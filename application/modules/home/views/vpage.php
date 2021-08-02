@@ -1,0 +1,3 @@
+<section>
+    <?= "Halaman utama"; ?>
+</section>
