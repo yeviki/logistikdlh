@@ -25,5 +25,7 @@
 <?= $this->asset->css('plugins/sweetalert2/dist/sweetalert2.min.css'); ?>
 <!-- Waitme CSS -->
 <?= $this->asset->css('plugins/waitme/waitMe.css'); ?>
+<!-- CSS LOADER -->
+<?= $this->asset->css('themes/loader.css'); ?>
 <!-- CSS per Page -->
 <?= isset($page_css) ? $page_css : ''; ?>

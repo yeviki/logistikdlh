@@ -11,14 +11,15 @@ class Barang extends SLP_Controller {
     protected $_uriName = '';
     public function __construct() {
         parent::__construct();
-        $this->load->model(array('model_barang' => 'mBarang'));
+        $this->load->model(array('model_barang' => 'mBarang', 'master/model_master' => 'mmas'));
         $this->_vwName = 'vbarang';
         $this->_uriName = 'data/barang';
     }
 
     private function validasiDataValue() {
-        $this->form_validation->set_rules('nm_mata_diklat', 'Nama Mata Diklat', 'required|trim');
-        $this->form_validation->set_rules('status', 'Status', 'required|trim');
+        $this->form_validation->set_rules('nm_barang', 'Nama Barang', 'required|trim');
+        $this->form_validation->set_rules('satuan', 'Satuan Barang', 'required|trim');
+        $this->form_validation->set_rules('kategori', 'Kategori Barang', 'required|trim');
         validation_message_setting();
         if($this->form_validation->run() == FALSE)
             return false;
@@ -28,11 +29,13 @@ class Barang extends SLP_Controller {
 
     public function index() {
         $this->breadcrumb->add('Dashboard', site_url('home'));
-        $this->breadcrumb->add('Diklat', '#');
-        $this->breadcrumb->add('Mata Diklat', site_url($this->_uriName));
-        $this->session_info['page_name'] = 'Mata Diklat';
-        $this->session_info['siteUri']   = $this->_uriName;
-        $this->session_info['page_js']	 = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
+        $this->breadcrumb->add('Data', '#');
+        $this->breadcrumb->add('Barang', site_url($this->_uriName));
+        $this->session_info['page_name']        = 'Barang';
+        $this->session_info['siteUri']          = $this->_uriName;
+        $this->session_info['page_js']	        = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
+        $this->session_info['data_satuan']      = $this->mmas->getSatuan();
+        $this->session_info['data_kategori']    = $this->mmas->getKategori();
         $this->template->build($this->_vwName.'/vpage', $this->session_info);
     }
 
@@ -49,10 +52,11 @@ class Barang extends SLP_Controller {
                     $no++;
                     $row = array();
                     $row[] = $no;
-                    $row[] = $dl['nm_mata_diklat'];
-                    $row[] = convert_status($dl['id_status']);
-                    $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_mata_diklat']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_mata_diklat']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
+                    $row[] = $dl['nm_barang'];
+                    $row[] = convert_status($dl['id_satuan']);
+                    $row[] = convert_status($dl['id_kat_barang']);
+                    $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     $data[] = $row;
                 }
                 $output = array(
@@ -101,8 +105,9 @@ class Barang extends SLP_Controller {
             if(!empty($contId) AND !empty($session)) {
                 $data = $this->mBarang->getDataDetail($this->encryption->decrypt($contId));
                 $row = array();
-                $row['nama']	= !empty($data) ? $data['nm_mata_diklat'] : '';
-                $row['status']	= !empty($data) ? $data['id_status'] : 1;
+                $row['barang']	    = !empty($data) ? $data['nm_barang'] : '';
+                $row['satuan']	    = !empty($data) ? $data['id_satuan'] : '';
+                $row['kategori']	= !empty($data) ? $data['id_kat_barang'] : '';
                 $result = array('status' => 'RC200', 'message' => $row, 'csrfHash' => $csrfHash);
             } else {
                 $result = array('status' => 'RC404', 'message' => array(), 'csrfHash' => $csrfHash);

@@ -184,8 +184,9 @@
                 $('input[name="'+csrfName+'"]').val(data.csrfHash);
                 if(data.status == 'RC200') {
                     $('input[name="tokenId"]').val(token);
-                    $('#nm_mata_diklat').val(data.message.nama);
-                    $('#status').select2().val(data.message.status).trigger("change");
+                    $('#nm_barang').val(data.message.barang);
+                    $('#satuan').select2().val(data.message.satuan).trigger("change");
+                    $('#kategori').select2().val(data.message.kategori).trigger("change");
                 }
                 $('#frmEntry').waitMe('hide');
             }

@@ -23,3 +23,9 @@
 <?= $this->asset->js('themes/scripts.js'); ?>
 <!-- JS per Page -->
 <?= isset($page_js) ? $page_js : ''; ?>
+
+<script>
+        $(document).ready(function() {
+			$('.preloader').addClass('out');
+		});
+</script>

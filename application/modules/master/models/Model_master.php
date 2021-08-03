@@ -82,6 +82,30 @@ class Model_master extends CI_Model {
         }
         return $dd_data;
     }
+
+    public function getDataSatuan() {
+        $this->db->order_by('id_satuan ASC');
+        $query = $this->db->get('ref_satuan');
+        $dd_data[''] = 'Pilih Data';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $dd_data[$row['id_satuan']] = $row['satuan'];
+            }
+        }
+        return $dd_data;
+    }
+
+    public function getDataKategori() {
+        $this->db->order_by('id_kat_barang ASC');
+        $query = $this->db->get('ref_kategori');
+        $dd_data[''] = 'Pilih Data';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $dd_data[$row['id_kat_barang']] = $row['kategori'];
+            }
+        }
+        return $dd_data;
+    }
 }
 
 // This is the end of auth signin model

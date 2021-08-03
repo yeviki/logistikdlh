@@ -4,6 +4,11 @@
         <?= isset($template['partials']['header']) ? $template['partials']['header'] : ''; ?>
     </head>
     <body style="display:none;" class="white-skin">
+        <div class="preloader">
+            <div class="loader">
+                <img src="<?= base_url('assets/img/loader.png'); ?>" width="85px" alt="">
+            </div>
+        </div>
         <!-- Dark Overlay element -->
         <div class="overlay"></div>
         <!------------------------- Header  ------------------------>
