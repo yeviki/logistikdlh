@@ -34,8 +34,8 @@ class Barang extends SLP_Controller {
         $this->session_info['page_name']        = 'Barang';
         $this->session_info['siteUri']          = $this->_uriName;
         $this->session_info['page_js']	        = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
-        $this->session_info['data_satuan']      = $this->mmas->getSatuan();
-        $this->session_info['data_kategori']    = $this->mmas->getKategori();
+        $this->session_info['data_satuan']      = $this->mmas->getDataSatuan();
+        $this->session_info['data_kategori']    = $this->mmas->getDataKategori();
         $this->template->build($this->_vwName.'/vpage', $this->session_info);
     }
 
@@ -53,8 +53,8 @@ class Barang extends SLP_Controller {
                     $row = array();
                     $row[] = $no;
                     $row[] = $dl['nm_barang'];
-                    $row[] = convert_status($dl['id_satuan']);
-                    $row[] = convert_status($dl['id_kat_barang']);
+                    $row[] = satuan($dl['id_satuan']);
+                    $row[] = kategori($dl['id_kat_barang']);
                     $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
                     <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     $data[] = $row;

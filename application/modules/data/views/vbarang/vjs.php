@@ -75,7 +75,8 @@
         $('#modalEntryForm').modal('toggle');
     });
     function formReset() {
-        $('#status').select2().val('1').trigger("change");
+        $('select[name="satuan"]').select2().val('').trigger("change");
+        $('select[name="kategori"]').select2().val('').trigger("change");
         $('#formEntry').attr('action', site + '/create');
         $('#errEntry').html('');
         $('form#formEntry').trigger('reset');

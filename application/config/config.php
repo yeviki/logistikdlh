@@ -453,8 +453,13 @@ $config['csrf_token_name'] = '_token';
 $config['csrf_cookie_name'] = '_cookie';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array('manajemen/fungsi/listview', 'manajemen/kontrol/listview', 'manajemen/module/listview',
-                                     'manajemen/group/listview', 'manajemen/users/listview');
+$config['csrf_exclude_uris'] = array('manajemen/fungsi/listview', 
+                                    'manajemen/kontrol/listview', 
+                                    'manajemen/module/listview',
+                                    'manajemen/group/listview', 
+                                    'manajemen/users/listview',
+                                    'data/barang/listview'
+                                );
 /*
 |--------------------------------------------------------------------------
 | Output Compression

@@ -416,7 +416,34 @@ if (!function_exists('array_group_by')) {
 			}
 		}
 		return $grouped;
-	}
+    }
+    
+
+    /**
+     * Fungsi get satuan
+     */
+    if (!function_exists('satuan')) {
+        function satuan($id) {
+            $ci =& get_instance();
+            $ci->load->database();
+            $ci->db->where('id_satuan', $id);
+            $row = $ci->db->get('ref_satuan')->row_array();
+            return !empty($row) ? $row['satuan'] : '';
+        }
+    }
+
+    /**
+     * Fungsi get satuan
+     */
+    if (!function_exists('kategori')) {
+        function kategori($id) {
+            $ci =& get_instance();
+            $ci->load->database();
+            $ci->db->where('id_kat_barang', $id);
+            $row = $ci->db->get('ref_kategori')->row_array();
+            return !empty($row) ? $row['kategori'] : '';
+        }
+    }
 }
 
 /* End of file string_helper.php */

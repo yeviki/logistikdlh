@@ -21,7 +21,8 @@
                                 <tr>
                                     <th width="3%" class="font-weight-bold">#</th>
                                     <th width="50%" class="font-weight-bold">Nama Barang</th>
-                                    <th width="6%" class="font-weight-bold">Status</th>
+                                    <th width="6%" class="font-weight-bold">Satuan</th>
+                                    <th width="6%" class="font-weight-bold">Kategori</th>
                                     <th width="5%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>
@@ -46,11 +47,13 @@
                 <div id="errEntry"></div>
                 <?php echo form_hidden('tokenId', ''); ?>
                 <div class="form-row mb-3">
-                    <div class="col-12 col-md-10 required">
+                    <div class="col-12 col-md-12 required">
                         <label for="nm_barang" class="control-label font-weight-bolder">Nama Barang<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="nm_barang" id="nm_barang" placeholder="Barang" value="<?php echo $this->input->post('nm_barang', TRUE); ?>" required>
                         <div class="invalid-feedback"></div>
                     </div>
+                </div>
+                <div class="form-row mb-3">
                     <div class="col-12 col-md-6 required">
                         <label for="satuan" class="control-label font-weight-bolder">Satuan Barang <span class="text-danger">*</span></label>
                             <?php echo form_dropdown('satuan', isset($data_satuan) ? $data_satuan : array(''=>'Pilih Data'), $this->input->post('satuan', TRUE), 'class="form-control select-all" id="satuan" required="" style="width:100%"');?>
