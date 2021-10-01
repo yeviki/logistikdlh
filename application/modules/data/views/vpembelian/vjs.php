@@ -75,8 +75,6 @@
         $('#modalEntryForm').modal('toggle');
     });
     function formReset() {
-        $('select[name="satuan"]').select2().val('').trigger("change");
-        $('select[name="kategori"]').select2().val('').trigger("change");
         $('#formEntry').attr('action', site + '/create');
         $('#errEntry').html('');
         $('form#formEntry').trigger('reset');
@@ -185,9 +183,9 @@
                 $('input[name="'+csrfName+'"]').val(data.csrfHash);
                 if(data.status == 'RC200') {
                     $('input[name="tokenId"]').val(token);
-                    $('#nm_barang').val(data.message.barang);
-                    $('#satuan').select2().val(data.message.satuan).trigger("change");
-                    $('#kategori').select2().val(data.message.kategori).trigger("change");
+                    $('#no_faktur_buy').val(data.message.no_faktur_buy);
+                    $('#tgl_pembelian').val(data.message.tgl_pembelian);
+                    $('#catatan').val(data.message.catatan);
                 }
                 $('#frmEntry').waitMe('hide');
             }

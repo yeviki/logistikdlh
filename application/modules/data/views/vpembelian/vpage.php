@@ -20,8 +20,9 @@
                             <thead>
                                 <tr>
                                     <th width="3%" class="font-weight-bold">#</th>
-                                    <th width="50%" class="font-weight-bold">No Faktur</th>
-                                    <th width="5%" class="font-weight-bold">Action</th>
+                                    <th width="50%" class="font-weight-bold">Tanggal</th>
+                                    <th width="40%" class="font-weight-bold">No Faktur</th>
+                                    <th width="9%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -53,6 +54,13 @@
                     <div class="col-12 col-md-6 required">
                         <label for="tgl_pembelian" class="control-label font-weight-bolder">Tanggal Pembelian <span class="text-danger">*</span></label>
                         <input placeholder="Pilih Tanggal" type="date" id="tgl_pembelian" name="tgl_pembelian" class="form-control">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="form-row mb-3">
+                    <div class="col-12 col-md-12">
+                        <label for="catatan" class="control-label font-weight-bolder">Catatan</label>
+                        <textarea class="form-control" id="catatan" name="catatan" placeholder="Catatan Pembelian"><?php echo $this->input->post('catatan', TRUE); ?></textarea>
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>

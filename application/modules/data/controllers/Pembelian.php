@@ -17,9 +17,9 @@ class Pembelian extends SLP_Controller {
     }
 
     private function validasiDataValue() {
-        $this->form_validation->set_rules('nm_barang', 'Nama Barang', 'required|trim');
-        $this->form_validation->set_rules('satuan', 'Satuan Barang', 'required|trim');
-        $this->form_validation->set_rules('kategori', 'Kategori Barang', 'required|trim');
+        $this->form_validation->set_rules('no_faktur_buy', 'No Faktur', 'required|trim');
+        $this->form_validation->set_rules('tgl_pembelian', 'Tanggal Pembelian', 'required|trim');
+        $this->form_validation->set_rules('catatan', 'Catatan', 'required|trim');
         validation_message_setting();
         if($this->form_validation->run() == FALSE)
             return false;
@@ -34,8 +34,6 @@ class Pembelian extends SLP_Controller {
         $this->session_info['page_name']        = 'Pembelian';
         $this->session_info['siteUri']          = $this->_uriName;
         $this->session_info['page_js']	        = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
-        $this->session_info['data_satuan']      = $this->mmas->getDataSatuan();
-        $this->session_info['data_kategori']    = $this->mmas->getDataKategori();
         $this->template->build($this->_vwName.'/vpage', $this->session_info);
     }
 
@@ -52,9 +50,11 @@ class Pembelian extends SLP_Controller {
                     $no++;
                     $row = array();
                     $row[] = $no;
-                    $row[] = $dl['nm_barang'];
-                    $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
-                    <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
+                    $row[] = $dl['tgl_pembelian'];
+                    $row[] = $dl['no_faktur_buy'];
+                    $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
+                    <button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     $data[] = $row;
                 }
                 $output = array(
@@ -103,9 +103,9 @@ class Pembelian extends SLP_Controller {
             if(!empty($contId) AND !empty($session)) {
                 $data = $this->mPembelian->getDataDetail($this->encryption->decrypt($contId));
                 $row = array();
-                $row['barang']	    = !empty($data) ? $data['nm_barang'] : '';
-                $row['satuan']	    = !empty($data) ? $data['id_satuan'] : '';
-                $row['kategori']	= !empty($data) ? $data['id_kat_barang'] : '';
+                $row['no_faktur_buy']	    = !empty($data) ? $data['no_faktur_buy'] : '';
+                $row['tgl_pembelian']	    = !empty($data) ? $data['tgl_pembelian'] : '';
+                $row['catatan']	            = !empty($data) ? $data['catatan'] : '';
                 $result = array('status' => 'RC200', 'message' => $row, 'csrfHash' => $csrfHash);
             } else {
                 $result = array('status' => 'RC404', 'message' => array(), 'csrfHash' => $csrfHash);
@@ -129,9 +129,9 @@ class Pembelian extends SLP_Controller {
                     if($data['response'] == 'ERROR') {
                         $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses update data gagal, karena data tidak ditemukan'), 'csrfHash' => $csrfHash);
                     } else if($data['response'] == 'ERRDATA') {
-                        $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses update data dengan nama '.$data['nama'].' gagal, karena ditemukan nama yang sama'), 'csrfHash' => $csrfHash);
+                        $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses update data dengan faktur '.$data['nama'].' gagal, karena ditemukan faktur yang sama'), 'csrfHash' => $csrfHash);
                     } else if($data['response'] == 'SUCCESS') {
-                        $result = array('status' => 'RC200', 'message' => 'Proses update data dengan nama '.$data['nama'].' sukses', 'csrfHash' => $csrfHash);
+                        $result = array('status' => 'RC200', 'message' => 'Proses update data dengan faktur '.$data['nama'].' sukses', 'csrfHash' => $csrfHash);
                     }
                 }
             } else {
@@ -153,9 +153,9 @@ class Pembelian extends SLP_Controller {
                 if($data['response'] == 'ERROR') {
                     $result = array('status' => 'RC404', 'message' => 'Proses delete data gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
                 } else if($data['response'] == 'ERRDATA') {
-                    $result = array('status' => 'RC404', 'message' => 'Proses delete data dengan nama '.$data['nama'].' gagal, karena data sedang digunakan', 'csrfHash' => $csrfHash);
+                    $result = array('status' => 'RC404', 'message' => 'Proses delete data dengan faktur '.$data['nama'].' gagal, karena data sedang digunakan', 'csrfHash' => $csrfHash);
                 } else if($data['response'] == 'SUCCESS') {
-                    $result = array('status' => 'RC200', 'message' => 'Proses delete data dengan nama '.$data['nama'].' sukses', 'csrfHash' => $csrfHash);
+                    $result = array('status' => 'RC200', 'message' => 'Proses delete data dengan faktur '.$data['nama'].' sukses', 'csrfHash' => $csrfHash);
                 }
             } else {
                 $result = array('status' => 0, 'message' => 'Proses delete data gagal, mohon coba kembali', 'csrfHash' => $csrfHash);
