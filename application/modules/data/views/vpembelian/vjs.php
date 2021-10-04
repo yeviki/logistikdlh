@@ -265,4 +265,456 @@
             }
         })
     });
+
+    $(document).on('click', '.btnCloseMataDik', function(e) {
+        let id = $(this).closest('div.modal').attr('id');
+        formResetDetail();
+        $('#'+id).modal('toggle');
+        if(id == 'modalDetailPembelian') {
+            $('#formSettingMataDiklat').hide();
+        }
+    });
+
+    function formResetDetail() {
+        $('#status').select2().val('1').trigger("change");
+        $('#formDetailPembelian').attr('action', site + '/create');
+        $('#errSuccess').html('');
+        $('#errRules').html('');
+        $('form#formDetailPembelian').trigger('reset');
+        $('form#formDetailPembelian').removeClass('was-validated');
+    }
+
+    //panggil form Rule
+    $(document).on('click', '.btnSetPembelian', function(e) {
+        $('#modalDetailPembelian').modal({
+            backdrop: 'static'
+        });
+        let token = $(this).data('id');
+        let label = $(this).data('jd');
+        $('input[name="tokenMataDik"]').val(token);
+        $('.lblMataDiklat').text(label);
+        getDataListPembelian(token);
+    });
+    $(document).on('click', '.btnDetail', function (e) {
+        $('#formSettingMataDiklat').slideToggle('slow');
+        $('#formEntry').attr('action', site + '/set-jadwal');
+        $('form#formDetailPembelian .select-all').select2().val('').trigger("change");
+        $('form#formDetailPembelian #status_rules').select2().val('1').trigger("change");
+    });
+    $(document).on('submit', '#formDetailPembelian', function(e) {
+        e.preventDefault();
+        let postData = $(this).serialize();
+        // get form action url
+        let formActionURL = $(this).attr("action");
+        $("#saveJadwal").html('<i class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></i> DIPROSES...');
+        $("#saveJadwal").addClass('disabled');
+        run_waitMe($('#frmDetailPem'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda ingin menyimpan data ini ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: formActionURL + '/new-pembelian',
+                    type: "POST",
+                    data: postData,
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        $('#formDetailPembelian').addClass('was-validated');
+                        swalAlert.fire({
+                            title: 'Gagal Simpan',
+                            text: 'Proses simpan data gagal, silahkan diperiksa kembali',
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.error('Silahkan dilengkapi data pada form inputan dibawah'));
+                                $.each(data.message, function(key,value){
+                                    if(key != 'isi')
+                                        $('input[name="'+key+'"], select[name="'+key+'"]').closest('div.required').find('div.invalid-feedback').text(value);
+                                    else {
+                                        $('#pesanErr').html(value);
+                                    }
+                                });
+                                $('#frmDetailPem').waitMe('hide');
+                            }
+                        })
+                    } else {
+                        $('#frmDetailPem').waitMe('hide');
+                        swalAlert.fire({
+                            title: 'Berhasil Simpan',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.success(data.message));
+                                $('#formSettingMataDiklat').slideToggle();
+                                getDataListPembelian(data.kode);
+                                getDataList();
+                            }
+                        })
+                    }
+                }).fail(function() {
+                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang diinputkan'));
+                    $('#frmDetailPem').waitMe('hide');
+                }).always(function() {
+                    $("#saveJadwal").html('<i class="fas fa-check"></i> SUBMIT');
+                    $("#saveJadwal").removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Simpan',
+                    text: 'Proses simpan data telah dibatalkan',
+                    icon: 'error',
+                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#frmDetailPem').waitMe('hide');
+                        $("#saveJadwal").html('<i class="fas fa-check"></i> SUBMIT');
+                        $("#saveJadwal").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
+    function getDataListPembelian(token) {
+        let html = '';
+        $.ajax({
+            type: 'GET',
+            url: site + '/rules-pembelian',
+            data: {'token' : token, '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()},
+            dataType: 'json',
+            success: function(data) {
+                $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                if(data.status = 'RC200') {
+                    if(Object.keys(data.message).length > 0) {
+                        $.each(data.message, function(key, val){
+                            // html += ' <tr class="table-info"><td colspan="8"><strong>Nama Kontrol : '+key+'</strong></td></tr>';
+                            let no = 1;
+                            $.each(val, function(row, v) {
+                                html += '<tr>';
+                                    html += '<td class="text-center">'+
+                                                '<div class="custom-control custom-checkbox ml-2">'+
+                                                    '<input type="checkbox" class="custom-control-input" name="checkid[]" id="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'" class="checkid" value="'+v['id_md_wi']+'">'+
+                                                    '<label class="custom-control-label" for="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'"></label>'+
+                                                '</div>'+
+                                            '</td>';
+                                    html += '<td class="text-center">'+no+'.</td>';
+                                    html += '<td>'+v['nip']+'</td>';
+                                    html += '<td class="text-left">'+v['nama_widyaiswara']+'</td>';
+                                    html += '<td class="text-left">'+v['nm_mata_diklat']+'</td>';
+                                    html += '<td class="text-left">'+v['nm_hari']+'</td>';
+                                    html += '<td class="text-left">'+v['jam_mulai']+'</td>';
+                                    html += '<td class="text-left">'+v['jam_selesai']+'</td>';
+                                    html += '<td class="text-left">'+v['jumlah_jp']+'</td>';
+                                    html += '<td class="text-center">'+v['status']+'</td>';
+                                html += '</tr>';
+                                no++;
+                            });
+                        });
+                    } else
+                        html = '<tr><td colspan="10"><i>Tidak Ada Data Mata Diklat</i></td></tr>';
+                } else
+                    html = '<tr><td colspan="10"><i>Tidak Ada Data Mata Diklat</i></td></tr>';
+                $('#tblMata > tbody').html(html);
+            }
+        });
+    }
+    // Handle click on "check all" control
+    $(document).on('click', '#checkAll', function(){
+        $('#tblMata > tbody input[type="checkbox"]').prop('checked', this.checked).trigger('change');
+    });
+    // Handle click on "checked" control
+    $(document).on('change', '#tblMata > tbody input[type="checkbox"]', function (e) {
+        let rowCount = $('#tblMata > tbody input[type="checkbox"]').length;
+        let n = $('#tblMata > tbody input[type="checkbox"]').filter(':checked').length;
+        if(n > 0) {
+            $('#eventButoon').show();
+            $('#btnDeleteJadwal').removeAttr('disabled');
+            $('#btnAktifJadwal').removeAttr('disabled');
+            $('#btnNonaktifJadwal').removeAttr('disabled');
+        } else {
+            $('#eventButoon').hide();
+            $('#btnDeleteJadwal').attr('disabled', '');
+            $('#btnAktifJadwal').attr('disabled', '');
+            $('#btnNonaktifJadwal').attr('disabled', '');
+        }
+        $(this).is(':checked') ? $(this).closest('tr').addClass('table-active') : $(this).closest('tr').removeClass('table-active');
+        if(rowCount !== n)
+            $('#checkAll').prop('checked', '');
+        else
+            $('#checkAll').prop('checked', 'checked');
+    });
+    // Handle click on "tr" control
+    $(document).on('click', '#tblMata > tbody > tr', function(){
+        let n = $(this).find('input[type="checkbox"]');
+        n.prop('checked', (n.is(':checked')) ? false : true).trigger('change');
+    });
+    //btn delete rules
+    $(document).on('click', '#btnDeleteJadwal', function (e){
+        e.preventDefault();
+        let token = $('input[name="tokenMataDik"]').val();
+        let rules = [];
+        $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
+            rules.push($(this).val());
+        });
+        const postData = {
+            'tokenId': token,
+            'jadwalId': rules,
+            'flag'   : '<?= $this->encryption->encrypt('DR'); ?>',
+            '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
+        };
+        // get form action url
+        $(this).html('<i class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></i> DIPROSES...');
+        $(this).addClass('disabled');
+        run_waitMe($('#frmDetailPem'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda ingin menghapus data ini ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: site + '/rules-pembelian/set-jadwal',
+                    type: 'POST',
+                    data: postData,
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        swalAlert.fire({
+                            title: 'Gagal Hapus',
+                            text: 'Proses hapus data gagal, silahkan diperiksa kembali',
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.error(data.message));
+                                $('#frmDetailPem').waitMe('hide');
+                            }
+                        })
+                    } else {
+                        $('#frmDetailPem').waitMe('hide');
+                        swalAlert.fire({
+                            title: 'Berhasil Hapus',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.success(data.message));
+                                getDataListPembelian(data.kode);
+                                getDataList();
+                            }
+                        })
+                    }
+                }).fail(function() {
+                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang dihapus'));
+                    $('#frmDetailPem').waitMe('hide');
+                }).always(function() {
+                    $("#btnDeleteJadwal").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
+                    $("#btnDeleteJadwal").removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Hapus',
+                    text: 'Proses hapus data telah dibatalkan',
+                    icon: 'error',
+                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#frmDetailPem').waitMe('hide');
+                        $("#btnDeleteJadwal").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
+                        $("#btnDeleteJadwal").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
+    //btn update status aktif
+    $(document).on('click', '#btnAktifJadwal', function (e){
+        e.preventDefault();
+        let token = $('input[name="tokenMataDik"]').val();
+        let rules = [];
+        $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
+            rules.push($(this).val());
+        });
+        const postData = {
+            'tokenId': token,
+            'jadwalId': rules,
+            'flag'   : '<?= $this->encryption->encrypt('AR'); ?>',
+            '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
+        };
+        // get form action url
+        $(this).html('<i class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></i> DIPROSES...');
+        $(this).addClass('disabled');
+        run_waitMe($('#frmDetailPem'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda ingin merubah data ini ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: site + '/rules-pembelian/set-jadwal',
+                    type: 'POST',
+                    data: postData,
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        swalAlert.fire({
+                            title: 'Gagal Update',
+                            text: 'Proses update status data gagal, silahkan diperiksa kembali',
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.error(data.message));
+                                $('#frmDetailPem').waitMe('hide');
+                            }
+                        })
+                    } else {
+                        $('#frmDetailPem').waitMe('hide');
+                        swalAlert.fire({
+                            title: 'Berhasil Update',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.success(data.message));
+                                getDataListPembelian(data.kode);
+                            }
+                        })
+                    }
+                }).fail(function() {
+                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang diupdate'));
+                    $('#frmDetailPem').waitMe('hide');
+                }).always(function() {
+                    $("#btnAktifJadwal").html('<i class="fas fa-check"></i> AKTIFKAN JADWAL');
+                    $("#btnAktifJadwal").removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Update',
+                    text: 'Proses update status data telah dibatalkan',
+                    icon: 'error',
+                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#frmDetailPem').waitMe('hide');
+                        $("#btnAktifJadwal").html('<i class="fas fa-check"></i> AKTIFKAN JADWAL');
+                        $("#btnAktifJadwal").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
+    //btn update status non aktif
+    $(document).on('click', '#btnNonaktifJadwal', function (e){
+        e.preventDefault();
+        let token = $('input[name="tokenMataDik"]').val();
+        let rules = [];
+        $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
+            rules.push($(this).val());
+        });
+        const postData = {
+            'tokenId': token,
+            'jadwalId': rules,
+            'flag'   : '<?= $this->encryption->encrypt('NR'); ?>',
+            '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
+        };
+        // get form action url
+        $(this).html('<i class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></i> DIPROSES...');
+        $(this).addClass('disabled');
+        run_waitMe($('#frmDetailPem'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda ingin merubah data ini ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: site + '/rules-pembelian/set-jadwal',
+                    type: 'POST',
+                    data: postData,
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        swalAlert.fire({
+                            title: 'Gagal Update',
+                            text: 'Proses update status data gagal, silahkan diperiksa kembali',
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.error(data.message));
+                                $('#frmDetailPem').waitMe('hide');
+                            }
+                        })
+                    } else {
+                        $('#frmDetailPem').waitMe('hide');
+                        swalAlert.fire({
+                            title: 'Berhasil Update',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errDiklat').html(msg.success(data.message));
+                                getDataListPembelian(data.kode);
+                            }
+                        })
+                    }
+                }).fail(function() {
+                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang diupdate'));
+                    $('#frmDetailPem').waitMe('hide');
+                }).always(function() {
+                    $("#btnNonaktifJadwal").html('<i class="fas fa-times"></i> NON AKTIFKAN JADWAL');
+                    $("#btnNonaktifJadwal").removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Update',
+                    text: 'Proses update status data telah dibatalkan',
+                    icon: 'error',
+                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#frmDetailPem').waitMe('hide');
+                        $("#btnNonaktifJadwal").html('<i class="fas fa-times"></i> NON AKTIFKAN JADWAL');
+                        $("#btnNonaktifJadwal").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
+
+    $(document).on('keypress keyup', '.nominal',function (e) {
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+      return false;
+    }
+    });
 </script>

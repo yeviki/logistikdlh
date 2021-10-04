@@ -149,6 +149,37 @@ class Model_pembelian extends CI_Model {
             }
         }
     }
+
+
+    /* get data list detail pembelian */
+    public function getDataListMataDiklatWI($id_diklat) {
+        $this->db->select('a.id_diklat,
+                            a.id_jenis_diklat,
+                            a.judul,
+                            b.id_md_wi,
+                            b.id_widyaiswara,
+                            b.id_mata_diklat,
+                            b.id_hari,
+                            b.jam_mulai,
+                            b.jam_selesai,
+                            b.jumlah_jp,
+                            b.tahun,
+                            b.id_status,
+                            c.nip,
+                            c.nama_widyaiswara,
+                            c.telp_widyaiswara,
+                            d.nm_mata_diklat,
+                            e.nm_hari
+                            ');
+        $this->db->from('dt_diklat a');
+        $this->db->join('det_mata_diklat_wi b', 'b.id_diklat = a.id_diklat', 'inner');
+        $this->db->join('dt_widyaiswara c', 'c.id_widyaiswara = b.id_widyaiswara', 'inner');
+        $this->db->join('dt_mata_diklat d', 'd.id_mata_diklat = b.id_mata_diklat', 'inner');
+        $this->db->join('ref_hari e', 'e.id_hari = b.id_hari', 'inner');
+        $this->db->where('a.id_diklat', abs($id_diklat));
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
 
 // This is the end of auth signin model
