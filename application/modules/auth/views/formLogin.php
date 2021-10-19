@@ -11,7 +11,8 @@
     <meta name="keywords" content="<?= isset($appKeys) ? $appKeys : ''; ?>" />
     <link rel="icon" type="image/png" href="<?php echo $this->asset->image_path((isset($appFavico) ? $appFavico : '')) ?>">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <?php echo $this->asset->css('fontawesome/css/all.css'); ?> -->
     <!-- Bootstrap core CSS -->
     <?php echo $this->asset->css('themes/bootstrap.min.css'); ?>
     <!-- Material Design Bootstrap -->

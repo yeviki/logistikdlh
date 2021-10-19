@@ -7,7 +7,8 @@
 <meta name="keywords" content="<?= (isset($app_keys) ? $app_keys : ''); ?>" />
 <link rel="icon" type="image/png" href="<?= $this->asset->image_path((isset($app_favico) ? $app_favico : '')); ?>">
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> -->
+<?= $this->asset->css('fontawesome/css/all.css'); ?> 
 <!-- Bootstrap core CSS -->
 <?= $this->asset->css('themes/bootstrap.min.css'); ?>
 <!-- Material Design Bootstrap -->
