@@ -106,6 +106,18 @@ class Model_master extends CI_Model {
         }
         return $dd_data;
     }
+
+    public function getDataBarang() {
+        $this->db->order_by('id_barang ASC');
+        $query = $this->db->get('data_barang');
+        $dd_data[''] = 'Pilih Data';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $dd_data[$row['id_barang']] = $row['nm_barang'];
+            }
+        }
+        return $dd_data;
+    }
 }
 
 // This is the end of auth signin model

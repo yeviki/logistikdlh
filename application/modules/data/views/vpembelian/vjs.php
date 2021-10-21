@@ -291,7 +291,7 @@
         });
         let token = $(this).data('id');
         let label = $(this).data('jd');
-        $('input[name="tokenMataDik"]').val(token);
+        $('input[name="tokenDetail"]').val(token);
         $('.lblMataDiklat').text(label);
         getDataListPembelian(token);
     });
@@ -408,22 +408,19 @@
                                                 '</div>'+
                                             '</td>';
                                     html += '<td class="text-center">'+no+'.</td>';
-                                    html += '<td>'+v['nip']+'</td>';
-                                    html += '<td class="text-left">'+v['nama_widyaiswara']+'</td>';
-                                    html += '<td class="text-left">'+v['nm_mata_diklat']+'</td>';
-                                    html += '<td class="text-left">'+v['nm_hari']+'</td>';
-                                    html += '<td class="text-left">'+v['jam_mulai']+'</td>';
-                                    html += '<td class="text-left">'+v['jam_selesai']+'</td>';
-                                    html += '<td class="text-left">'+v['jumlah_jp']+'</td>';
+                                    html += '<td>'+v['nm_barang']+'</td>';
+                                    html += '<td class="text-left">'+v['satuan']+'</td>';
+                                    html += '<td class="text-left">'+v['qty_barang']+'</td>';
+                                    html += '<td class="text-left">'+v['harga_barang']+'</td>';
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
                             });
                         });
                     } else
-                        html = '<tr><td colspan="10"><i>Tidak Ada Data Mata Diklat</i></td></tr>';
+                        html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
                 } else
-                    html = '<tr><td colspan="10"><i>Tidak Ada Data Mata Diklat</i></td></tr>';
+                    html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
                 $('#tblMata > tbody').html(html);
             }
         });
@@ -461,7 +458,7 @@
     //btn delete rules
     $(document).on('click', '#btnDeleteJadwal', function (e){
         e.preventDefault();
-        let token = $('input[name="tokenMataDik"]').val();
+        let token = $('input[name="tokenDetail"]').val();
         let rules = [];
         $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
             rules.push($(this).val());
@@ -546,7 +543,7 @@
     //btn update status aktif
     $(document).on('click', '#btnAktifJadwal', function (e){
         e.preventDefault();
-        let token = $('input[name="tokenMataDik"]').val();
+        let token = $('input[name="tokenDetail"]').val();
         let rules = [];
         $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
             rules.push($(this).val());
@@ -630,7 +627,7 @@
     //btn update status non aktif
     $(document).on('click', '#btnNonaktifJadwal', function (e){
         e.preventDefault();
-        let token = $('input[name="tokenMataDik"]').val();
+        let token = $('input[name="tokenDetail"]').val();
         let rules = [];
         $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
             rules.push($(this).val());

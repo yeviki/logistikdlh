@@ -29,7 +29,7 @@ class Model_pembelian extends CI_Model {
     }
 
     public function count_all() {
-        return $this->db->count_all_results('dt_pembelian');
+        return $this->db->count_all_results('data_pembelian');
     }
 
     private function _get_datatables_query() {
@@ -38,7 +38,7 @@ class Model_pembelian extends CI_Model {
                            tgl_pembelian,
                            catatan
                            ');
-        $this->db->from('dt_pembelian');
+        $this->db->from('data_pembelian');
         $i = 0;
         foreach ($this->search as $item) { // loop column
             if($_POST['search']['value']) { // if datatable send POST for search
@@ -59,7 +59,7 @@ class Model_pembelian extends CI_Model {
     /*Fungsi get data edit by id*/
     public function getDataDetail($id) {
         $this->db->where('id_pembelian', abs($id));
-        $query = $this->db->get('dt_pembelian');
+        $query = $this->db->get('data_pembelian');
         return $query->row_array();
     }
 
@@ -72,7 +72,7 @@ class Model_pembelian extends CI_Model {
         $no_faktur_buy = escape($this->input->post('no_faktur_buy', TRUE));
         //cek nama matadiklat duplicate
         $this->db->where('no_faktur_buy', $no_faktur_buy);
-        $qTot = $this->db->count_all_results('dt_pembelian');
+        $qTot = $this->db->count_all_results('data_pembelian');
         if($qTot > 0)
             return array('response'=>'ERROR', 'nama'=>$no_faktur_buy);
         else {
@@ -88,7 +88,7 @@ class Model_pembelian extends CI_Model {
                 'mod_ip'            => $create_ip
             );
             /*query insert*/
-            $this->db->insert('dt_pembelian', $data);
+            $this->db->insert('data_pembelian', $data);
             return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
         }
     }
@@ -109,7 +109,7 @@ class Model_pembelian extends CI_Model {
             //cek data duplicate
             $this->db->where('no_faktur_buy', $no_faktur_buy);
             $this->db->where('id_pembelian !=', $id_pembelian);
-            $qTot = $this->db->count_all_results('dt_pembelian');
+            $qTot = $this->db->count_all_results('data_pembelian');
             if($qTot > 0)
                 return array('response'=>'ERRDATA', 'nama'=>$no_faktur_buy);
             else {
@@ -123,7 +123,7 @@ class Model_pembelian extends CI_Model {
                 );
                 /*query update*/
                 $this->db->where('id_pembelian', abs($id_pembelian));
-                $this->db->update('dt_pembelian', $data);
+                $this->db->update('data_pembelian', $data);
                 return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
             }
         }
@@ -144,7 +144,7 @@ class Model_pembelian extends CI_Model {
                 return array('response'=>'ERRDATA', 'nama'=>$no_faktur_buy);
             else {
                 $this->db->where('id_pembelian', abs($id));
-                $this->db->delete('dt_pembelian');
+                $this->db->delete('data_pembelian');
                 return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
             }
         }
@@ -152,33 +152,62 @@ class Model_pembelian extends CI_Model {
 
 
     /* get data list detail pembelian */
-    public function getDataListMataDiklatWI($id_diklat) {
-        $this->db->select('a.id_diklat,
-                            a.id_jenis_diklat,
-                            a.judul,
-                            b.id_md_wi,
-                            b.id_widyaiswara,
-                            b.id_mata_diklat,
-                            b.id_hari,
-                            b.jam_mulai,
-                            b.jam_selesai,
-                            b.jumlah_jp,
-                            b.tahun,
-                            b.id_status,
-                            c.nip,
-                            c.nama_widyaiswara,
-                            c.telp_widyaiswara,
-                            d.nm_mata_diklat,
-                            e.nm_hari
+    public function getDataListDetailPembelian($id_pembelian) {
+        $this->db->select('a.id_pembelian,
+                            a.no_faktur_buy,
+                            a.tgl_pembelian,
+                            b.id_detail_pembelian,
+                            b.id_barang,
+                            b.qty_barang,
+                            b.harga_barang,
+                            b.id_status_barang,
+                            c.nm_barang,
+                            c.id_satuan,
+                            c.id_kat_barang,
+                            d.satuan,
+                            e.kategori
                             ');
-        $this->db->from('dt_diklat a');
-        $this->db->join('det_mata_diklat_wi b', 'b.id_diklat = a.id_diklat', 'inner');
-        $this->db->join('dt_widyaiswara c', 'c.id_widyaiswara = b.id_widyaiswara', 'inner');
-        $this->db->join('dt_mata_diklat d', 'd.id_mata_diklat = b.id_mata_diklat', 'inner');
-        $this->db->join('ref_hari e', 'e.id_hari = b.id_hari', 'inner');
-        $this->db->where('a.id_diklat', abs($id_diklat));
+        $this->db->from('data_pembelian a');
+        $this->db->join('detail_pembelian b', 'b.id_pembelian = a.id_pembelian', 'inner');
+        $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
+        $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
+        $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
+        $this->db->where('a.id_pembelian', abs($id_pembelian));
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    /*Fungsi get data edit by id*/
+    public function getDataDetailPembelian($id) {
+        $this->db->where('id_pembelian', abs($id));
+        $query = $this->db->get('dt_diklat');
+        return $query->row_array();
+    }
+
+    /* Fungsi untuk insert data */
+    public function insertDetailPembelian() {
+        //get data
+        $tahun          = gmdate('Y');
+        $create_by      = $this->app_loader->current_account();
+        $create_date    = gmdate('Y-m-d H:i:s', time()+60*60*7);
+        $create_ip      = $this->input->ip_address();
+        
+        $id_pembelian	    = $this->encryption->decrypt(escape($this->input->post('tokenDetail', TRUE)));
+        $data = array(
+            'id_pembelian'      => $id_pembelian,
+            'id_barang'         => escape($this->input->post('id_barang', TRUE)),
+            'qty_barang'        => escape($this->input->post('qty_barang', TRUE)),
+            'harga_barang'      => escape($this->input->post('harga_barang', TRUE)),
+            'id_status_barang'  => '1',
+            'create_by'         => $create_by,
+            'create_date'       => $create_date,
+            'create_ip'         => $create_ip,
+            'mod_by'            => $create_by,
+            'mod_date'          => $create_date,
+            'mod_ip'            => $create_ip
+        );
+        $this->db->insert('detail_pembelian', $data);
+        return array('response'=>'SUCCESS');
     }
 }
 

@@ -34,6 +34,7 @@ class Pembelian extends SLP_Controller {
         $this->session_info['page_name']        = 'Pembelian';
         $this->session_info['siteUri']          = $this->_uriName;
         $this->session_info['page_js']	        = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
+        $this->session_info['data_barang']	    = $this->mmas->getDataBarang();
         $this->template->build($this->_vwName.'/vpage', $this->session_info);
     }
 
@@ -182,21 +183,18 @@ class Pembelian extends SLP_Controller {
     private function pembelianData() {
         $session    = $this->app_loader->current_account();
         $csrfHash   = $this->security->get_csrf_hash();
-        $mataId     = $this->encryption->decrypt(escape($this->input->get('token', TRUE)));
-        if(!empty($mataId) AND !empty($session)) {
-            $data = $this->mMata_WI->getDataListMataDiklatWI($mataId);
+        $dataID     = $this->encryption->decrypt(escape($this->input->get('token', TRUE)));
+        if(!empty($dataID) AND !empty($session)) {
+            $data = $this->mPembelian->getDataListDetailPembelian($dataID);
             $matadiklat = array();
             foreach ($data as $q) {
-                $isi['id_md_wi'] 	= $this->encryption->encrypt($q['id_md_wi']);
-                $isi['nip'] 	                = $q['nip'];
-                $isi['nama_widyaiswara'] 		= $q['nama_widyaiswara'];
-                $isi['nm_mata_diklat'] 		    = $q['nm_mata_diklat'];
-                $isi['nm_hari'] 		        = $q['nm_hari'];
-                $isi['jam_mulai'] 			    = $q['jam_mulai'];
-                $isi['jam_selesai'] 	        = $q['jam_selesai'];
-                $isi['jumlah_jp'] 	            = $q['jumlah_jp'];
-                $isi['status'] 			        = convert_status($q['id_status']);
-                $matadiklat[$q['judul']][] = $isi;
+                $isi['id_detail_pembelian'] 	= $this->encryption->encrypt($q['id_detail_pembelian']);
+                $isi['nm_barang'] 	            = $q['nm_barang'];
+                $isi['satuan'] 		            = $q['satuan'];
+                $isi['qty_barang'] 		        = $q['qty_barang'];
+                $isi['harga_barang'] 			= $q['harga_barang'];
+                $isi['status'] 			        = convert_status($q['id_status_barang']);
+                $matadiklat[$q['no_faktur_buy']][] = $isi;
             }
             $result = array('status' => 'RC200', 'message' => $matadiklat, 'csrfHash' => $csrfHash);
         } else {
@@ -205,27 +203,34 @@ class Pembelian extends SLP_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }
 
+    private function validasiDataValueDetail() {
+        $this->form_validation->set_rules('id_barang', 'Barang', 'required|trim');
+        $this->form_validation->set_rules('qty_barang', 'Mata Diklat', 'required|trim');
+        $this->form_validation->set_rules('harga_barang', 'Hari', 'required|trim');
+        validation_message_setting();
+        if($this->form_validation->run() == FALSE)
+            return false;
+        else
+            return true;
+    }
+
     private function pembelianCreate() {
         $session  = $this->app_loader->current_account();
         $csrfHash = $this->security->get_csrf_hash();
-        $modId    = escape($this->input->post('tokenMataDik', TRUE));
+        $modId    = escape($this->input->post('tokenDetail', TRUE));
         if(!empty($session) AND !empty($modId)) {
-            if($this->validasiDataValue() == FALSE) {
+            if($this->validasiDataValueDetail() == FALSE) {
                 $result = array('status' => 'RC404', 'message' => $this->form_validation->error_array(), 'kode'=>$modId, 'csrfHash' => $csrfHash);
             } else {
-                $data = $this->mMata_WI->insertDataMataDiklatWI();
+                $data = $this->mPembelian->insertDetailPembelian();
                 if($data['response'] == 'ERROR') {
-                    $result = array('status' => 'RC404', 'message' => 'Proses insert data jadwal mata diklat gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
-                // } else if($data['response'] == 'JAMING') {
-                //     $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses simpan data jadwal mata diklat dengan judul '.$data['nama'].' gagal, pastikan jam selesai lebih besar dari jam mulai'), 'csrfHash' => $csrfHash);
-                // } else if($data['response'] == 'ERRDATA') {
-                //     $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses simpan data jadwal mata diklat dengan judul '.$data['nama'].' gagal, karena ditemukan hari dan jam yang sama'), 'csrfHash' => $csrfHash);
+                    $result = array('status' => 'RC404', 'message' => 'Proses insert data gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
                 } else if($data['response'] == 'SUCCESS') {
-                    $result = array('status' => 'RC200', 'message' => 'Proses insert data jadwal mata diklat dengan judul '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                    $result = array('status' => 'RC200', 'message' => 'Proses insert data sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
                 }
             }
         } else {
-            $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses insert data jadwal mata diklat gagal, mohon coba kembali'), 'kode'=>$modId, 'csrfHash' => $csrfHash);
+            $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses insert data gagal, mohon coba kembali'), 'kode'=>$modId, 'csrfHash' => $csrfHash);
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }
@@ -236,7 +241,7 @@ class Pembelian extends SLP_Controller {
         $modId    = escape($this->input->post('tokenId', TRUE));
         $flag     = $this->encryption->decrypt(escape($this->input->post('flag', TRUE)));
         if(!empty($session) AND !empty($modId)) {
-            $data = $this->mMata_WI->updateDataMataDiklatWI();
+            $data = $this->mPembelian->updateDataMataDiklatWI();
             if($data['response'] == 'ERROR') {
                 $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data jadwal mata diklat gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'SUCCESS') {
