@@ -110,14 +110,19 @@
                                         <?php echo form_dropdown('id_barang', isset($data_barang) ? $data_barang : array(''=>'Pilih Data'), $this->input->post('id_barang', TRUE), 'class="form-control select-all" id="id_barang" required=""');?>
                                         <div class="invalid-feedback"></div>
                                     </div>
-                                    <div class="col-12 col-md-4 required">
+                                    <div class="col-12 col-md-2 required">
                                         <label for="qty_barang" class="control-label font-weight-bolder">Jumlah <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control nominal" name="qty_barang" id="qty_barang" placeholder="Jumlah Pembelian" value="<?php echo $this->input->post('qty_barang', TRUE); ?>" required>
+                                        <input type="text" class="form-control nominal" name="qty_barang" id="qty_barang" placeholder="Jumlah" value="<?php echo $this->input->post('qty_barang', TRUE); ?>" required>
                                         <div class="invalid-feedback"></div>
                                     </div>
-                                    <div class="col-12 col-md-4 required">
+                                    <div class="col-12 col-md-3 required">
                                         <label for="harga_barang" class="control-label font-weight-bolder">Harga <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control nominal" name="harga_barang" id="harga_barang" placeholder="Harga" value="<?php echo $this->input->post('harga_barang', TRUE); ?>" required>
+                                        <input type="text" class="form-control nominal hitung" name="harga_barang" id="harga_barang" placeholder="Harga" value="<?php echo $this->input->post('harga_barang', TRUE); ?>" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="col-12 col-md-3 required">
+                                        <label for="total_harga" class="control-label font-weight-bolder">Total Harga <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control nominal" name="total_harga" id="total_harga" placeholder="Harga" value="<?php echo $this->input->post('total_harga', TRUE); ?>" required>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -133,7 +138,7 @@
                     </div>
                 </div>
                 <div class="table-responsive-md">
-                    <h5 class="heading font-weight-bold"><i class="fas fa-list"></i> Detail Pembelian Barang <span class="lblMataDiklat"></span></h5>
+                    <h5 class="heading font-weight-bold"><i class="fas fa-list"></i> Detail Pembelian No Faktur <span class="lblDetail"></span></h5>
                     <table cellspacing="0" class="table table-striped table-borderless table-hover table-sm" id="tblMata" width="100%">
                         <thead>
                             <tr>
@@ -147,6 +152,7 @@
                                 <th class="font-weight-bold">Barang</th>
                                 <th class="font-weight-bold text-left">Satuan</th>
                                 <th class="font-weight-bold text-left">Jumlah</th>
+                                <th class="font-weight-bold text-left"> Harga Barang</th>
                                 <th class="font-weight-bold text-left"> Total Harga</th>
                                 <th class="font-weight-bold text-center">Status Beli</th>
                             </tr>
@@ -154,6 +160,8 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <hr>
+                <div class="d-flex p-2 col-example">Total Pembelian : </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-blue-grey waves-effect waves-light px-3 py-2 mx-0 font-weight-bold btnCloseMataDik"><i class="fas fa-times"></i> Close</button>

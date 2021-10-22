@@ -292,7 +292,7 @@
         let token = $(this).data('id');
         let label = $(this).data('jd');
         $('input[name="tokenDetail"]').val(token);
-        $('.lblMataDiklat').text(label);
+        $('.lblDetail').text(label);
         getDataListPembelian(token);
     });
     $(document).on('click', '.btnDetail', function (e) {
@@ -412,6 +412,7 @@
                                     html += '<td class="text-left">'+v['satuan']+'</td>';
                                     html += '<td class="text-left">'+v['qty_barang']+'</td>';
                                     html += '<td class="text-left">'+v['harga_barang']+'</td>';
+                                    html += '<td class="text-left">'+v['total_harga']+'</td>';
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
@@ -423,6 +424,7 @@
                     html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
                 $('#tblMata > tbody').html(html);
             }
+
         });
     }
     // Handle click on "check all" control
@@ -714,4 +716,12 @@
       return false;
     }
     });
+
+    $(document).on('change input keyup', '.hitung', function(e){
+    var hargaBarang = $('#harga_barang').val();
+    var qtyBarang = $('#qty_barang').val();
+    var totalHarga = Math.round(hargaBarang*qtyBarang).toString();
+    $('#total_harga').val(totalHarga);
+    // $('#biaya').val(biaya);
+  });
 </script>

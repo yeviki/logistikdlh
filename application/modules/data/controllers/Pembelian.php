@@ -55,7 +55,7 @@ class Pembelian extends SLP_Controller {
                     $row[] = $dl['no_faktur_buy'];
                     $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
 
-                    <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Tambah Barang"><i class="fas fa-cog"></i></button>
+                    <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" data-jd="'.$dl['no_faktur_buy'].'" title="Tambah Barang"><i class="fas fa-cog"></i></button>
 
                     <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     $data[] = $row;
@@ -193,6 +193,7 @@ class Pembelian extends SLP_Controller {
                 $isi['satuan'] 		            = $q['satuan'];
                 $isi['qty_barang'] 		        = $q['qty_barang'];
                 $isi['harga_barang'] 			= $q['harga_barang'];
+                $isi['total_harga'] 			= $q['total_harga'];
                 $isi['status'] 			        = convert_status($q['id_status_barang']);
                 $matadiklat[$q['no_faktur_buy']][] = $isi;
             }
@@ -206,7 +207,8 @@ class Pembelian extends SLP_Controller {
     private function validasiDataValueDetail() {
         $this->form_validation->set_rules('id_barang', 'Barang', 'required|trim');
         $this->form_validation->set_rules('qty_barang', 'Mata Diklat', 'required|trim');
-        $this->form_validation->set_rules('harga_barang', 'Hari', 'required|trim');
+        $this->form_validation->set_rules('harga_barang', 'Harga Barang', 'required|trim');
+        $this->form_validation->set_rules('total_harga', 'Total Harga', 'required|trim');
         validation_message_setting();
         if($this->form_validation->run() == FALSE)
             return false;
