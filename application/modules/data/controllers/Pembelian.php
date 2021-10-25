@@ -55,7 +55,7 @@ class Pembelian extends SLP_Controller {
                     $row[] = $dl['no_faktur_buy'];
                     $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
 
-                    <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" data-jd="'.$dl['no_faktur_buy'].'" title="Tambah Barang"><i class="fas fa-cog"></i></button>
+                    <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" data-jd="'.$dl['no_faktur_buy'].'" title="Tambah Barang"><i class="fas fa-cart-plus"></i></button>
 
                     <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     $data[] = $row;
@@ -173,7 +173,7 @@ class Pembelian extends SLP_Controller {
         } else {
             if($name == 'new-pembelian')
                 $this->pembelianCreate();
-            else if($name == 'set-jadwal')
+            else if($name == 'set-detail')
                 $this->pembelianUpdate();
             else
                 $this->pembelianData();
@@ -186,15 +186,19 @@ class Pembelian extends SLP_Controller {
         $dataID     = $this->encryption->decrypt(escape($this->input->get('token', TRUE)));
         if(!empty($dataID) AND !empty($session)) {
             $data = $this->mPembelian->getDataListDetailPembelian($dataID);
+
+            // $data_total = $this->mPembelian->getTotalPembelian($dataID);
+
             $matadiklat = array();
             foreach ($data as $q) {
                 $isi['id_detail_pembelian'] 	= $this->encryption->encrypt($q['id_detail_pembelian']);
                 $isi['nm_barang'] 	            = $q['nm_barang'];
                 $isi['satuan'] 		            = $q['satuan'];
                 $isi['qty_barang'] 		        = $q['qty_barang'];
-                $isi['harga_barang'] 			= $q['harga_barang'];
-                $isi['total_harga'] 			= $q['total_harga'];
-                $isi['status'] 			        = convert_status($q['id_status_barang']);
+                $isi['harga_barang'] 			= harga_indo($q['harga_barang']);
+                $isi['total_harga'] 			= harga_indo($q['total_harga']);
+                $isi['subtotal'] 			    = $q['total_harga'];
+                $isi['status'] 			        = convert_status_stok($q['id_status_barang']);
                 $matadiklat[$q['no_faktur_buy']][] = $isi;
             }
             $result = array('status' => 'RC200', 'message' => $matadiklat, 'csrfHash' => $csrfHash);
@@ -242,15 +246,16 @@ class Pembelian extends SLP_Controller {
         $csrfHash = $this->security->get_csrf_hash();
         $modId    = escape($this->input->post('tokenId', TRUE));
         $flag     = $this->encryption->decrypt(escape($this->input->post('flag', TRUE)));
+        // die($modId);
         if(!empty($session) AND !empty($modId)) {
-            $data = $this->mPembelian->updateDataMataDiklatWI();
+            $data = $this->mPembelian->updateStokBarang();
             if($data['response'] == 'ERROR') {
-                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data jadwal mata diklat gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'SUCCESS') {
-                $result = array('status' => 'RC200', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data jadwal mata diklat dengan judul '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC200', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang dengan faktur '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
             }
         } else {
-            $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data jadwal mata diklat gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+            $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }

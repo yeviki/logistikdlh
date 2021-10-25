@@ -4,6 +4,7 @@
     let csrfName  = '<?php echo $this->security->get_csrf_token_name(); ?>';
     let site      = '<?php echo site_url(isset($siteUri) ? $siteUri : ''); ?>';
     let msg       = new alertMessage();
+    let jumlah = 0;
     const swalAlert = Swal.mixin({
         customClass: {
             confirmButton: 'btn btn-primary',
@@ -297,7 +298,7 @@
     });
     $(document).on('click', '.btnDetail', function (e) {
         $('#formSettingMataDiklat').slideToggle('slow');
-        $('#formEntry').attr('action', site + '/set-jadwal');
+        $('#formEntry').attr('action', site + '/set-detail');
         $('form#formDetailPembelian .select-all').select2().val('').trigger("change");
         $('form#formDetailPembelian #status_rules').select2().val('1').trigger("change");
     });
@@ -396,6 +397,7 @@
                 $('input[name="'+csrfName+'"]').val(data.csrfHash);
                 if(data.status = 'RC200') {
                     if(Object.keys(data.message).length > 0) {
+                        jumlah = 0;
                         $.each(data.message, function(key, val){
                             // html += ' <tr class="table-info"><td colspan="8"><strong>Nama Kontrol : '+key+'</strong></td></tr>';
                             let no = 1;
@@ -403,7 +405,7 @@
                                 html += '<tr>';
                                     html += '<td class="text-center">'+
                                                 '<div class="custom-control custom-checkbox ml-2">'+
-                                                    '<input type="checkbox" class="custom-control-input" name="checkid[]" id="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'" class="checkid" value="'+v['id_md_wi']+'">'+
+                                                    '<input type="checkbox" class="custom-control-input" name="checkid[]" id="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'" class="checkid" value="'+v['id_detail_pembelian']+'">'+
                                                     '<label class="custom-control-label" for="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'"></label>'+
                                                 '</div>'+
                                             '</td>';
@@ -416,35 +418,40 @@
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
+                                jumlah += parseInt(v['subtotal']);
+
                             });
                         });
+                        $("#jumlah").html('Rp. '+NumberDenganKoma(jumlah));
                     } else
                         html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
+                        
                 } else
                     html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
-                $('#tblMata > tbody').html(html);
+                $('#tblDetail > tbody').html(html);
             }
 
         });
     }
+
     // Handle click on "check all" control
     $(document).on('click', '#checkAll', function(){
-        $('#tblMata > tbody input[type="checkbox"]').prop('checked', this.checked).trigger('change');
+        $('#tblDetail > tbody input[type="checkbox"]').prop('checked', this.checked).trigger('change');
     });
     // Handle click on "checked" control
-    $(document).on('change', '#tblMata > tbody input[type="checkbox"]', function (e) {
-        let rowCount = $('#tblMata > tbody input[type="checkbox"]').length;
-        let n = $('#tblMata > tbody input[type="checkbox"]').filter(':checked').length;
+    $(document).on('change', '#tblDetail > tbody input[type="checkbox"]', function (e) {
+        let rowCount = $('#tblDetail > tbody input[type="checkbox"]').length;
+        let n = $('#tblDetail > tbody input[type="checkbox"]').filter(':checked').length;
         if(n > 0) {
             $('#eventButoon').show();
-            $('#btnDeleteJadwal').removeAttr('disabled');
-            $('#btnAktifJadwal').removeAttr('disabled');
-            $('#btnNonaktifJadwal').removeAttr('disabled');
+            $('#btnDeleteDetail').removeAttr('disabled');
+            $('#btnUpdateStok').removeAttr('disabled');
+            $('#btnRefundStok').removeAttr('disabled');
         } else {
             $('#eventButoon').hide();
-            $('#btnDeleteJadwal').attr('disabled', '');
-            $('#btnAktifJadwal').attr('disabled', '');
-            $('#btnNonaktifJadwal').attr('disabled', '');
+            $('#btnDeleteDetail').attr('disabled', '');
+            $('#btnUpdateStok').attr('disabled', '');
+            $('#btnRefundStok').attr('disabled', '');
         }
         $(this).is(':checked') ? $(this).closest('tr').addClass('table-active') : $(this).closest('tr').removeClass('table-active');
         if(rowCount !== n)
@@ -453,21 +460,21 @@
             $('#checkAll').prop('checked', 'checked');
     });
     // Handle click on "tr" control
-    $(document).on('click', '#tblMata > tbody > tr', function(){
+    $(document).on('click', '#tblDetail > tbody > tr', function(){
         let n = $(this).find('input[type="checkbox"]');
         n.prop('checked', (n.is(':checked')) ? false : true).trigger('change');
     });
     //btn delete rules
-    $(document).on('click', '#btnDeleteJadwal', function (e){
+    $(document).on('click', '#btnDeleteDetail', function (e){
         e.preventDefault();
         let token = $('input[name="tokenDetail"]').val();
         let rules = [];
-        $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
+        $.each($('#tblDetail > tbody input[type="checkbox"]:checked'), function(){
             rules.push($(this).val());
         });
         const postData = {
             'tokenId': token,
-            'jadwalId': rules,
+            'detailId': rules,
             'flag'   : '<?= $this->encryption->encrypt('DR'); ?>',
             '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
         };
@@ -486,7 +493,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: site + '/rules-pembelian/set-jadwal',
+                    url: site + '/rules-pembelian/set-detail',
                     type: 'POST',
                     data: postData,
                     dataType: "json",
@@ -523,8 +530,8 @@
                     $('#errDiklat').html(msg.error('Harap periksa kembali data yang dihapus'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
-                    $("#btnDeleteJadwal").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
-                    $("#btnDeleteJadwal").removeClass('disabled');
+                    $("#btnDeleteDetail").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
+                    $("#btnDeleteDetail").removeClass('disabled');
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel ) {
                 swalAlert.fire({
@@ -535,24 +542,24 @@
                 }).then((result) => {
                     if (result.value) {
                         $('#frmDetailPem').waitMe('hide');
-                        $("#btnDeleteJadwal").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
-                        $("#btnDeleteJadwal").removeClass('disabled');
+                        $("#btnDeleteDetail").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
+                        $("#btnDeleteDetail").removeClass('disabled');
                     }
                 })
             }
         })
     });
     //btn update status aktif
-    $(document).on('click', '#btnAktifJadwal', function (e){
+    $(document).on('click', '#btnUpdateStok', function (e){
         e.preventDefault();
         let token = $('input[name="tokenDetail"]').val();
         let rules = [];
-        $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
+        $.each($('#tblDetail > tbody input[type="checkbox"]:checked'), function(){
             rules.push($(this).val());
         });
         const postData = {
             'tokenId': token,
-            'jadwalId': rules,
+            'detailId': rules,
             'flag'   : '<?= $this->encryption->encrypt('AR'); ?>',
             '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
         };
@@ -571,7 +578,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: site + '/rules-pembelian/set-jadwal',
+                    url: site + '/rules-pembelian/set-detail',
                     type: 'POST',
                     data: postData,
                     dataType: "json",
@@ -607,8 +614,8 @@
                     $('#errDiklat').html(msg.error('Harap periksa kembali data yang diupdate'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
-                    $("#btnAktifJadwal").html('<i class="fas fa-check"></i> AKTIFKAN JADWAL');
-                    $("#btnAktifJadwal").removeClass('disabled');
+                    $("#btnUpdateStok").html('<i class="fas fa-check"></i> AKTIFKAN JADWAL');
+                    $("#btnUpdateStok").removeClass('disabled');
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel ) {
                 swalAlert.fire({
@@ -619,24 +626,24 @@
                 }).then((result) => {
                     if (result.value) {
                         $('#frmDetailPem').waitMe('hide');
-                        $("#btnAktifJadwal").html('<i class="fas fa-check"></i> AKTIFKAN JADWAL');
-                        $("#btnAktifJadwal").removeClass('disabled');
+                        $("#btnUpdateStok").html('<i class="fas fa-check"></i> AKTIFKAN JADWAL');
+                        $("#btnUpdateStok").removeClass('disabled');
                     }
                 })
             }
         })
     });
     //btn update status non aktif
-    $(document).on('click', '#btnNonaktifJadwal', function (e){
+    $(document).on('click', '#btnRefundStok', function (e){
         e.preventDefault();
         let token = $('input[name="tokenDetail"]').val();
         let rules = [];
-        $.each($('#tblMata > tbody input[type="checkbox"]:checked'), function(){
+        $.each($('#tblDetail > tbody input[type="checkbox"]:checked'), function(){
             rules.push($(this).val());
         });
         const postData = {
             'tokenId': token,
-            'jadwalId': rules,
+            'detailId': rules,
             'flag'   : '<?= $this->encryption->encrypt('NR'); ?>',
             '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
         };
@@ -655,7 +662,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: site + '/rules-pembelian/set-jadwal',
+                    url: site + '/rules-pembelian/set-detail',
                     type: 'POST',
                     data: postData,
                     dataType: "json",
@@ -691,8 +698,8 @@
                     $('#errDiklat').html(msg.error('Harap periksa kembali data yang diupdate'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
-                    $("#btnNonaktifJadwal").html('<i class="fas fa-times"></i> NON AKTIFKAN JADWAL');
-                    $("#btnNonaktifJadwal").removeClass('disabled');
+                    $("#btnRefundStok").html('<i class="fas fa-times"></i> NON AKTIFKAN JADWAL');
+                    $("#btnRefundStok").removeClass('disabled');
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel ) {
                 swalAlert.fire({
@@ -703,8 +710,8 @@
                 }).then((result) => {
                     if (result.value) {
                         $('#frmDetailPem').waitMe('hide');
-                        $("#btnNonaktifJadwal").html('<i class="fas fa-times"></i> NON AKTIFKAN JADWAL');
-                        $("#btnNonaktifJadwal").removeClass('disabled');
+                        $("#btnRefundStok").html('<i class="fas fa-times"></i> NON AKTIFKAN JADWAL');
+                        $("#btnRefundStok").removeClass('disabled');
                     }
                 })
             }
@@ -718,10 +725,14 @@
     });
 
     $(document).on('change input keyup', '.hitung', function(e){
-    var hargaBarang = $('#harga_barang').val();
-    var qtyBarang = $('#qty_barang').val();
-    var totalHarga = Math.round(hargaBarang*qtyBarang).toString();
-    $('#total_harga').val(totalHarga);
-    // $('#biaya').val(biaya);
-  });
+        var hargaBarang = $('#harga_barang').val();
+        var qtyBarang = $('#qty_barang').val();
+        var totalHarga = Math.round(hargaBarang*qtyBarang).toString();
+        $('#total_harga').val(totalHarga);
+        // $('#biaya').val(biaya);
+    });
+
+    function NumberDenganKoma(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 </script>

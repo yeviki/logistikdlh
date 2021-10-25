@@ -78,7 +78,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-xl" id="frmDetailPem">
         <div class="modal-content">
             <div class="modal-header aqua-gradient-rgba">
-                <h4 class="modal-title heading lead white-text font-weight-bold"><i class="fas fa-cogs"></i> Detail Pembelian</h4>
+                <h4 class="modal-title heading lead white-text font-weight-bold"><i class="fas fa-cart-plus"></i> Detail Pembelian</h4>
                 <button type="button" class="close btnCloseMataDik" aria-label="Close">
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
@@ -90,9 +90,9 @@
                             <button class="btn btn-success waves-effect waves-light px-3 py-2 mx-0 font-weight-bold btnDetail" type="button"><i class="fas fa-plus-circle"></i> Tambah Pembelian</button>
                         </div>
                         <div class="float-right" style="display: none;" id="eventButoon">
-                            <button class="btn btn-danger waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnDeleteJadwal" disabled=""><i class="fas fa-trash-alt"></i> Delete Barang</button>
-                            <button class="btn btn-info waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnAktifJadwal" disabled=""><i class="fas fa-check"></i> Aktifkan Jadwal</button>
-                            <button class="btn btn-orange waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnNonaktifJadwal" disabled=""><i class="fas fa-times"></i> Non Aktifkan Jadwal</button>
+                            <button class="btn btn-danger waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnDeleteDetail" disabled=""><i class="fas fa-trash-alt"></i> Delete Barang</button>
+                            <button class="btn btn-info waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnUpdateStok" disabled=""><i class="fas fa-check"></i> Update Stok</button>
+                            <button class="btn btn-orange waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnRefundStok" disabled=""><i class="fas fa-times"></i> Refund Stok</button>
                         </div>
                     </div>
                     <div class="col-12 col-md-12">
@@ -139,7 +139,7 @@
                 </div>
                 <div class="table-responsive-md">
                     <h5 class="heading font-weight-bold"><i class="fas fa-list"></i> Detail Pembelian No Faktur <span class="lblDetail"></span></h5>
-                    <table cellspacing="0" class="table table-striped table-borderless table-hover table-sm" id="tblMata" width="100%">
+                    <table cellspacing="0" class="table table-striped table-borderless table-hover table-sm" id="tblDetail" width="100%">
                         <thead>
                             <tr>
                                 <th width="2%" class="text-center">
@@ -158,10 +158,16 @@
                             </tr>
                         </thead>
                         <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6">Total Pembelian</th>
+                                <th><span id="jumlah"></span></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <hr>
-                <div class="d-flex p-2 col-example">Total Pembelian : </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-blue-grey waves-effect waves-light px-3 py-2 mx-0 font-weight-bold btnCloseMataDik"><i class="fas fa-times"></i> Close</button>

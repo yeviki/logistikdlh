@@ -273,3 +273,11 @@ if (!function_exists('date_convert')) {
         return $newdate;
     }
 }
+
+if( ! function_exists('harga_indo')) {
+	function harga_indo($harga) {
+		$angka = number_format($harga,0,".",".");
+        $formatHarga = 'Rp. '.$angka; //hasil akhir harga
+        return $formatHarga;
+	}
+}

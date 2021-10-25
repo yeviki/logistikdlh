@@ -167,5 +167,18 @@ if (!function_exists('replace_backslases')) {
         return $to;
     }
 }
+
+/**
+ * Fungsi convert status stok pembelian
+ */
+if (!function_exists('convert_status_stok')) {
+    function convert_status_stok($id_status) {
+        $status = array(
+            0 => '<span class="badge badge-pill badge-danger">PENDING</span>',
+            1 => '<span class="badge badge-pill badge-success">DONE</span>',
+        );
+        return $status[intval($id_status)];
+    }
+}
 /* End of file inc.php */
 /* Location: ./application/helpers/inc_helper.php */

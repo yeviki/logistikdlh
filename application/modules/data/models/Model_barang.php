@@ -89,6 +89,23 @@ class Model_barang extends CI_Model {
             );
             /*query insert*/
             $this->db->insert('data_barang', $data);
+
+            $id_barang = $this->db->insert_id();
+
+            $data_gudang = array(
+                'id_barang'         => $id_barang,
+                'qty_stok'          => '0',
+                'id_level'          => '',
+                'create_by'         => $create_by,
+                'create_date'       => $create_date,
+                'create_ip'         => $create_ip,
+                'mod_by'            => $create_by,
+                'mod_date'          => $create_date,
+                'mod_ip'            => $create_ip
+            );
+            /*query insert*/
+            
+            $this->db->insert('data_gudang', $data_gudang);
             return array('response'=>'SUCCESS', 'nama'=>$nm_barang);
         }
     }
