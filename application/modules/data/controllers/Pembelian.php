@@ -53,6 +53,7 @@ class Pembelian extends SLP_Controller {
                     $row[] = $no;
                     $row[] = $dl['tgl_pembelian'];
                     $row[] = $dl['no_faktur_buy'];
+                    $row[] = $dl['total'];
                     $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
 
                     <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" data-jd="'.$dl['no_faktur_buy'].'" title="Tambah Barang"><i class="fas fa-cart-plus"></i></button>
@@ -186,12 +187,9 @@ class Pembelian extends SLP_Controller {
         $dataID     = $this->encryption->decrypt(escape($this->input->get('token', TRUE)));
         if(!empty($dataID) AND !empty($session)) {
             $data = $this->mPembelian->getDataListDetailPembelian($dataID);
-
-            // $data_total = $this->mPembelian->getTotalPembelian($dataID);
-
             $matadiklat = array();
             foreach ($data as $q) {
-                $isi['id_detail_pembelian'] 	= $this->encryption->encrypt($q['id_detail_pembelian']);
+                $isi['id_detail_pembelian'] 	= $this->encryption->encrypt($q['id_detail_pembelian']).'####'.$q['id_status_barang'];
                 $isi['nm_barang'] 	            = $q['nm_barang'];
                 $isi['satuan'] 		            = $q['satuan'];
                 $isi['qty_barang'] 		        = $q['qty_barang'];
@@ -253,6 +251,8 @@ class Pembelian extends SLP_Controller {
                 $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'SUCCESS') {
                 $result = array('status' => 'RC200', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang dengan faktur '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+            } else if($data['response'] == 'STOK') {
+                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang dengan faktur '.$data['nama'].' gagal, stok sudah terupdate', 'kode'=>$modId, 'csrfHash' => $csrfHash);
             }
         } else {
             $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);

@@ -20,9 +20,10 @@
                             <thead>
                                 <tr>
                                     <th width="3%" class="font-weight-bold">#</th>
-                                    <th width="50%" class="font-weight-bold">Tanggal</th>
+                                    <th width="20%" class="font-weight-bold">Tanggal</th>
                                     <th width="40%" class="font-weight-bold">No Faktur</th>
-                                    <th width="9%" class="font-weight-bold">Action</th>
+                                    <th width="20%" class="font-weight-bold">Total Pembelian</th>
+                                    <th width="12%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -92,7 +93,6 @@
                         <div class="float-right" style="display: none;" id="eventButoon">
                             <button class="btn btn-danger waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnDeleteDetail" disabled=""><i class="fas fa-trash-alt"></i> Delete Barang</button>
                             <button class="btn btn-info waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnUpdateStok" disabled=""><i class="fas fa-check"></i> Update Stok</button>
-                            <button class="btn btn-orange waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnRefundStok" disabled=""><i class="fas fa-times"></i> Refund Stok</button>
                         </div>
                     </div>
                     <div class="col-12 col-md-12">
@@ -160,8 +160,8 @@
                         <tbody></tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="6">Total Pembelian</th>
-                                <th><span id="jumlah"></span></th>
+                                <th colspan="6"><h4>Total Pembelian</h4></th>
+                                <th><h4><span id="jumlah"></span></h4></th>
                                 <th></th>
                             </tr>
                         </tfoot>

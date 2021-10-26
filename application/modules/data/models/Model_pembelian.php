@@ -33,12 +33,27 @@ class Model_pembelian extends CI_Model {
     }
 
     private function _get_datatables_query() {
-        $this->db->select('id_pembelian,
-                           no_faktur_buy,
-                           tgl_pembelian,
-                           catatan
-                           ');
-        $this->db->from('data_pembelian');
+        $this->db->select('a.id_pembelian,
+                            a.no_faktur_buy,
+                            a.tgl_pembelian,
+                            b.id_detail_pembelian,
+                            b.id_barang,
+                            b.qty_barang,
+                            b.harga_barang,
+                            b.total_harga,
+                            sum(b.total_harga) as total,
+                            b.id_status_barang,
+                            c.nm_barang,
+                            c.id_satuan,
+                            c.id_kat_barang,
+                            d.satuan,
+                            e.kategori
+                            ');
+        $this->db->from('data_pembelian a');
+        $this->db->join('detail_pembelian b', 'b.id_pembelian = a.id_pembelian', 'inner');
+        $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
+        $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
+        $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
         $i = 0;
         foreach ($this->search as $item) { // loop column
             if($_POST['search']['value']) { // if datatable send POST for search
@@ -53,7 +68,7 @@ class Model_pembelian extends CI_Model {
             }
             $i++;
         }
-        $this->db->order_by('id_pembelian ASC');
+        $this->db->order_by('a.id_pembelian ASC');
     }
 
     /*Fungsi get data edit by id*/
@@ -251,16 +266,23 @@ class Model_pembelian extends CI_Model {
             return array('response'=>'ERROR', 'nama'=>'');
         else {
             foreach ($detailPembelian as $key => $r) {
-                $this->db->where('id_detail_pembelian', abs($this->encryption->decrypt($r)));
+                list($idPembelian,$status) = explode('####',$r);
+                
+                $this->db->where('id_detail_pembelian', abs($this->encryption->decrypt($idPembelian)));
                 $this->db->where('id_pembelian', abs($id));
                 if($flag == "AR") {
-                    $this->db->update('detail_pembelian', array('id_status_barang' => 1));
-                } elseif($flag == "NR") {
-                    $this->db->update('detail_pembelian', array('id_status_barang' => 0));
-                } elseif($flag == "DR") {
-                    $this->db->delete('detail_pembelian');
+                    if ($status==0) {
+                        $this->db->update('detail_pembelian', array('id_status_barang' => 1));
+                    }
+                } else if($flag == "DR") {
+                    if ($status==0) {
+                        $this->db->delete('detail_pembelian');
+                    } else {
+                        return array('response'=>'STOK', 'nama'=>$no_faktur_buy);
+                    }
                 }
             }
+
             return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
         }
     }
