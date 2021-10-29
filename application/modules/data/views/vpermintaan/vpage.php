@@ -22,7 +22,7 @@
                                     <th width="3%" class="font-weight-bold">#</th>
                                     <th width="20%" class="font-weight-bold">Tanggal</th>
                                     <th width="40%" class="font-weight-bold">No Faktur</th>
-                                    <th width="20%" class="font-weight-bold">Total Pembelian</th>
+                                    <th width="20%" class="font-weight-bold">Total Permintaan</th>
                                     <th width="12%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>
@@ -53,7 +53,7 @@
                         <div class="invalid-feedback"></div>
                     </div>
                     <div class="col-12 col-md-6 required">
-                        <label for="tgl_pembelian" class="control-label font-weight-bolder">Tanggal Pembelian <span class="text-danger">*</span></label>
+                        <label for="tgl_pembelian" class="control-label font-weight-bolder">Tanggal Permintaan <span class="text-danger">*</span></label>
                         <input placeholder="Pilih Tanggal" type="date" id="tgl_pembelian" name="tgl_pembelian" class="form-control">
                         <div class="invalid-feedback"></div>
                     </div>
