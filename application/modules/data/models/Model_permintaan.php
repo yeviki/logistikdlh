@@ -13,7 +13,7 @@ class Model_permintaan extends CI_Model {
     }
 
     /*Fungsi Get Data List*/
-    var $search = array('no_faktur_buy');
+    var $search = array('no_faktur_req');
     public function get_datatables() {
         $this->_get_datatables_query();
         if($_POST['length'] != -1)
@@ -29,31 +29,16 @@ class Model_permintaan extends CI_Model {
     }
 
     public function count_all() {
-        return $this->db->count_all_results('data_pembelian');
+        return $this->db->count_all_results('data_permintaan');
     }
 
     private function _get_datatables_query() {
-        $this->db->select('a.id_pembelian,
-                            a.no_faktur_buy,
-                            a.tgl_pembelian,
-                            b.id_detail_pembelian,
-                            b.id_barang,
-                            b.qty_barang,
-                            b.harga_barang,
-                            b.total_harga,
-                            sum(b.total_harga) as total,
-                            b.id_status_barang,
-                            c.nm_barang,
-                            c.id_satuan,
-                            c.id_kat_barang,
-                            d.satuan,
-                            e.kategori
+        $this->db->select('a.id_permintaan,
+                            a.no_faktur_req,
+                            a.tanggal_req,
+                            a.catatan
                             ');
-        $this->db->from('data_pembelian a');
-        $this->db->join('detail_pembelian b', 'b.id_pembelian = a.id_pembelian', 'inner');
-        $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
-        $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
-        $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
+        $this->db->from('data_permintaan a');
         $i = 0;
         foreach ($this->search as $item) { // loop column
             if($_POST['search']['value']) { // if datatable send POST for search
@@ -68,13 +53,13 @@ class Model_permintaan extends CI_Model {
             }
             $i++;
         }
-        $this->db->order_by('a.id_pembelian ASC');
+        $this->db->order_by('a.id_permintaan ASC');
     }
 
     /*Fungsi get data edit by id*/
     public function getDataDetail($id) {
-        $this->db->where('id_pembelian', abs($id));
-        $query = $this->db->get('data_pembelian');
+        $this->db->where('id_permintaan', abs($id));
+        $query = $this->db->get('data_permintaan');
         return $query->row_array();
     }
 
@@ -84,17 +69,19 @@ class Model_permintaan extends CI_Model {
         $create_by      = $this->app_loader->current_account();
         $create_date    = gmdate('Y-m-d H:i:s', time()+60*60*7);
         $create_ip      = $this->input->ip_address();
-        $no_faktur_buy = escape($this->input->post('no_faktur_buy', TRUE));
+        $no_faktur_req  = escape($this->input->post('no_faktur_req', TRUE));
         //cek nama matadiklat duplicate
-        $this->db->where('no_faktur_buy', $no_faktur_buy);
-        $qTot = $this->db->count_all_results('data_pembelian');
+        $this->db->where('no_faktur_req', $no_faktur_req);
+        $qTot = $this->db->count_all_results('data_permintaan');
         if($qTot > 0)
-            return array('response'=>'ERROR', 'nama'=>$no_faktur_buy);
+            return array('response'=>'ERROR', 'nama'=>$no_faktur_req);
         else {
             $data = array(
-                'no_faktur_buy'     => $no_faktur_buy,
-                'tgl_pembelian'     => escape($this->input->post('tgl_pembelian', TRUE)),
+                'no_faktur_req'     => $no_faktur_req,
+                'tanggal_req'       => escape($this->input->post('tanggal_req', TRUE)),
                 'catatan'           => escape($this->input->post('catatan', TRUE)),
+                'id_tpa'            => '0',
+                'status_req'        => '1',
                 'create_by'         => $create_by,
                 'create_date'       => $create_date,
                 'create_ip'         => $create_ip,
@@ -103,8 +90,8 @@ class Model_permintaan extends CI_Model {
                 'mod_ip'            => $create_ip
             );
             /*query insert*/
-            $this->db->insert('data_pembelian', $data);
-            return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
+            $this->db->insert('data_permintaan', $data);
+            return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
         }
     }
 
@@ -114,32 +101,34 @@ class Model_permintaan extends CI_Model {
         $create_by          = $this->app_loader->current_account();
         $create_date        = gmdate('Y-m-d H:i:s', time()+60*60*7);
         $create_ip          = $this->input->ip_address();
-        $id_pembelian	        = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
-        $no_faktur_buy          = escape($this->input->post('no_faktur_buy', TRUE));
+        $id_permintaan	    = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
+        $no_faktur_req      = escape($this->input->post('no_faktur_req', TRUE));
         //cek data by id
-        $data_search = $this->getDataDetail($id_pembelian);
+        $data_search = $this->getDataDetail($id_permintaan);
         if(count($data_search) <= 0)
             return array('response'=>'ERROR', 'nama'=>'');
         else {
             //cek data duplicate
-            $this->db->where('no_faktur_buy', $no_faktur_buy);
-            $this->db->where('id_pembelian !=', $id_pembelian);
-            $qTot = $this->db->count_all_results('data_pembelian');
+            $this->db->where('no_faktur_req', $no_faktur_req);
+            $this->db->where('id_permintaan !=', $id_permintaan);
+            $qTot = $this->db->count_all_results('data_permintaan');
             if($qTot > 0)
-                return array('response'=>'ERRDATA', 'nama'=>$no_faktur_buy);
+                return array('response'=>'ERRDATA', 'nama'=>$no_faktur_req);
             else {
                 $data = array(
-                    'no_faktur_buy'     => $no_faktur_buy,
-                    'tgl_pembelian'     => escape($this->input->post('tgl_pembelian', TRUE)),
+                    'no_faktur_req'     => $no_faktur_req,
+                    'tanggal_req'       => escape($this->input->post('tanggal_req', TRUE)),
                     'catatan'           => escape($this->input->post('catatan', TRUE)),
+                    'id_tpa'            => '0',
+                    'status_req'        => '1',
                     'mod_by'            => $create_by,
                     'mod_date'          => $create_date,
                     'mod_ip'            => $create_ip
                 );
                 /*query update*/
-                $this->db->where('id_pembelian', abs($id_pembelian));
-                $this->db->update('data_pembelian', $data);
-                return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
+                $this->db->where('id_permintaan', abs($id_permintaan));
+                $this->db->update('data_permintaan', $data);
+                return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
             }
         }
     }
@@ -149,73 +138,71 @@ class Model_permintaan extends CI_Model {
         $id = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
         //cek data by id
         $dataSearch = $this->getDataDetail($id);
-        $no_faktur_buy = !empty($dataSearch) ? $dataSearch['no_faktur_buy'] : '';
+        $no_faktur_req = !empty($dataSearch) ? $dataSearch['no_faktur_req'] : '';
         if (count($dataSearch) <= 0)
             return array('response'=>'ERROR', 'nama'=>'');
         else {
-            $this->db->where('id_pembelian', abs($id));
-            $count = $this->db->count_all_results('det_pembelian');
+            $this->db->where('id_permintaan', abs($id));
+            $count = $this->db->count_all_results('detail_permintaan');
             if ($count > 0)
-                return array('response'=>'ERRDATA', 'nama'=>$no_faktur_buy);
+                return array('response'=>'ERRDATA', 'nama'=>$no_faktur_req);
             else {
-                $this->db->where('id_pembelian', abs($id));
-                $this->db->delete('data_pembelian');
-                return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
+                $this->db->where('id_permintaan', abs($id));
+                $this->db->delete('data_permintaan');
+                return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
             }
         }
     }
 
 
     /* get data list detail pembelian */
-    public function getDataListDetailPembelian($id_pembelian) {
-        $this->db->select('a.id_pembelian,
-                            a.no_faktur_buy,
-                            a.tgl_pembelian,
-                            b.id_detail_pembelian,
+    public function getDataListDetailPembelian($id_permintaan) {
+        $this->db->select('a.id_permintaan,
+                            a.no_faktur_req,
+                            a.tanggal_req,
+                            b.id_detail_permintaan,
                             b.id_barang,
-                            b.qty_barang,
-                            b.harga_barang,
-                            b.total_harga,
-                            b.id_status_barang,
+                            b.qty_req,
+                            b.qty_acc,
+                            b.id_status_req,
                             c.nm_barang,
                             c.id_satuan,
                             c.id_kat_barang,
                             d.satuan,
                             e.kategori
                             ');
-        $this->db->from('data_pembelian a');
-        $this->db->join('detail_pembelian b', 'b.id_pembelian = a.id_pembelian', 'inner');
+        $this->db->from('data_permintaan a');
+        $this->db->join('detail_permintaan b', 'b.id_permintaan = a.id_permintaan', 'inner');
         $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
         $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
         $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
-        $this->db->where('a.id_pembelian', abs($id_pembelian));
+        $this->db->where('a.id_permintaan', abs($id_permintaan));
         $query = $this->db->get();
         return $query->result_array();
     }
 
     /*Fungsi get data edit by id*/
-    public function getDataDetailPembelian($id_pembelian) {
-        $this->db->select('a.id_pembelian,
-                            a.no_faktur_buy,
-                            a.tgl_pembelian,
-                            b.id_detail_pembelian,
+    public function getDataDetailPembelian($id_permintaan) {
+        $this->db->select('a.id_permintaan,
+                            a.no_faktur_req,
+                            a.tanggal_req,
+                            b.id_detail_permintaan,
                             b.id_barang,
-                            b.qty_barang,
-                            b.harga_barang,
-                            b.total_harga,
-                            b.id_status_barang,
+                            b.qty_req,
+                            b.qty_acc,
+                            b.id_status_req,
                             c.nm_barang,
                             c.id_satuan,
                             c.id_kat_barang,
                             d.satuan,
                             e.kategori
                             ');
-        $this->db->from('data_pembelian a');
-        $this->db->join('detail_pembelian b', 'b.id_pembelian = a.id_pembelian', 'inner');
+        $this->db->from('data_permintaan a');
+        $this->db->join('detail_permintaan b', 'b.id_permintaan = a.id_permintaan', 'inner');
         $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
         $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
         $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
-        $this->db->where('a.id_pembelian', abs($id_pembelian));
+        $this->db->where('a.id_permintaan', abs($id_permintaan));
         $query = $this->db->get();
         return $query->row_array();
     }
@@ -234,14 +221,13 @@ class Model_permintaan extends CI_Model {
         $create_date    = gmdate('Y-m-d H:i:s', time()+60*60*7);
         $create_ip      = $this->input->ip_address();
         
-        $id_pembelian	    = $this->encryption->decrypt(escape($this->input->post('tokenDetail', TRUE)));
+        $id_permintaan	    = $this->encryption->decrypt(escape($this->input->post('tokenDetail', TRUE)));
         $data = array(
-            'id_pembelian'      => $id_pembelian,
+            'id_permintaan'     => $id_permintaan,
             'id_barang'         => escape($this->input->post('id_barang', TRUE)),
-            'qty_barang'        => escape($this->input->post('qty_barang', TRUE)),
-            'harga_barang'      => escape($this->input->post('harga_barang', TRUE)),
-            'total_harga'       => escape($this->input->post('total_harga', TRUE)),
-            'id_status_barang'  => '0',
+            'qty_req'           => escape($this->input->post('qty_req', TRUE)),
+            'qty_acc'           => '0',
+            'id_status_req'     => '0',
             'create_by'         => $create_by,
             'create_date'       => $create_date,
             'create_ip'         => $create_ip,
@@ -249,7 +235,7 @@ class Model_permintaan extends CI_Model {
             'mod_date'          => $create_date,
             'mod_ip'            => $create_ip
         );
-        $this->db->insert('detail_pembelian', $data);
+        $this->db->insert('detail_permintaan', $data);
         return array('response'=>'SUCCESS');
     }
 
@@ -261,29 +247,29 @@ class Model_permintaan extends CI_Model {
         $detailPembelian = escape($this->input->post('detailId', TRUE));
         //cek data by id
         $dataMD = $this->getDataDetailPembelian($id);
-        $no_faktur_buy = !empty($dataMD) ? $dataMD['no_faktur_buy'] : '';
+        $no_faktur_req = !empty($dataMD) ? $dataMD['no_faktur_req'] : '';
         if (count($dataMD) <= 0)
             return array('response'=>'ERROR', 'nama'=>'');
         else {
             foreach ($detailPembelian as $key => $r) {
                 list($idPembelian,$status) = explode('####',$r);
                 
-                $this->db->where('id_detail_pembelian', abs($this->encryption->decrypt($idPembelian)));
-                $this->db->where('id_pembelian', abs($id));
+                $this->db->where('id_detail_permintaan', abs($this->encryption->decrypt($idPembelian)));
+                $this->db->where('id_permintaan', abs($id));
                 if($flag == "AR") {
                     if ($status==0) {
-                        $this->db->update('detail_pembelian', array('id_status_barang' => 1));
+                        $this->db->update('detail_permintaan', array('id_status_req' => 1));
                     }
                 } else if($flag == "DR") {
                     if ($status==0) {
-                        $this->db->delete('detail_pembelian');
+                        $this->db->delete('detail_permintaan');
                     } else {
-                        return array('response'=>'STOK', 'nama'=>$no_faktur_buy);
+                        return array('response'=>'STOK', 'nama'=>$no_faktur_req);
                     }
                 }
             }
 
-            return array('response'=>'SUCCESS', 'nama'=>$no_faktur_buy);
+            return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
         }
     }
 }

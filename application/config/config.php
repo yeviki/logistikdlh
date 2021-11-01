@@ -459,7 +459,8 @@ $config['csrf_exclude_uris'] = array('manajemen/fungsi/listview',
                                     'manajemen/group/listview', 
                                     'manajemen/users/listview',
                                     'data/barang/listview',
-                                    'data/pembelian/listview'
+                                    'data/pembelian/listview',
+                                    'data/permintaan/listview'
                                 );
 /*
 |--------------------------------------------------------------------------

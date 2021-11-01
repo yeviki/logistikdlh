@@ -184,8 +184,8 @@
                 $('input[name="'+csrfName+'"]').val(data.csrfHash);
                 if(data.status == 'RC200') {
                     $('input[name="tokenId"]').val(token);
-                    $('#no_faktur_buy').val(data.message.no_faktur_buy);
-                    $('#tgl_pembelian').val(data.message.tgl_pembelian);
+                    $('#no_faktur_req').val(data.message.no_faktur_req);
+                    $('#tanggal_req').val(data.message.tanggal_req);
                     $('#catatan').val(data.message.catatan);
                 }
                 $('#frmEntry').waitMe('hide');
@@ -271,23 +271,23 @@
         let id = $(this).closest('div.modal').attr('id');
         formResetDetail();
         $('#'+id).modal('toggle');
-        if(id == 'modalDetailPembelian') {
-            $('#formSettingMataDiklat').hide();
+        if(id == 'modalDetailPermintaan') {
+            $('#formSettingPermintaan').hide();
         }
     });
 
     function formResetDetail() {
         $('#status').select2().val('1').trigger("change");
-        $('#formDetailPembelian').attr('action', site + '/create');
+        $('#formDetailPermintaan').attr('action', site + '/create');
         $('#errSuccess').html('');
         $('#errRules').html('');
-        $('form#formDetailPembelian').trigger('reset');
-        $('form#formDetailPembelian').removeClass('was-validated');
+        $('form#formDetailPermintaan').trigger('reset');
+        $('form#formDetailPermintaan').removeClass('was-validated');
     }
 
     //panggil form Rule
     $(document).on('click', '.btnSetPembelian', function(e) {
-        $('#modalDetailPembelian').modal({
+        $('#modalDetailPermintaan').modal({
             backdrop: 'static'
         });
         let token = $(this).data('id');
@@ -297,12 +297,12 @@
         getDataListPembelian(token);
     });
     $(document).on('click', '.btnDetail', function (e) {
-        $('#formSettingMataDiklat').slideToggle('slow');
+        $('#formSettingPermintaan').slideToggle('slow');
         $('#formEntry').attr('action', site + '/set-detail');
-        $('form#formDetailPembelian .select-all').select2().val('').trigger("change");
-        $('form#formDetailPembelian #status_rules').select2().val('1').trigger("change");
+        $('form#formDetailPermintaan .select-all').select2().val('').trigger("change");
+        $('form#formDetailPermintaan #status_rules').select2().val('1').trigger("change");
     });
-    $(document).on('submit', '#formDetailPembelian', function(e) {
+    $(document).on('submit', '#formDetailPermintaan', function(e) {
         e.preventDefault();
         let postData = $(this).serialize();
         // get form action url
@@ -321,14 +321,14 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: formActionURL + '/new-pembelian',
+                    url: formActionURL + '/new-permintaan',
                     type: "POST",
                     data: postData,
                     dataType: "json",
                 }).done(function(data) {
                     $('input[name="'+csrfName+'"]').val(data.csrfHash);
                     if(data.status == 'RC404') {
-                        $('#formDetailPembelian').addClass('was-validated');
+                        $('#formDetailPermintaan').addClass('was-validated');
                         swalAlert.fire({
                             title: 'Gagal Simpan',
                             text: 'Proses simpan data gagal, silahkan diperiksa kembali',
@@ -357,7 +357,7 @@
                         }).then((result) => {
                             if (result.value) {
                                 $('#errDiklat').html(msg.success(data.message));
-                                $('#formSettingMataDiklat').slideToggle();
+                                $('#formSettingPermintaan').slideToggle();
                                 getDataListPembelian(data.kode);
                                 getDataList();
                             }
@@ -390,7 +390,7 @@
         let html = '';
         $.ajax({
             type: 'GET',
-            url: site + '/rules-pembelian',
+            url: site + '/rules-permintaan',
             data: {'token' : token, '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()},
             dataType: 'json',
             success: function(data) {
@@ -405,16 +405,14 @@
                                 html += '<tr>';
                                     html += '<td class="text-center">'+
                                                 '<div class="custom-control custom-checkbox ml-2">'+
-                                                    '<input type="checkbox" class="custom-control-input" name="checkid[]" id="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'" class="checkid" value="'+v['id_detail_pembelian']+'">'+
+                                                    '<input type="checkbox" class="custom-control-input" name="checkid[]" id="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'" class="checkid" value="'+v['id_detail_permintaan']+'">'+
                                                     '<label class="custom-control-label" for="checkid_'+key.toLowerCase().replace(' ','_')+'_'+no+'"></label>'+
                                                 '</div>'+
                                             '</td>';
                                     html += '<td class="text-center">'+no+'.</td>';
                                     html += '<td>'+v['nm_barang']+'</td>';
                                     html += '<td class="text-left">'+v['satuan']+'</td>';
-                                    html += '<td class="text-left">'+v['qty_barang']+'</td>';
-                                    html += '<td class="text-left">'+v['harga_barang']+'</td>';
-                                    html += '<td class="text-left">'+v['total_harga']+'</td>';
+                                    html += '<td class="text-left">'+v['qty_req']+'</td>';
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
@@ -422,7 +420,7 @@
 
                             });
                         });
-                        $("#jumlah").html('Rp. '+NumberDenganKoma(jumlah));
+                        $("#jumlah").html(NumberDenganKoma(jumlah));
                     } else
                         html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
                         
@@ -491,7 +489,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: site + '/rules-pembelian/set-detail',
+                    url: site + '/rules-permintaan/set-detail',
                     type: 'POST',
                     data: postData,
                     dataType: "json",
@@ -576,7 +574,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: site + '/rules-pembelian/set-detail',
+                    url: site + '/rules-permintaan/set-detail',
                     type: 'POST',
                     data: postData,
                     dataType: "json",

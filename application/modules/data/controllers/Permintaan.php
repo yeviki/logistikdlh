@@ -17,8 +17,8 @@ class Permintaan extends SLP_Controller {
     }
 
     private function validasiDataValue() {
-        $this->form_validation->set_rules('no_faktur_buy', 'No Faktur', 'required|trim');
-        $this->form_validation->set_rules('tgl_pembelian', 'Tanggal Pembelian', 'required|trim');
+        $this->form_validation->set_rules('no_faktur_req', 'No Faktur', 'required|trim');
+        $this->form_validation->set_rules('tanggal_req', 'Tanggal Permintaan', 'required|trim');
         $this->form_validation->set_rules('catatan', 'Catatan', 'required|trim');
         validation_message_setting();
         if($this->form_validation->run() == FALSE)
@@ -30,8 +30,8 @@ class Permintaan extends SLP_Controller {
     public function index() {
         $this->breadcrumb->add('Dashboard', site_url('home'));
         $this->breadcrumb->add('Data', '#');
-        $this->breadcrumb->add('Pembelian', site_url($this->_uriName));
-        $this->session_info['page_name']        = 'Pembelian';
+        $this->breadcrumb->add('Permintaan', site_url($this->_uriName));
+        $this->session_info['page_name']        = 'Permintaan';
         $this->session_info['siteUri']          = $this->_uriName;
         $this->session_info['page_js']	        = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
         $this->session_info['data_barang']	    = $this->mmas->getDataBarang();
@@ -51,14 +51,14 @@ class Permintaan extends SLP_Controller {
                     $no++;
                     $row = array();
                     $row[] = $no;
-                    $row[] = $dl['tgl_pembelian'];
-                    $row[] = $dl['no_faktur_buy'];
-                    $row[] = $dl['total'];
-                    $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
+                    $row[] = $dl['tanggal_req'];
+                    $row[] = $dl['no_faktur_req'];
+                    $row[] = $dl['catatan'];
+                    $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
 
-                    <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" data-jd="'.$dl['no_faktur_buy'].'" title="Tambah Barang"><i class="fas fa-cart-plus"></i></button>
+                    <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" data-jd="'.$dl['no_faktur_req'].'" title="Tambah Barang"><i class="fas fa-cart-plus"></i></button>
 
-                    <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
+                    <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     $data[] = $row;
                 }
                 $output = array(
@@ -85,9 +85,9 @@ class Permintaan extends SLP_Controller {
                 } else {
                     $data = $this->mPermintaan->insertData();
                     if($data['response'] == 'ERROR') {
-                        $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses insert data baru dengan nama '.$data['nama'].' gagal, karena ditemukan nama yang sama'), 'csrfHash' => $csrfHash);
+                        $result = array('status' => 'RC404', 'message' => array('isi' => 'Proses insert data baru dengan faktur '.$data['nama'].' gagal, karena ditemukan faktur yang sama'), 'csrfHash' => $csrfHash);
                     } else if($data['response'] == 'SUCCESS') {
-                        $result = array('status' => 'RC200', 'message' => 'Proses insert data baru dengan nama '.$data['nama'].' sukses', 'csrfHash' => $csrfHash);
+                        $result = array('status' => 'RC200', 'message' => 'Proses insert data baru dengan faktur '.$data['nama'].' sukses', 'csrfHash' => $csrfHash);
                     }
                 }
             } else {
@@ -107,8 +107,8 @@ class Permintaan extends SLP_Controller {
             if(!empty($contId) AND !empty($session)) {
                 $data = $this->mPermintaan->getDataDetail($this->encryption->decrypt($contId));
                 $row = array();
-                $row['no_faktur_buy']	    = !empty($data) ? $data['no_faktur_buy'] : '';
-                $row['tgl_pembelian']	    = !empty($data) ? $data['tgl_pembelian'] : '';
+                $row['no_faktur_req']	    = !empty($data) ? $data['no_faktur_req'] : '';
+                $row['tanggal_req']	        = !empty($data) ? $data['tanggal_req'] : '';
                 $row['catatan']	            = !empty($data) ? $data['catatan'] : '';
                 $result = array('status' => 'RC200', 'message' => $row, 'csrfHash' => $csrfHash);
             } else {
@@ -168,20 +168,20 @@ class Permintaan extends SLP_Controller {
         }
     }
 
-    public function rules_pembelian($name=null) {
+    public function rules_permintaan($name=null) {
         if(!$this->input->is_ajax_request()) {
             exit('No direct script access allowed');
         } else {
-            if($name == 'new-pembelian')
-                $this->pembelianCreate();
+            if($name == 'new-permintaan')
+                $this->permintaanCreate();
             else if($name == 'set-detail')
                 $this->pembelianUpdate();
             else
-                $this->pembelianData();
+                $this->permintaanData();
         }
     }
 
-    private function pembelianData() {
+    private function permintaanData() {
         $session    = $this->app_loader->current_account();
         $csrfHash   = $this->security->get_csrf_hash();
         $dataID     = $this->encryption->decrypt(escape($this->input->get('token', TRUE)));
@@ -189,15 +189,13 @@ class Permintaan extends SLP_Controller {
             $data = $this->mPermintaan->getDataListDetailPembelian($dataID);
             $matadiklat = array();
             foreach ($data as $q) {
-                $isi['id_detail_pembelian'] 	= $this->encryption->encrypt($q['id_detail_pembelian']).'####'.$q['id_status_barang'];
+                $isi['id_detail_permintaan'] 	= $this->encryption->encrypt($q['id_detail_permintaan']).'####'.$q['id_status_req'];
                 $isi['nm_barang'] 	            = $q['nm_barang'];
                 $isi['satuan'] 		            = $q['satuan'];
-                $isi['qty_barang'] 		        = $q['qty_barang'];
-                $isi['harga_barang'] 			= harga_indo($q['harga_barang']);
-                $isi['total_harga'] 			= harga_indo($q['total_harga']);
-                $isi['subtotal'] 			    = $q['total_harga'];
-                $isi['status'] 			        = convert_status_stok($q['id_status_barang']);
-                $matadiklat[$q['no_faktur_buy']][] = $isi;
+                $isi['qty_req'] 		        = $q['qty_req'];
+                $isi['subtotal'] 			    = $q['qty_req'];
+                $isi['status'] 			        = convert_status_stok($q['id_status_req']);
+                $matadiklat[$q['no_faktur_req']][] = $isi;
             }
             $result = array('status' => 'RC200', 'message' => $matadiklat, 'csrfHash' => $csrfHash);
         } else {
@@ -208,9 +206,7 @@ class Permintaan extends SLP_Controller {
 
     private function validasiDataValueDetail() {
         $this->form_validation->set_rules('id_barang', 'Barang', 'required|trim');
-        $this->form_validation->set_rules('qty_barang', 'Mata Diklat', 'required|trim');
-        $this->form_validation->set_rules('harga_barang', 'Harga Barang', 'required|trim');
-        $this->form_validation->set_rules('total_harga', 'Total Harga', 'required|trim');
+        $this->form_validation->set_rules('qty_req', 'Jumlah', 'required|trim');
         validation_message_setting();
         if($this->form_validation->run() == FALSE)
             return false;
@@ -218,7 +214,7 @@ class Permintaan extends SLP_Controller {
             return true;
     }
 
-    private function pembelianCreate() {
+    private function permintaanCreate() {
         $session  = $this->app_loader->current_account();
         $csrfHash = $this->security->get_csrf_hash();
         $modId    = escape($this->input->post('tokenDetail', TRUE));
@@ -248,14 +244,14 @@ class Permintaan extends SLP_Controller {
         if(!empty($session) AND !empty($modId)) {
             $data = $this->mPermintaan->updateStokBarang();
             if($data['response'] == 'ERROR') {
-                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'SUCCESS') {
-                $result = array('status' => 'RC200', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang dengan faktur '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC200', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang dengan faktur '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'STOK') {
-                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang dengan faktur '.$data['nama'].' gagal, stok sudah terupdate', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang dengan faktur '.$data['nama'].' gagal, stok sudah terupdate', 'kode'=>$modId, 'csrfHash' => $csrfHash);
             }
         } else {
-            $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data pembelian barang gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+            $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }
