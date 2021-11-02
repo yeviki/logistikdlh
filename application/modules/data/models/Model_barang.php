@@ -56,6 +56,13 @@ class Model_barang extends CI_Model {
         $this->db->order_by('id_barang ASC');
     }
 
+    /*Fungsi cek stok barang*/
+    public function checkStok($id) {
+        $this->db->where('id_barang', abs($id));
+        $query = $this->db->get('data_gudang');
+        return $query->row_array();
+    }
+
     /*Fungsi get data edit by id*/
     public function getDataDetail($id) {
         $this->db->where('id_barang', abs($id));

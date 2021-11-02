@@ -207,9 +207,10 @@ class Model_permintaan extends CI_Model {
         return $query->row_array();
     }
 
-    public function checkGudang($id){
+    /*Fungsi cek stok barang*/
+    public function checkStok($id) {
         $this->db->where('id_barang', abs($id));
-        $query = $this->db->get('data_barang');
+        $query = $this->db->get('data_gudang');
         return $query->row_array();
     }
 
@@ -220,23 +221,25 @@ class Model_permintaan extends CI_Model {
         $create_by      = $this->app_loader->current_account();
         $create_date    = gmdate('Y-m-d H:i:s', time()+60*60*7);
         $create_ip      = $this->input->ip_address();
+        $id_permintaan	= $this->encryption->decrypt(escape($this->input->post('tokenDetail', TRUE)));
+        $id_barang	    = escape($this->input->post('id_barang', TRUE));
         
-        $id_permintaan	    = $this->encryption->decrypt(escape($this->input->post('tokenDetail', TRUE)));
-        $data = array(
-            'id_permintaan'     => $id_permintaan,
-            'id_barang'         => escape($this->input->post('id_barang', TRUE)),
-            'qty_req'           => escape($this->input->post('qty_req', TRUE)),
-            'qty_acc'           => '0',
-            'id_status_req'     => '0',
-            'create_by'         => $create_by,
-            'create_date'       => $create_date,
-            'create_ip'         => $create_ip,
-            'mod_by'            => $create_by,
-            'mod_date'          => $create_date,
-            'mod_ip'            => $create_ip
-        );
-        $this->db->insert('detail_permintaan', $data);
-        return array('response'=>'SUCCESS');
+            $data = array(
+                'id_permintaan'     => $id_permintaan,
+                'id_barang'         => $id_barang,
+                'qty_req'           => escape($this->input->post('qty_req', TRUE)),
+                'qty_acc'           => '0',
+                'id_status_req'     => '0',
+                'create_by'         => $create_by,
+                'create_date'       => $create_date,
+                'create_ip'         => $create_ip,
+                'mod_by'            => $create_by,
+                'mod_date'          => $create_date,
+                'mod_ip'            => $create_ip
+            );
+
+            $this->db->insert('detail_permintaan', $data);
+            return array('response'=>'SUCCESS');
     }
 
     /* Fungsi untuk update data */

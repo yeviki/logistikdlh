@@ -79,7 +79,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-xl" id="frmDetailPem">
         <div class="modal-content">
             <div class="modal-header aqua-gradient-rgba">
-                <h4 class="modal-title heading lead white-text font-weight-bold"><i class="fas fa-cart-plus"></i> Detail Pembelian</h4>
+                <h4 class="modal-title heading lead white-text font-weight-bold"><i class="fas fa-cart-plus"></i> Detail Permintaan</h4>
                 <button type="button" class="close btnCloseMataDik" aria-label="Close">
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-12">
-                        <div id="errDiklat"></div>
+                        <div id="errNotifikasi"></div>
                     </div>
                     <div class="col-12 col-md-12 clearfix mb-3" id="formSettingPermintaan" style="display: none;">
                         <div class="card">
@@ -107,7 +107,7 @@
                                 <div class="form-row mb-3 ">
                                     <div class="col-12 col-md-10 required">
                                         <label for="id_barang" class="control-label font-weight-bolder">Nama Barang <span class="text-danger">*</span></label>
-                                        <?php echo form_dropdown('id_barang', isset($data_barang) ? $data_barang : array(''=>'Pilih Data'), $this->input->post('id_barang', TRUE), 'class="form-control select-all" id="id_barang" required=""');?>
+                                        <?php echo form_dropdown('id_barang', isset($data_barang) ? $data_barang : array(''=>'Pilih Data'), $this->input->post('id_barang', TRUE), 'class="form-control select-all" id="id_barang" required="" style="width: 100% "');?>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                     <div class="col-12 col-md-2 required">
@@ -141,15 +141,15 @@
                                 <th width="3%" class="font-weight-bold text-center">No.</th>
                                 <th width="50%" class="font-weight-bold">Barang</th>
                                 <th class="font-weight-bold text-left">Satuan</th>
-                                <th class="font-weight-bold text-left">Jumlah Permintaan</th>
-                                <th class="font-weight-bold text-center">Status Permintaan</th>
+                                <th class="font-weight-bold text-center">Permintaan</th>
+                                <th class="font-weight-bold text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="4"><h4>Total Permintaan</h4></th>
-                                <th><h4><span id="jumlah"></span></h4></th>
+                                <th class="font-weight-bold text-center"><h4><span id="jumlah"></span></h4></th>
                                 <th></th>
                             </tr>
                         </tfoot>

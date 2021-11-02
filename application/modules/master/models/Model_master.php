@@ -118,6 +118,25 @@ class Model_master extends CI_Model {
         }
         return $dd_data;
     }
+
+    public function getDataStok() {
+        $this->db->select('a.id_barang,
+                            a.nm_barang,
+                            b.id_gudang,
+                            b.qty_stok
+                            ');
+        $this->db->from('data_barang a');
+        $this->db->where('b.qty_stok > 0');
+        $this->db->join('data_gudang b', 'b.id_barang = a.id_barang', 'inner');
+        $query = $this->db->get();
+        $dd_data[''] = 'Pilih Data';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $dd_data[$row['id_barang']] = $row['nm_barang'].' - '.$row['qty_stok'];
+            }
+        }
+        return $dd_data;
+    }
 }
 
 // This is the end of auth signin model

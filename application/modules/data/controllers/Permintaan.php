@@ -34,7 +34,7 @@ class Permintaan extends SLP_Controller {
         $this->session_info['page_name']        = 'Permintaan';
         $this->session_info['siteUri']          = $this->_uriName;
         $this->session_info['page_js']	        = $this->load->view($this->_vwName.'/vjs', array('siteUri'=>$this->_uriName), true);
-        $this->session_info['data_barang']	    = $this->mmas->getDataBarang();
+        $this->session_info['data_barang']	    = $this->mmas->getDataStok();
         $this->template->build($this->_vwName.'/vpage', $this->session_info);
     }
 
@@ -218,15 +218,24 @@ class Permintaan extends SLP_Controller {
         $session  = $this->app_loader->current_account();
         $csrfHash = $this->security->get_csrf_hash();
         $modId    = escape($this->input->post('tokenDetail', TRUE));
+        $id_barang    = escape($this->input->post('id_barang', TRUE));
+        $qty_req    = escape($this->input->post('qty_req', TRUE));
         if(!empty($session) AND !empty($modId)) {
-            if($this->validasiDataValueDetail() == FALSE) {
-                $result = array('status' => 'RC404', 'message' => $this->form_validation->error_array(), 'kode'=>$modId, 'csrfHash' => $csrfHash);
+            $dataCheck = $this->mPermintaan->checkStok($id_barang);
+            if ($dataCheck['qty_stok'] == 0) {
+                $result = array('status' => 'RC404', 'message' => 'Stok barang kosong', 'csrfHash' => $csrfHash);
+            } else if ($qty_req > $dataCheck['qty_stok']) {
+                $result = array('status' => 'RC404', 'message' => 'Permintaan melebihi stok yang tersedia', 'csrfHash' => $csrfHash);
             } else {
-                $data = $this->mPermintaan->insertDetailPembelian();
-                if($data['response'] == 'ERROR') {
-                    $result = array('status' => 'RC404', 'message' => 'Proses insert data gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
-                } else if($data['response'] == 'SUCCESS') {
-                    $result = array('status' => 'RC200', 'message' => 'Proses insert data sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                if($this->validasiDataValueDetail() == FALSE) {
+                    $result = array('status' => 'RC404', 'message' => $this->form_validation->error_array(), 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                } else {
+                    $data = $this->mPermintaan->insertDetailPembelian();
+                    if($data['response'] == 'ERROR') {
+                        $result = array('status' => 'RC404', 'message' => 'Proses insert data gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
+                    }  else if ($data['response'] == 'SUCCESS') {
+                        $result = array('status' => 'RC200', 'message' => 'Proses insert data sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                    }
                 }
             }
         } else {

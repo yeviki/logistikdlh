@@ -20,9 +20,10 @@
                             <thead>
                                 <tr>
                                     <th width="3%" class="font-weight-bold">#</th>
-                                    <th width="50%" class="font-weight-bold">Nama Barang</th>
+                                    <th width="40%" class="font-weight-bold">Nama Barang</th>
+                                    <th width="6%" class="font-weight-bold">Stok</th>
                                     <th width="6%" class="font-weight-bold">Satuan</th>
-                                    <th width="6%" class="font-weight-bold">Kategori</th>
+                                    <th width="10%" class="font-weight-bold">Kategori</th>
                                     <th width="5%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>

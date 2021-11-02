@@ -294,7 +294,7 @@
         let label = $(this).data('jd');
         $('input[name="tokenDetail"]').val(token);
         $('.lblDetail').text(label);
-        getDataListPembelian(token);
+        getDataListPermintaan(token);
     });
     $(document).on('click', '.btnDetail', function (e) {
         $('#formSettingPermintaan').slideToggle('slow');
@@ -315,6 +315,7 @@
             text: 'Apakah anda ingin menyimpan data ini ?',
             icon: 'warning',
             showCancelButton: true,
+            allowOutsideClick : false,
             confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
             cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
             reverseButtons: true
@@ -331,12 +332,12 @@
                         $('#formDetailPermintaan').addClass('was-validated');
                         swalAlert.fire({
                             title: 'Gagal Simpan',
-                            text: 'Proses simpan data gagal, silahkan diperiksa kembali',
+                            text: data.message,
                             icon: 'error',
                             confirmButtonText: '<i class="fas fa-check"></i> Oke',
                         }).then((result) => {
                             if (result.value) {
-                                $('#errDiklat').html(msg.error('Silahkan dilengkapi data pada form inputan dibawah'));
+                                $('#errNotifikasi').html(msg.error(data.message));
                                 $.each(data.message, function(key,value){
                                     if(key != 'isi')
                                         $('input[name="'+key+'"], select[name="'+key+'"]').closest('div.required').find('div.invalid-feedback').text(value);
@@ -356,19 +357,20 @@
                             confirmButtonText: '<i class="fas fa-check"></i> Oke',
                         }).then((result) => {
                             if (result.value) {
-                                $('#errDiklat').html(msg.success(data.message));
+                                $('#errNotifikasi').html(msg.success(data.message));
                                 $('#formSettingPermintaan').slideToggle();
-                                getDataListPembelian(data.kode);
+                                getDataListPermintaan(data.kode);
                                 getDataList();
                             }
                         })
                     }
                 }).fail(function() {
-                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang diinputkan'));
+                    $('#errNotifikasi').html(msg.error('Harap periksa kembali data yang diinputkan'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
                     $("#saveJadwal").html('<i class="fas fa-check"></i> SUBMIT');
                     $("#saveJadwal").removeClass('disabled');
+                    $('#frmDetailPem').waitMe('hide');
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel ) {
                 swalAlert.fire({
@@ -386,7 +388,7 @@
             }
         })
     });
-    function getDataListPembelian(token) {
+    function getDataListPermintaan(token) {
         let html = '';
         $.ajax({
             type: 'GET',
@@ -412,7 +414,7 @@
                                     html += '<td class="text-center">'+no+'.</td>';
                                     html += '<td>'+v['nm_barang']+'</td>';
                                     html += '<td class="text-left">'+v['satuan']+'</td>';
-                                    html += '<td class="text-left">'+v['qty_req']+'</td>';
+                                    html += '<td class="text-center">'+v['qty_req']+'</td>';
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
@@ -503,7 +505,7 @@
                             confirmButtonText: '<i class="fas fa-check"></i> Oke',
                         }).then((result) => {
                             if (result.value) {
-                                $('#errDiklat').html(msg.error(data.message));
+                                $('#errNotifikasi').html(msg.error(data.message));
                                 $('#frmDetailPem').waitMe('hide');
                             }
                         })
@@ -516,14 +518,14 @@
                             confirmButtonText: '<i class="fas fa-check"></i> Oke',
                         }).then((result) => {
                             if (result.value) {
-                                $('#errDiklat').html(msg.success(data.message));
-                                getDataListPembelian(data.kode);
+                                $('#errNotifikasi').html(msg.success(data.message));
+                                getDataListPermintaan(data.kode);
                                 getDataList();
                             }
                         })
                     }
                 }).fail(function() {
-                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang dihapus'));
+                    $('#errNotifikasi').html(msg.error('Harap periksa kembali data yang dihapus'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
                     $("#btnDeleteDetail").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
@@ -588,7 +590,7 @@
                             confirmButtonText: '<i class="fas fa-check"></i> Oke',
                         }).then((result) => {
                             if (result.value) {
-                                $('#errDiklat').html(msg.error(data.message));
+                                $('#errNotifikasi').html(msg.error(data.message));
                                 $('#frmDetailPem').waitMe('hide');
                             }
                         })
@@ -601,13 +603,13 @@
                             confirmButtonText: '<i class="fas fa-check"></i> Oke',
                         }).then((result) => {
                             if (result.value) {
-                                $('#errDiklat').html(msg.success(data.message));
-                                getDataListPembelian(data.kode);
+                                $('#errNotifikasi').html(msg.success(data.message));
+                                getDataListPermintaan(data.kode);
                             }
                         })
                     }
                 }).fail(function() {
-                    $('#errDiklat').html(msg.error('Harap periksa kembali data yang diupdate'));
+                    $('#errNotifikasi').html(msg.error('Harap periksa kembali data yang diupdate'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
                     $("#btnUpdateStok").html('<i class="fas fa-check"></i> UPDATE STOK');

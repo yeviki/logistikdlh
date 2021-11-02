@@ -49,10 +49,23 @@ class Barang extends SLP_Controller {
                 $dataList = $this->mBarang->get_datatables();
                 $no = $this->input->post('start');
                 foreach ($dataList as $key => $dl) {
+
+                    $data_stok = $this->mBarang->checkStok($dl['id_barang']);
+                    $qty_stok = !empty($data_stok) ? $data_stok['qty_stok'] : 0;
+
+                    if ($qty_stok == 0) {
+                        $status = '<span class="badge badge-pill badge-danger">Empty</span>';
+                    } else if ($qty_stok <= 5) {
+                        $status = '<span class="badge badge-pill badge-warning">Restock</span>';
+                    } else {
+                        $status = '';
+                    }
+                        
                     $no++;
                     $row = array();
                     $row[] = $no;
-                    $row[] = $dl['nm_barang'];
+                    $row[] = $dl['nm_barang'].' '.$status;
+                    $row[] = $qty_stok;
                     $row[] = satuan($dl['id_satuan']);
                     $row[] = kategori($dl['id_kat_barang']);
                     $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_barang']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
