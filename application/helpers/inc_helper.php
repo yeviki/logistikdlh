@@ -180,5 +180,19 @@ if (!function_exists('convert_status_stok')) {
         return $status[intval($id_status)];
     }
 }
+
+/**
+ * Fungsi convert status permintaan
+ */
+if (!function_exists('convert_status_req')) {
+    function convert_status_req($id_status) {
+        $status = array(
+            0 => '<span class="badge badge-pill badge-danger">REQUEST</span>',
+            1 => '<span class="badge badge-pill badge-success">COMPLETE APPROVE</span>',
+            2 => '<span class="badge badge-pill badge-success">PARTIAL APPROVE</span>',
+        );
+        return $status[intval($id_status)];
+    }
+}
 /* End of file inc.php */
 /* Location: ./application/helpers/inc_helper.php */

@@ -69,8 +69,8 @@ class App_loader {
      * Fungsi untuk mengecek user yang login apakah sebagai Operator
      * @return boolean
      */
-    public function is_operator() {
-        if ($this->CI->session->userdata('nick_level') == 'OPR') {
+    public function is_tpa() {
+        if ($this->CI->session->userdata('nick_level') == 'TPP') {
             return TRUE;
         }
         return FALSE;

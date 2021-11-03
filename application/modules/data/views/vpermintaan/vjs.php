@@ -445,11 +445,9 @@
         if(n > 0) {
             $('#eventButoon').show();
             $('#btnDeleteDetail').removeAttr('disabled');
-            $('#btnUpdateStok').removeAttr('disabled');
         } else {
             $('#eventButoon').hide();
             $('#btnDeleteDetail').attr('disabled', '');
-            $('#btnUpdateStok').attr('disabled', '');
         }
         $(this).is(':checked') ? $(this).closest('tr').addClass('table-active') : $(this).closest('tr').removeClass('table-active');
         if(rowCount !== n)
@@ -473,7 +471,6 @@
         const postData = {
             'tokenId': token,
             'detailId': rules,
-            'flag'   : '<?= $this->encryption->encrypt('DR'); ?>',
             '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
         };
         // get form action url
@@ -547,90 +544,7 @@
             }
         })
     });
-    //btn update status aktif
-    $(document).on('click', '#btnUpdateStok', function (e){
-        e.preventDefault();
-        let token = $('input[name="tokenDetail"]').val();
-        let rules = [];
-        $.each($('#tblDetail > tbody input[type="checkbox"]:checked'), function(){
-            rules.push($(this).val());
-        });
-        const postData = {
-            'tokenId': token,
-            'detailId': rules,
-            'flag'   : '<?= $this->encryption->encrypt('AR'); ?>',
-            '<?php echo $this->security->get_csrf_token_name(); ?>': $('input[name="' + csrfName + '"]').val()
-        };
-        // get form action url
-        $(this).html('<i class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></i> DIPROSES...');
-        $(this).addClass('disabled');
-        run_waitMe($('#frmDetailPem'));
-        swalAlert.fire({
-            title: 'Konfirmasi',
-            text: 'Data yang sudah update stok tidak akan bisa dihapus! Apakah anda ingin update data stok ini ke gudang ?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
-            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    url: site + '/rules-permintaan/set-detail',
-                    type: 'POST',
-                    data: postData,
-                    dataType: "json",
-                }).done(function(data) {
-                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
-                    if(data.status == 'RC404') {
-                        swalAlert.fire({
-                            title: 'Gagal Update',
-                            text: 'Proses update status data gagal, silahkan diperiksa kembali',
-                            icon: 'error',
-                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
-                        }).then((result) => {
-                            if (result.value) {
-                                $('#errNotifikasi').html(msg.error(data.message));
-                                $('#frmDetailPem').waitMe('hide');
-                            }
-                        })
-                    } else {
-                        $('#frmDetailPem').waitMe('hide');
-                        swalAlert.fire({
-                            title: 'Berhasil Update',
-                            text: data.message,
-                            icon: 'success',
-                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
-                        }).then((result) => {
-                            if (result.value) {
-                                $('#errNotifikasi').html(msg.success(data.message));
-                                getDataListPermintaan(data.kode);
-                            }
-                        })
-                    }
-                }).fail(function() {
-                    $('#errNotifikasi').html(msg.error('Harap periksa kembali data yang diupdate'));
-                    $('#frmDetailPem').waitMe('hide');
-                }).always(function() {
-                    $("#btnUpdateStok").html('<i class="fas fa-check"></i> UPDATE STOK');
-                    $("#btnUpdateStok").removeClass('disabled');
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel ) {
-                swalAlert.fire({
-                    title: 'Batal Update',
-                    text: 'Proses update status data telah dibatalkan',
-                    icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
-                }).then((result) => {
-                    if (result.value) {
-                        $('#frmDetailPem').waitMe('hide');
-                        $("#btnUpdateStok").html('<i class="fas fa-check"></i> UPDATE STOK');
-                        $("#btnUpdateStok").removeClass('disabled');
-                    }
-                })
-            }
-        })
-    });
+    
 
     $(document).on('keypress keyup', '.nominal',function (e) {
     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {

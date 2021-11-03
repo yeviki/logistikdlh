@@ -243,7 +243,7 @@ class Model_permintaan extends CI_Model {
     }
 
     /* Fungsi untuk update data */
-    public function updateStokBarang() {
+    public function updatePermintaan() {
         //get data
         $id    = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
         $flag  = $this->encryption->decrypt(escape($this->input->post('flag', TRUE)));
@@ -259,16 +259,10 @@ class Model_permintaan extends CI_Model {
                 
                 $this->db->where('id_detail_permintaan', abs($this->encryption->decrypt($idPembelian)));
                 $this->db->where('id_permintaan', abs($id));
-                if($flag == "AR") {
-                    if ($status==0) {
-                        $this->db->update('detail_permintaan', array('id_status_req' => 1));
-                    }
-                } else if($flag == "DR") {
-                    if ($status==0) {
-                        $this->db->delete('detail_permintaan');
-                    } else {
-                        return array('response'=>'STOK', 'nama'=>$no_faktur_req);
-                    }
+                if ($status==0) {
+                    $this->db->delete('detail_permintaan');
+                } else {
+                    return array('response'=>'STOK', 'nama'=>$no_faktur_req);
                 }
             }
 

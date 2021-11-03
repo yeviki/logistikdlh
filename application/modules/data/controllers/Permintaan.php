@@ -194,7 +194,7 @@ class Permintaan extends SLP_Controller {
                 $isi['satuan'] 		            = $q['satuan'];
                 $isi['qty_req'] 		        = $q['qty_req'];
                 $isi['subtotal'] 			    = $q['qty_req'];
-                $isi['status'] 			        = convert_status_stok($q['id_status_req']);
+                $isi['status'] 			        = convert_status_req($q['id_status_req']);
                 $matadiklat[$q['no_faktur_req']][] = $isi;
             }
             $result = array('status' => 'RC200', 'message' => $matadiklat, 'csrfHash' => $csrfHash);
@@ -248,19 +248,18 @@ class Permintaan extends SLP_Controller {
         $session  = $this->app_loader->current_account();
         $csrfHash = $this->security->get_csrf_hash();
         $modId    = escape($this->input->post('tokenId', TRUE));
-        $flag     = $this->encryption->decrypt(escape($this->input->post('flag', TRUE)));
         // die($modId);
         if(!empty($session) AND !empty($modId)) {
-            $data = $this->mPermintaan->updateStokBarang();
+            $data = $this->mPermintaan->updatePermintaan();
             if($data['response'] == 'ERROR') {
-                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC404', 'message' => 'Proses data permintaan barang gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'SUCCESS') {
-                $result = array('status' => 'RC200', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang dengan faktur '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC200', 'message' => 'Hapus permintaan barang dengan faktur '.$data['nama'].' sukses', 'kode'=>$modId, 'csrfHash' => $csrfHash);
             } else if($data['response'] == 'STOK') {
-                $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang dengan faktur '.$data['nama'].' gagal, stok sudah terupdate', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC404', 'message' => 'Proses data permintaan barang dengan faktur '.$data['nama'].' gagal, stok sudah terupdate', 'kode'=>$modId, 'csrfHash' => $csrfHash);
             }
         } else {
-            $result = array('status' => 'RC404', 'message' => 'Proses '.(($flag == 'DR') ? 'hapus' : 'update status').' data permintaan barang gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);
+            $result = array('status' => 'RC404', 'message' => 'Proses data permintaan barang gagal, mohon coba kembali', 'kode'=>$modId, 'csrfHash' => $csrfHash);
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }

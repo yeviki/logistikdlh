@@ -92,7 +92,6 @@
                         </div>
                         <div class="float-right" style="display: none;" id="eventButoon">
                             <button class="btn btn-danger waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnDeleteDetail" disabled=""><i class="fas fa-trash-alt"></i> Delete Permintaan</button>
-                            <button class="btn btn-info waves-effect waves-light px-3 py-2 mx-0 font-weight-bold" type="button" id="btnUpdateStok" disabled=""><i class="fas fa-check"></i> Update Stok</button>
                         </div>
                     </div>
                     <div class="col-12 col-md-12">
