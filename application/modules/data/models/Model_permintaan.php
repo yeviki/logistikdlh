@@ -29,16 +29,32 @@ class Model_permintaan extends CI_Model {
     }
 
     public function count_all() {
-        return $this->db->count_all_results('data_permintaan');
+        $this->db->select('a.id_permintaan,
+                            a.no_faktur_req,
+                            a.tanggal_req,
+                            a.catatan,
+                            a.status_req,
+                            a.id_tpa
+                            ');
+        $this->db->from('data_permintaan a');
+        if($this->app_loader->is_tpa()) {
+            $this->db->where('a.id_tpa', $this->app_loader->current_tpaid());
+        }
+        return $this->db->count_all_results();
     }
 
     private function _get_datatables_query() {
         $this->db->select('a.id_permintaan,
                             a.no_faktur_req,
                             a.tanggal_req,
-                            a.catatan
+                            a.catatan,
+                            a.status_req,
+                            a.id_tpa
                             ');
         $this->db->from('data_permintaan a');
+        if($this->app_loader->is_tpa()) {
+            $this->db->where('a.id_tpa', $this->app_loader->current_tpaid());
+        } 
         $i = 0;
         foreach ($this->search as $item) { // loop column
             if($_POST['search']['value']) { // if datatable send POST for search
@@ -66,6 +82,7 @@ class Model_permintaan extends CI_Model {
     /* Fungsi untuk insert data */
     public function insertData() {
         //get data
+        $userLogin      = $this->app_loader->current_tpaid();
         $create_by      = $this->app_loader->current_account();
         $create_date    = gmdate('Y-m-d H:i:s', time()+60*60*7);
         $create_ip      = $this->input->ip_address();
@@ -80,7 +97,7 @@ class Model_permintaan extends CI_Model {
                 'no_faktur_req'     => $no_faktur_req,
                 'tanggal_req'       => escape($this->input->post('tanggal_req', TRUE)),
                 'catatan'           => escape($this->input->post('catatan', TRUE)),
-                'id_tpa'            => '0',
+                'id_tpa'            => $userLogin,
                 'status_req'        => '1',
                 'create_by'         => $create_by,
                 'create_date'       => $create_date,
@@ -164,7 +181,7 @@ class Model_permintaan extends CI_Model {
                             b.id_barang,
                             b.qty_req,
                             b.qty_acc,
-                            b.id_status_req,
+                            b.status_det_req,
                             c.nm_barang,
                             c.id_satuan,
                             c.id_kat_barang,
@@ -182,15 +199,16 @@ class Model_permintaan extends CI_Model {
     }
 
     /*Fungsi get data edit by id*/
-    public function getDataDetailPembelian($id_permintaan) {
+    public function getDataDetailPermintaan($id_permintaan) {
         $this->db->select('a.id_permintaan,
                             a.no_faktur_req,
                             a.tanggal_req,
+                            a.status_req,
                             b.id_detail_permintaan,
                             b.id_barang,
                             b.qty_req,
                             b.qty_acc,
-                            b.id_status_req,
+                            b.status_det_req,
                             c.nm_barang,
                             c.id_satuan,
                             c.id_kat_barang,
@@ -222,14 +240,25 @@ class Model_permintaan extends CI_Model {
         $create_date    = gmdate('Y-m-d H:i:s', time()+60*60*7);
         $create_ip      = $this->input->ip_address();
         $id_permintaan	= $this->encryption->decrypt(escape($this->input->post('tokenDetail', TRUE)));
-        $id_barang	    = escape($this->input->post('id_barang', TRUE));
+        $statReq        = escape($this->input->post('statRequest', TRUE));
+        $id_barang      = escape($this->input->post('id_barang', TRUE));
+        $qty_req        = escape($this->input->post('qty_req', TRUE));
         
+        $dataCheck = $this->mPermintaan->checkStok($id_barang);
+        if ($statReq != 1) {
+            return array('response'=>'PENGAJUAN');
+        } else {
+            if ($dataCheck['qty_stok'] == 0) {
+                return array('response'=>'STOK');
+            } else if ($qty_req > $dataCheck['qty_stok']) {
+                return array('response'=>'MELEBIHI');
+            } else {
             $data = array(
                 'id_permintaan'     => $id_permintaan,
-                'id_barang'         => $id_barang,
+                'id_barang'         => escape($this->input->post('id_barang', TRUE)),
                 'qty_req'           => escape($this->input->post('qty_req', TRUE)),
                 'qty_acc'           => '0',
-                'id_status_req'     => '0',
+                'status_det_req'     => '0',
                 'create_by'         => $create_by,
                 'create_date'       => $create_date,
                 'create_ip'         => $create_ip,
@@ -237,34 +266,61 @@ class Model_permintaan extends CI_Model {
                 'mod_date'          => $create_date,
                 'mod_ip'            => $create_ip
             );
-
             $this->db->insert('detail_permintaan', $data);
             return array('response'=>'SUCCESS');
+            }
+        }
     }
 
-    /* Fungsi untuk update data */
-    public function updatePermintaan() {
+    /* Fungsi untuk delete detail permintaan */
+    public function deleteDetail() {
         //get data
         $id    = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
         $flag  = $this->encryption->decrypt(escape($this->input->post('flag', TRUE)));
         $detailPembelian = escape($this->input->post('detailId', TRUE));
         //cek data by id
-        $dataMD = $this->getDataDetailPembelian($id);
+        $dataMD = $this->getDataDetailPermintaan($id);
         $no_faktur_req = !empty($dataMD) ? $dataMD['no_faktur_req'] : '';
+        $statusReq = !empty($dataMD) ? $dataMD['status_req'] : '';
         if (count($dataMD) <= 0)
             return array('response'=>'ERROR', 'nama'=>'');
         else {
             foreach ($detailPembelian as $key => $r) {
                 list($idPembelian,$status) = explode('####',$r);
-                
-                $this->db->where('id_detail_permintaan', abs($this->encryption->decrypt($idPembelian)));
-                $this->db->where('id_permintaan', abs($id));
-                if ($status==0) {
-                    $this->db->delete('detail_permintaan');
+                if ($statusReq != 1) {
+                    return array('response'=>'PENGAJUAN', 'nama'=>$no_faktur_req);
                 } else {
-                    return array('response'=>'STOK', 'nama'=>$no_faktur_req);
+                    $this->db->where('id_detail_permintaan', abs($this->encryption->decrypt($idPembelian)));
+                    $this->db->where('id_permintaan', abs($id));
+                    if ($status == 0) {
+                        $this->db->delete('detail_permintaan');
+                    } 
                 }
+                
             }
+
+            return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
+        }
+    }
+
+    /* Fungsi untuk pengajuan permintaan barang */
+    public function requestBarang() {
+        //get data
+        $id    = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
+        //cek data by id
+        $dataMD = $this->getDataDetailPermintaan($id);
+        $no_faktur_req = !empty($dataMD) ? $dataMD['no_faktur_req'] : '';
+        $statusReq = !empty($dataMD) ? $dataMD['status_req'] : '';
+        if (count($dataMD) <= 0)
+            return array('response'=>'ERROR');
+        else {
+            if ($statusReq==2) {
+                return array('response'=>'PENGAJUAN', 'nama'=>$no_faktur_req);
+            } else {
+            }
+            $this->db->set('status_req', 2);
+            $this->db->where('id_permintaan', abs($id));
+            $this->db->update('data_permintaan');
 
             return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
         }

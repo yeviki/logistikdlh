@@ -49,6 +49,7 @@ class Users extends SLP_Controller {
         $this->session_info['data_level']  = $this->muser->getDataLevelAkses();
         $this->session_info['data_group']  = $this->muser->getDataListGroup();
         $this->session_info['group_user']  = $this->muser->getDataGroup();
+        $this->session_info['group_tpa']  = $this->muser->getDataTPA();
         $this->template->build($this->_vwName.'/vpage', $this->session_info);
     }
 
@@ -136,6 +137,7 @@ class Users extends SLP_Controller {
                 $row = array();
                 $row['fullname'] = !empty($data) ? $data['fullname'] : '';
                 $row['username'] = !empty($data) ? $data['username'] : '';
+                $row['id_tpa'] = !empty($data) ? $data['id_tpa'] : '';
                 $row['blokir']	 = !empty($data) ? $data['blokir'] : 0;
                 $row['status']	 = !empty($data) ? $data['id_status'] : 1;
                 $row['groupid']	 = !empty($data) ? explode(',', str_replace(' ', '', $data['group_user'])) : array();

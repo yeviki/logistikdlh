@@ -11,6 +11,18 @@ class Model_users extends CI_Model {
 		parent::__construct();
 	}
 
+	public function getDataTPA() {
+        $this->db->order_by('id_tpa ASC');
+        $query = $this->db->get('ms_tpa');
+        $dd_data[''] = 'Pilih Data';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $dd_data[$row['id_tpa']] = $row['nama_tpa'];
+            }
+        }
+        return $dd_data;
+    }
+
     public function getDataGroup() {
         $this->db->where('id_status', '1');
         if(!$this->app_loader->is_super()) {
@@ -94,6 +106,7 @@ class Model_users extends CI_Model {
                            a.email,
                            a.fullname,
                            a.foto_profile,
+                           a.id_tpa,
                            a.blokir,
                            a.id_status,
                            (CASE
@@ -105,6 +118,7 @@ class Model_users extends CI_Model {
 		$this->db->join('xi_sa_users_privileges b', 'a.id_users = b.id_users', 'left');
 		$this->db->join('xi_sa_group c', 'b.id_group = c.id_group', 'left');
 		$this->db->join('xi_sa_users_default_pass d', 'a.id_users = d.id_users', 'left');
+		$this->db->join('ms_tpa e', 'a.id_tpa = e.id_tpa', 'left');
 		$this->db->where('b.id_status', 1);
 		if(!$this->app_loader->is_super()) {
 			$this->db->where('c.id_level_akses !=', 1);
@@ -151,6 +165,7 @@ class Model_users extends CI_Model {
                            a.email,
                            a.fullname,
                            a.foto_profile,
+                           a.id_tpa,
                            a.blokir,
                            a.id_status,
                            GROUP_CONCAT(b.id_group ORDER BY b.id_group ASC SEPARATOR ",") AS group_user');
@@ -191,6 +206,7 @@ class Model_users extends CI_Model {
 			'email' 					=> '',
 			'fullname' 					=> $fullname,
 			'foto_profile' 				=> 'default-user-icon.jpg',
+			'id_tpa' 					=> escape($this->input->post('id_tpa', TRUE)),
 			'blokir' 					=> escape($this->input->post('blokir', TRUE)),
 			'id_status' 				=> escape($this->input->post('status', TRUE)),
 			'validate_email_code'		=> '',
@@ -237,6 +253,7 @@ class Model_users extends CI_Model {
 		$data = array(
 			'username'  	=> $username,
 			'fullname' 		=> escape($this->input->post('fullname', TRUE)),
+			'id_tpa'    	=> escape($this->input->post('id_tpa', TRUE)),
 			'blokir'    	=> escape($this->input->post('blokir', TRUE)),
 			'id_status' 	=> escape($this->input->post('status', TRUE)),
 			'mod_by' 	  	=> $create_by,

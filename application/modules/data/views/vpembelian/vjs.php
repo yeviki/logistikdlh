@@ -94,6 +94,7 @@
             text: 'Apakah anda ingin menyimpan data ini ?',
             icon: 'warning',
             showCancelButton: true,
+            allowOutsideClick : false,
             confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
             cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
             reverseButtons: true
@@ -153,7 +154,8 @@
                     title: 'Batal Simpan',
                     text: 'Proses simpan data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#frmEntry').waitMe('hide');
@@ -206,6 +208,7 @@
             text: 'Apakah anda ingin menghapus data ini ?',
             icon: 'warning',
             showCancelButton: true,
+            allowOutsideClick : false,
             confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
             cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
             reverseButtons: true
@@ -255,7 +258,8 @@
                     title: 'Batal Hapus',
                     text: 'Proses hapus data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#formParent').waitMe('hide');
@@ -315,6 +319,7 @@
             text: 'Apakah anda ingin menyimpan data ini ?',
             icon: 'warning',
             showCancelButton: true,
+            allowOutsideClick : false,
             confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
             cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
             reverseButtons: true
@@ -375,7 +380,8 @@
                     title: 'Batal Simpan',
                     text: 'Proses simpan data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#frmDetailPem').waitMe('hide');
@@ -484,10 +490,11 @@
             title: 'Konfirmasi',
             text: 'Apakah anda ingin menghapus data ini ?',
             icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
-            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
-            reverseButtons: true
+            showCancelButton    : true,
+            allowOutsideClick   : false,
+            confirmButtonText   : '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText    : '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons      : true
         }).then((result) => {
             if (result.value) {
                 $.ajax({
@@ -536,7 +543,8 @@
                     title: 'Batal Hapus',
                     text: 'Proses hapus data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#frmDetailPem').waitMe('hide');
@@ -567,12 +575,13 @@
         run_waitMe($('#frmDetailPem'));
         swalAlert.fire({
             title: 'Konfirmasi',
-            text: 'Data yang sudah update stok tidak akan bisa dihapus! Apakah anda ingin update data stok ini ke gudang ?',
+            text: 'Stok yang telah di update tidak akan bisa di kembalikan! Apakah anda ingin update data stok ini ke gudang ?',
             icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
-            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
-            reverseButtons: true
+            showCancelButton    : true,
+            allowOutsideClick   : false,
+            confirmButtonText   : '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText    : '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons      : true
         }).then((result) => {
             if (result.value) {
                 $.ajax({
@@ -612,7 +621,7 @@
                     $('#errDiklat').html(msg.error('Harap periksa kembali data yang diupdate'));
                     $('#frmDetailPem').waitMe('hide');
                 }).always(function() {
-                    $("#btnUpdateStok").html('<i class="fas fa-check"></i> UPDATE STOK');
+                    $("#btnUpdateStok").html('<i class="fas fa-truck"></i> UPDATE STOK');
                     $("#btnUpdateStok").removeClass('disabled');
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel ) {
@@ -620,11 +629,12 @@
                     title: 'Batal Update',
                     text: 'Proses update status data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#frmDetailPem').waitMe('hide');
-                        $("#btnUpdateStok").html('<i class="fas fa-check"></i> UPDATE STOK');
+                        $("#btnUpdateStok").html('<i class="fas fa-truck"></i> UPDATE STOK');
                         $("#btnUpdateStok").removeClass('disabled');
                     }
                 })

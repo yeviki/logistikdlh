@@ -36,24 +36,8 @@ class Model_pembelian extends CI_Model {
         $this->db->select('a.id_pembelian,
                             a.no_faktur_buy,
                             a.tgl_pembelian,
-                            b.id_detail_pembelian,
-                            b.id_barang,
-                            b.qty_barang,
-                            b.harga_barang,
-                            b.total_harga,
-                            sum(b.total_harga) as total,
-                            b.id_status_barang,
-                            c.nm_barang,
-                            c.id_satuan,
-                            c.id_kat_barang,
-                            d.satuan,
-                            e.kategori
                             ');
         $this->db->from('data_pembelian a');
-        $this->db->join('detail_pembelian b', 'b.id_pembelian = a.id_pembelian', 'inner');
-        $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
-        $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
-        $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
         $i = 0;
         foreach ($this->search as $item) { // loop column
             if($_POST['search']['value']) { // if datatable send POST for search
@@ -203,6 +187,7 @@ class Model_pembelian extends CI_Model {
                             b.qty_barang,
                             b.harga_barang,
                             b.total_harga,
+                            sum(b.total_harga) as total,
                             b.id_status_barang,
                             c.nm_barang,
                             c.id_satuan,

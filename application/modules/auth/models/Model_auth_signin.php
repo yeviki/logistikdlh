@@ -70,6 +70,7 @@ class Model_auth_signin extends CI_Model {
                            u.email,
                            u.fullname,
                            u.foto_profile,
+                           u.id_tpa,
                            up.id_group,
                            g.nama_group,
                            g.id_level_akses,

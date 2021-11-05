@@ -43,6 +43,11 @@ class App_loader {
         return $group_name;
     }
 
+    public function current_tpaid() {
+        $id_tpa = $this->CI->session->userdata('tpa_id');
+        return $id_tpa;
+    }
+
     /**
      * Fungsi untuk mengecek level yang sedang login apakah sebagai Superadmin
      * @return boolean

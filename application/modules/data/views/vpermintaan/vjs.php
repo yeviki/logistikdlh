@@ -153,7 +153,8 @@
                     title: 'Batal Simpan',
                     text: 'Proses simpan data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#frmEntry').waitMe('hide');
@@ -206,6 +207,7 @@
             text: 'Apakah anda ingin menghapus data ini ?',
             icon: 'warning',
             showCancelButton: true,
+            allowOutsideClick : false,
             confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
             cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
             reverseButtons: true
@@ -255,7 +257,8 @@
                     title: 'Batal Hapus',
                     text: 'Proses hapus data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#formParent').waitMe('hide');
@@ -286,13 +289,15 @@
     }
 
     //panggil form Rule
-    $(document).on('click', '.btnSetPembelian', function(e) {
+    $(document).on('click', '.btnSetPermintaan', function(e) {
         $('#modalDetailPermintaan').modal({
             backdrop: 'static'
         });
         let token = $(this).data('id');
+        let stat  = $(this).data('st');
         let label = $(this).data('jd');
         $('input[name="tokenDetail"]').val(token);
+        $('input[name="statRequest"]').val(stat);
         $('.lblDetail').text(label);
         getDataListPermintaan(token);
     });
@@ -539,6 +544,84 @@
                         $('#frmDetailPem').waitMe('hide');
                         $("#btnDeleteDetail").html('<i class="fas fa-trash-alt"></i> DELETE JADWAL');
                         $("#btnDeleteDetail").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
+
+    //Button Ajukan Permintaan ---------------------------------------------------------------------//
+    $(document).on('click', '.btnRequest', function(e){
+        e.preventDefault();
+        let postData = {
+            'tokenId': $(this).data('id'),
+            '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()
+        };
+        $(this).html('<i class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></i>');
+        $(this).addClass('disabled');
+        run_waitMe($('#formParent'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda ingin mengajukan permintaan barang ?, Pastikan detail permintaan sudah terisi sesuai kebutuhan, Permintaan yang telah diajukan tidak bisa dibatalkan.!',
+            icon: 'warning',
+            showCancelButton: true,
+            allowOutsideClick : false,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: site + '/rules-permintaan/set-request',
+                    type: "POST",
+                    data: postData,
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        swalAlert.fire({
+                            title: 'Gagal Mengajukan',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errSuccess').html(msg.error(data.message));
+                            }
+                        })
+                    } else {
+                        swalAlert.fire({
+                            title: 'Berhasil Mengajukan',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errSuccess').html(msg.success(data.message));
+                                getDataList();
+                            }
+                        })
+                    }
+                    $('#formParent').waitMe('hide');
+                }).fail(function() {
+                    $('#errSuccess').html(msg.error('Harap periksa kembali data permintaan'));
+                    $('#formParent').waitMe('hide');
+                }).always(function() {
+                    $('.btnRequest').html('<i class="fas fa-lock"></i> Ajukan Permintaan');
+                    $('.btnRequest').removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Mengajukan',
+                    text: 'Proses pengajuan permintaan barang telah dibatalkan',
+                    icon: 'error',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#formParent').waitMe('hide');
+                        $('.btnRequest').html('<i class="fas fa-lock"></i> Ajukan Permintaan');
+                        $('.btnRequest').removeClass('disabled');
                     }
                 })
             }

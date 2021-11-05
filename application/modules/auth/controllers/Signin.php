@@ -215,6 +215,7 @@ class Signin extends MY_Controller {
             $session['level_akses']			= $dataUser['level_akses'];
             $session['nick_level']			= $dataUser['nick_level'];
             $session['user_id']			    = $dataUser['token'];
+            $session['tpa_id']			    = $dataUser['id_tpa'];
             //simpan session
             $this->session->set_userdata($session);
         } else

@@ -154,6 +154,11 @@
                     </div>
                 </div>
                 <div class="form-row mb-3">
+                    <label for="id_tpa" class="control-label font-weight-bolder">Nama TPA <span class="text-danger">*</span></label>
+                    <?php echo form_dropdown('id_tpa', isset($group_tpa) ? $group_tpa : array(''=>'Pilih Data'), $this->input->post('id_tpa', TRUE), 'class="form-control select-all" id="id_tpa" required="" style="width: 100% "');?>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="form-row mb-3">
                     <div class="col-12 col-md-4 required">
                         <label for="blokir" class="control-label font-weight-bolder">Blokir <span class="text-danger">*</span></label>
                         <?php echo form_dropdown('blokir', blokir(), $this->input->post('blokir', TRUE), 'class="form-control select-data" id="blokir" style="width:100%" required=""');?>
@@ -165,6 +170,11 @@
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
+                <small>
+                    <span><b> NOTE :</b> 
+                        Jika group user TPA silahkan mengisi nama TPA berdasarkan lokasi TPA user
+                    </span>
+                </small>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-blue-grey waves-effect waves-light px-3 py-2 font-weight-bold btnClose"><i class="fas fa-times"></i> Close</button>

@@ -23,7 +23,7 @@
                                     <th width="20%" class="font-weight-bold">Tanggal</th>
                                     <th width="40%" class="font-weight-bold">No Faktur</th>
                                     <th width="20%" class="font-weight-bold">Catatan</th>
-                                    <th width="12%" class="font-weight-bold">Action</th>
+                                    <th width="20%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -103,6 +103,7 @@
                                 <h5 class="heading font-weight-bolder mb-3"><i class="fas fa-pencil-alt"></i> Form Entry Detail Permintaan <span class="lblMod"></span></h5>
                                 <?php echo form_open(site_url(isset($siteUri) ? $siteUri.'/rules-permintaan' : ''), array('id' => 'formDetailPermintaan', 'class='=>'needs-validated', 'novalidate'=>'')); ?>
                                 <?php echo form_hidden('tokenDetail', ''); ?>
+                                <?php echo form_hidden('statRequest', ''); ?>
                                 <div class="form-row mb-3 ">
                                     <div class="col-12 col-md-10 required">
                                         <label for="id_barang" class="control-label font-weight-bolder">Nama Barang <span class="text-danger">*</span></label>

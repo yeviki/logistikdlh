@@ -48,12 +48,16 @@ class Pembelian extends SLP_Controller {
                 $dataList = $this->mPembelian->get_datatables();
                 $no = $this->input->post('start');
                 foreach ($dataList as $key => $dl) {
+
+                    $data_total = $this->mPembelian->getDataDetailPembelian($dl['id_pembelian']);
+                    $total_pembelian = !empty($data_total) ? $data_total['total'] : '0';
+
                     $no++;
                     $row = array();
                     $row[] = $no;
                     $row[] = $dl['tgl_pembelian'];
                     $row[] = $dl['no_faktur_buy'];
-                    $row[] = $dl['total'];
+                    $row[] = harga_indo($total_pembelian);
                     $row[] = '<button type="button" class="btn btn-orange btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnEdit" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" title="Edit data"><i class="fas fa-pencil-alt"></i></button>
 
                     <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnSetPembelian" data-id="'.$this->encryption->encrypt($dl['id_pembelian']).'" data-jd="'.$dl['no_faktur_buy'].'" title="Tambah Barang"><i class="fas fa-cart-plus"></i></button>

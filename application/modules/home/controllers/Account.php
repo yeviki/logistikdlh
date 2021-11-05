@@ -39,7 +39,6 @@ class Account extends SLP_Controller
     }
     public function update()
     {
-
         // echo "<pre>";
         // print_r($_POST);
         // echo "</pre>";

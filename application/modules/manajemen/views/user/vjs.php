@@ -237,6 +237,7 @@
                     $('input[name="tokenId"]').val(token);
                     $('#fullname').val(data.message.fullname);
                     $('#username').val(data.message.username);
+                    $('#id_tpa').val(data.message.id_tpa);
                     $('#blokir').select2().val(data.message.blokir).trigger("change");
                     $('#status').select2().val(data.message.status).trigger("change");
                     $.each(data.message.groupid, function(key, g){
