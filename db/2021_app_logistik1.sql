@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Nov 2021 pada 02.29
+-- Waktu pembuatan: 21 Okt 2021 pada 11.02
 -- Versi server: 10.1.38-MariaDB
 -- Versi PHP: 5.6.40
 
@@ -46,16 +46,7 @@ CREATE TABLE `data_barang` (
 --
 
 INSERT INTO `data_barang` (`id_barang`, `nm_barang`, `id_satuan`, `id_kat_barang`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
-(1, 'Mesin Cetak', 2, 1, 'yeviki', '2021-10-25 14:19:30', '127.0.0.1', 'yeviki', '2021-10-25 14:19:30', '127.0.0.1'),
-(2, 'Catride', 2, 1, 'yeviki', '2021-10-25 14:20:04', '127.0.0.1', 'yeviki', '2021-10-25 14:20:04', '127.0.0.1'),
-(3, 'Sepatu Bot', 5, 1, 'yeviki', '2021-10-25 14:20:22', '127.0.0.1', 'yeviki', '2021-10-25 14:20:22', '127.0.0.1'),
-(4, 'Baju Rompi', 1, 1, 'yeviki', '2021-10-25 14:20:39', '127.0.0.1', 'yeviki', '2021-10-25 14:20:39', '127.0.0.1'),
-(5, 'Cangkul', 2, 1, 'yeviki', '2021-10-25 14:20:59', '127.0.0.1', 'yeviki', '2021-10-25 14:20:59', '127.0.0.1'),
-(6, 'Helm Proyek', 5, 1, 'yeviki', '2021-10-25 14:21:11', '127.0.0.1', 'yeviki', '2021-10-25 14:21:11', '127.0.0.1'),
-(7, 'Sarung Tangan', 1, 2, 'yeviki', '2021-10-25 14:21:33', '127.0.0.1', 'yeviki', '2021-10-25 14:21:33', '127.0.0.1'),
-(8, 'Gear Excavator', 5, 7, 'yeviki', '2021-10-25 14:21:49', '127.0.0.1', 'yeviki', '2021-10-25 14:21:49', '127.0.0.1'),
-(9, 'Air Radiator Excavator', 8, 6, 'yeviki', '2021-10-25 14:22:09', '127.0.0.1', 'yeviki', '2021-10-25 14:22:09', '127.0.0.1'),
-(10, 'Galon Air', 11, 1, 'yeviki', '2021-10-26 09:27:46', '127.0.0.1', 'yeviki', '2021-10-26 09:27:46', '127.0.0.1');
+(1, 'asfasdfa', 2, 2, 'yeviki', '2021-08-04 11:02:00', '127.0.0.1', 'yeviki', '2021-10-19 14:48:59', '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -67,30 +58,8 @@ CREATE TABLE `data_gudang` (
   `id_gudang` int(11) NOT NULL,
   `id_barang` int(11) NOT NULL,
   `qty_stok` int(11) NOT NULL,
-  `id_level` int(11) NOT NULL,
-  `create_by` varchar(255) NOT NULL,
-  `create_date` datetime NOT NULL,
-  `create_ip` varchar(20) NOT NULL,
-  `mod_by` varchar(255) NOT NULL,
-  `mod_date` datetime NOT NULL,
-  `mod_ip` varchar(20) NOT NULL
+  `id_level` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `data_gudang`
---
-
-INSERT INTO `data_gudang` (`id_gudang`, `id_barang`, `qty_stok`, `id_level`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
-(1, 1, 1, 0, 'yeviki', '2021-10-25 14:19:30', '127.0.0.1', 'yeviki', '2021-10-25 14:19:30', '127.0.0.1'),
-(2, 2, 10, 0, 'yeviki', '2021-10-25 14:20:04', '127.0.0.1', 'yeviki', '2021-10-25 14:20:04', '127.0.0.1'),
-(3, 3, 10, 0, 'yeviki', '2021-10-25 14:20:22', '127.0.0.1', 'yeviki', '2021-10-25 14:20:22', '127.0.0.1'),
-(4, 4, 50, 0, 'yeviki', '2021-10-25 14:20:39', '127.0.0.1', 'yeviki', '2021-10-25 14:20:39', '127.0.0.1'),
-(5, 5, 20, 0, 'yeviki', '2021-10-25 14:20:59', '127.0.0.1', 'yeviki', '2021-10-25 14:20:59', '127.0.0.1'),
-(6, 6, 50, 0, 'yeviki', '2021-10-25 14:21:11', '127.0.0.1', 'yeviki', '2021-10-25 14:21:11', '127.0.0.1'),
-(7, 7, 100, 0, 'yeviki', '2021-10-25 14:21:33', '127.0.0.1', 'yeviki', '2021-10-25 14:21:33', '127.0.0.1'),
-(8, 8, 100, 0, 'yeviki', '2021-10-25 14:21:49', '127.0.0.1', 'yeviki', '2021-10-25 14:21:49', '127.0.0.1'),
-(9, 9, 1, 0, 'yeviki', '2021-10-25 14:22:09', '127.0.0.1', 'yeviki', '2021-10-25 14:22:09', '127.0.0.1'),
-(10, 10, 0, 0, 'yeviki', '2021-10-26 09:27:46', '127.0.0.1', 'yeviki', '2021-10-26 09:27:46', '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -121,34 +90,6 @@ INSERT INTO `data_pembelian` (`id_pembelian`, `no_faktur_buy`, `tgl_pembelian`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `data_permintaan`
---
-
-CREATE TABLE `data_permintaan` (
-  `id_permintaan` int(11) NOT NULL,
-  `no_faktur_req` varchar(255) NOT NULL,
-  `tanggal_req` date NOT NULL,
-  `id_tpa` int(11) NOT NULL,
-  `catatan` text NOT NULL,
-  `status_req` int(11) NOT NULL,
-  `create_by` varchar(255) NOT NULL,
-  `create_date` datetime NOT NULL,
-  `create_ip` varchar(20) NOT NULL,
-  `mod_by` varchar(255) NOT NULL,
-  `mod_date` datetime NOT NULL,
-  `mod_ip` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `data_permintaan`
---
-
-INSERT INTO `data_permintaan` (`id_permintaan`, `no_faktur_req`, `tanggal_req`, `id_tpa`, `catatan`, `status_req`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
-(1, '1234123', '2021-11-01', 0, 'asdfasdfad', 1, 'yeviki', '2021-11-01 09:24:16', '127.0.0.1', 'yeviki', '2021-11-01 09:24:16', '127.0.0.1');
-
--- --------------------------------------------------------
-
---
 -- Struktur dari tabel `detail_pembelian`
 --
 
@@ -158,7 +99,6 @@ CREATE TABLE `detail_pembelian` (
   `id_barang` int(11) NOT NULL,
   `qty_barang` int(11) NOT NULL,
   `harga_barang` bigint(11) NOT NULL,
-  `total_harga` bigint(20) NOT NULL,
   `id_status_barang` int(11) NOT NULL,
   `create_by` varchar(255) NOT NULL,
   `create_date` datetime NOT NULL,
@@ -172,83 +112,9 @@ CREATE TABLE `detail_pembelian` (
 -- Dumping data untuk tabel `detail_pembelian`
 --
 
-INSERT INTO `detail_pembelian` (`id_detail_pembelian`, `id_pembelian`, `id_barang`, `qty_barang`, `harga_barang`, `total_harga`, `id_status_barang`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
-(1, 1, 1, 1, 10000, 10000, 1, 'yeviki', '2021-10-25 12:02:31', '127.0.0.1', 'yeviki', '2021-10-25 12:02:31', '127.0.0.1'),
-(2, 1, 2, 10, 25000, 250000, 1, 'yeviki', '2021-10-25 12:02:50', '127.0.0.1', 'yeviki', '2021-10-25 12:02:50', '127.0.0.1'),
-(3, 1, 3, 10, 50000, 500000, 1, 'yeviki', '2021-10-25 12:05:15', '127.0.0.1', 'yeviki', '2021-10-25 12:05:15', '127.0.0.1'),
-(4, 1, 4, 50, 150000, 7500000, 1, 'yeviki', '2021-10-25 12:06:53', '127.0.0.1', 'yeviki', '2021-10-25 12:06:53', '127.0.0.1'),
-(5, 1, 5, 20, 100000, 2000000, 1, 'yeviki', '2021-10-25 12:08:58', '127.0.0.1', 'yeviki', '2021-10-25 12:08:58', '127.0.0.1'),
-(6, 1, 6, 50, 50000, 2500000, 1, 'yeviki', '2021-10-25 12:10:17', '127.0.0.1', 'yeviki', '2021-10-25 12:10:17', '127.0.0.1'),
-(7, 1, 7, 100, 20000, 2000000, 1, 'yeviki', '2021-10-25 12:10:32', '127.0.0.1', 'yeviki', '2021-10-25 12:10:32', '127.0.0.1'),
-(8, 1, 8, 100, 500000, 50000000, 1, 'yeviki', '2021-10-25 12:10:48', '127.0.0.1', 'yeviki', '2021-10-25 12:10:48', '127.0.0.1'),
-(9, 1, 9, 1, 10000, 10000, 1, 'yeviki', '2021-10-25 15:06:12', '127.0.0.1', 'yeviki', '2021-10-25 15:06:12', '127.0.0.1');
-
---
--- Trigger `detail_pembelian`
---
-DELIMITER $$
-CREATE TRIGGER `Update Stok` AFTER UPDATE ON `detail_pembelian` FOR EACH ROW BEGIN
-	IF NEW.id_status_barang = 1 THEN
-	UPDATE data_gudang SET qty_stok = qty_stok + NEW.qty_barang 	WHERE  id_barang = NEW.id_barang;
-    END IF;
-END
-$$
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `detail_permintaan`
---
-
-CREATE TABLE `detail_permintaan` (
-  `id_detail_permintaan` int(11) NOT NULL,
-  `id_permintaan` int(11) NOT NULL,
-  `id_barang` int(11) NOT NULL,
-  `qty_req` int(11) NOT NULL,
-  `qty_acc` bigint(11) NOT NULL,
-  `id_status_req` int(11) NOT NULL,
-  `create_by` varchar(255) NOT NULL,
-  `create_date` datetime NOT NULL,
-  `create_ip` varchar(20) NOT NULL,
-  `mod_by` varchar(255) NOT NULL,
-  `mod_date` datetime NOT NULL,
-  `mod_ip` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `detail_permintaan`
---
-
-INSERT INTO `detail_permintaan` (`id_detail_permintaan`, `id_permintaan`, `id_barang`, `qty_req`, `qty_acc`, `id_status_req`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
-(3, 1, 3, 1, 0, 0, 'yeviki', '2021-11-02 15:04:52', '127.0.0.1', 'yeviki', '2021-11-02 15:04:52', '127.0.0.1');
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `ms_tpa`
---
-
-CREATE TABLE `ms_tpa` (
-  `id_tpa` int(11) NOT NULL,
-  `nama_tpa` varchar(255) NOT NULL,
-  `lokasi_tpa` text NOT NULL,
-  `kapasitas_tpa` bigint(255) NOT NULL,
-  `create_by` varchar(255) NOT NULL,
-  `create_date` datetime NOT NULL,
-  `create_ip` varchar(20) NOT NULL,
-  `mod_by` varchar(255) NOT NULL,
-  `mod_date` datetime NOT NULL,
-  `mod_ip` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `ms_tpa`
---
-
-INSERT INTO `ms_tpa` (`id_tpa`, `nama_tpa`, `lokasi_tpa`, `kapasitas_tpa`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
-(1, 'TPA Sampah Regional Payakumbuh', 'Kelurahan Kapalo Koto dan Kelurahan Padang Karambia, Kecamatan Payakumbuh Selatan,Kota Payakumbuh', 400000, 'yeviki', '2020-11-24 09:47:05', '::1', 'yeviki', '2021-06-07 14:13:23', '127.0.0.1'),
-(2, 'TPA Sampah Regional Solok', 'Ampang Kualo Kelurahan Kampung Jawa, Kecamatan Tanjung Harapan, Kota Solok', 270000, 'yeviki', '2020-11-24 09:47:57', '::1', 'izinmasuk', '2021-03-16 10:08:06', '182.253.91.124');
+INSERT INTO `detail_pembelian` (`id_detail_pembelian`, `id_pembelian`, `id_barang`, `qty_barang`, `harga_barang`, `id_status_barang`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
+(1, 1, 1, 2, 10, 1, 'yeviki', '2021-10-21 15:01:06', '127.0.0.1', 'yeviki', '2021-10-21 15:01:06', '127.0.0.1'),
+(2, 1, 1, 2, 10000, 1, 'yeviki', '2021-10-21 15:04:16', '127.0.0.1', 'yeviki', '2021-10-21 15:04:16', '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -338,21 +204,10 @@ CREATE TABLE `xi_sa_ci_session` (
 
 INSERT INTO `xi_sa_ci_session` (`id`, `ip_address`, `timestamp`, `data`) VALUES
 ('3hcbi8vd8upi6kboj6jsfmgs0j2bcv54', '::1', 1633053005, 0x6572726f725f73657373696f6e7c693a313b6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223032393938656335356636313230323261626264636438376332303166326563653933613863646233396663326163613565633662373431643762666438336361363339346435353434343132316532666231616366623036363365663336323539343735346561616432353538383930653465323564643530636537303066316c5a384a645171486e3552577062693774617538705a4e75385837773230527a744a46306d494f736d63762b6e33696e6377397876557452574c4a634b7a56223b657870697265735f62797c693a313633333035363537393b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('45mcj6a902i5oob0agmpjsa0j2732n5m', '127.0.0.1', 1635479148, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a2266353136343064383432663539373432383736626264333732323230646466663834393165646533653135613133653034386364643263343834653265396135653031636535323332393164323062356265343531343861353665316566646562323562613864663466323762653365343566646261396462653762313862645238654837546e6c325a726f64724b31756456566167676f547174524b46666e612b4454524552694d646677764132653744694b6a683752315234395a583575223b657870697265735f62797c693a313633353437323032323b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('4fsm8djcub7u7qqr41rjct7qvkgn081c', '127.0.0.1', 1634887397, ''),
-('4ghg61ktsahca1l79nnbnngoqc9alleg', '::1', 1635842488, ''),
-('4iavg7n427uqv4dsoolgnae79bqm6vec', '127.0.0.1', 1635815176, ''),
-('6ir1itp6mmiq1p53p501p40qtq887raa', '127.0.0.1', 1635304782, 0x66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223664333038393866313039373533653539386166366262656166323834633639376639633434653833306565643439353363306362383334376331633138323237316232376466393237316565643863666630303734633530666231636636346636333238643464376238356530663066336461646263376665336439643538374739514974435533563675715273726f4f47776332616a327a417330374f384d647077393150456a574974466958484c55624a324651785057437a45642f34223b657870697265735f62797c693a313633353330353839383b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
+('6ir1itp6mmiq1p53p501p40qtq887raa', '127.0.0.1', 1634806485, 0x66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a2263636436376632643832613536306333323962363165363133353232353462623433313534636332643531346639323865616532633535316364326537643666323361323131376432373364383033663339343439363332343935643562313966323762663335376466313339646135626262326432336263343866303166354a596c4c444f7a55425176324e6543574b4b574153515235797645494c4a714968416b544d447730594d486a34546f4f4a3274594d774347456c362f51524c61223b657870697265735f62797c693a313633343738313230313b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
 ('8a72k2ht68i9rb2utip1p5ff1ki2opoa', '127.0.0.1', 1634786229, ''),
 ('8dg2jecqgq7lno0d720871pf4b0l4rkt', '127.0.0.1', 1633415874, 0x6572726f725f73657373696f6e7c693a383b6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a22316538303535663139333634333237646664623032643931653033303133323131356233303334626562373332353739313434626261653733646537336361356363306438333237323135353733303531363463356431336564623737386437353361303162323936656533666561626334653463393239626261373361323654744a366d61342b58727a516c744f4f586c3558364175564e515259555a734a676f434e543667414c367359657035686f6162656e443958557962423255544f223b657870697265735f62797c693a313633333431393434363b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('bcprpfp9r8odfai5k4qbn3g1pbti9b2c', '127.0.0.1', 1633323027, ''),
-('dsunqesuen4bk90hi608hcllj49vd1av', '127.0.0.1', 1635138497, ''),
-('e17eh7mlgqiv7l2lm7scvqauurvtnmh4', '127.0.0.1', 1635232962, ''),
-('ero4rq3fllsq3bblnmgb488i2llaj0iq', '127.0.0.1', 1635928828, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a2237613430643464633762326264373361336465633633306563326463373966633765633839363335613564663863383463326633393263323330323261386634653030373335613931633135376430633734353637353130643433636537346365346631396534386330313763333066653664376365626366343837363563626e644375725461667034456b2b587434472b645347796e4f61586b307a74302f316f573839485873766a556166785158674937436f786642755479673267576c223b657870697265735f62797c693a313633353932383330333b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('g9ihkuemo40hqjqsgmrt0k1a1b438j7c', '::1', 1635842578, ''),
-('oehu5c0o7po5cc17ief5dm9lo7lj7qc9', '127.0.0.1', 1635755617, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a22626263303964316561656362343565643431396333643835396334646539653338623839623634303039666332303666323733306432336334623636376237613939303462393533636462656130633863366337663930303639656437663531306132613539613231343664336338363164353963653265343333633565356334774c686c34507371474970366931656a6e78485564454548566d364f4f4347654c3264324c564764706766756d2f44344446474f764a71796c2b64594b7757223b657870697265735f62797c693a313633353733333438333b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('ui7shc22qmvjcibv2gnu6l99g8g9m9pi', '127.0.0.1', 1635843988, 0x66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223933353732346538313334626635333737613936356236336162336135663830346632356532643930333930646537653966633962373738393437363735663639666235663630353736363439313039653962613264653065306237326232616266336362363466623938353965666135353739333734376630373931363064325a51356c4167364d2f73777750534b63494570543459686a674153484b7968743541555344686d4b69575a5757544538364241724c634c747778334d6e3457223b657870697265735f62797c693a313633353834363230313b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('vhm4bq2c361b8sfnmk0gdqr8j1v6266n', '127.0.0.1', 1635382611, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223465626436643261623730613635663533643636353732626138626562623335313531613238633465363561386538643366366361333131383164373765656631343266393232303334333030376131396232656161346265396537313238323762396434353431323535333432613363623435623933363466616233396234552b305a53794b39357a775a326e65554d4a47353543754f6d4f5a496265506e6c714e576831695a755257584146454b4c66545a522b49414b6c396867616e4e223b657870697265735f62797c693a313633353338353637313b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b);
+('bcprpfp9r8odfai5k4qbn3g1pbti9b2c', '127.0.0.1', 1633323027, '');
 
 -- --------------------------------------------------------
 
@@ -402,8 +257,7 @@ INSERT INTO `xi_sa_fungsi` (`id_fungsi`, `nama_fungsi`, `label_fungsi`, `url_fun
 (18, 'export_to_word', 'Download Word', 'export-to-word', 'Fungsi download laporan format word', 2, 0, 'yogisolop', '2020-05-02 07:16:39', '::1', 'yogisolop', '2020-05-22 08:03:33', '::1', 1),
 (19, 'export_to_excel', 'Download Excel', 'export-to-excel', 'Fungsi download laporan format excel', 2, 0, 'yogisolop', '2020-05-11 08:27:30', '::1', 'yogisolop', '2020-05-11 08:27:30', '::1', 1),
 (20, 'export_to_pdf', 'Download PDF', 'export-to-pdf', 'Fungsi download laporan format pdf', 2, 0, 'yogisolop', '2020-05-11 08:30:42', '::1', 'yogisolop', '2020-05-11 08:30:42', '::1', 1),
-(21, 'rules_pembelian', 'Rules Pembelian', 'rules-pembelian', 'Fungsi untuk menambahkan detail data yang dibeli', 2, 0, 'yeviki', '2021-10-04 14:10:13', '127.0.0.1', 'yeviki', '2021-10-04 14:10:13', '127.0.0.1', 1),
-(22, 'rules_permintaan', 'Rules Permintaan', 'rules-permintaan', 'Halaman untuk menambahkan detail permintaan barang', 2, 0, 'yeviki', '2021-11-01 14:09:49', '127.0.0.1', 'yeviki', '2021-11-01 14:09:49', '127.0.0.1', 1);
+(21, 'rules_pembelian', 'Rules Pembelian', 'rules-pembelian', 'Fungsi untuk menambahkan detail data yang dibeli', 2, 0, 'yeviki', '2021-10-04 14:10:13', '127.0.0.1', 'yeviki', '2021-10-04 14:10:13', '127.0.0.1', 1);
 
 -- --------------------------------------------------------
 
@@ -432,7 +286,7 @@ CREATE TABLE `xi_sa_group` (
 INSERT INTO `xi_sa_group` (`id_group`, `nama_group`, `id_level_akses`, `id_upk`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`, `id_status`) VALUES
 (1, 'Super Admin', 1, 0, 'yogisolop', '2020-04-07 00:00:00', '::1', 'yogisolop', '2020-04-07 00:00:00', '::1', 1),
 (2, 'Administrator', 2, 0, 'yogisolop', '2020-09-20 12:36:48', '::1', 'yogisolop', '2021-01-28 12:52:42', '::1', 1),
-(6, 'TPA', 3, 0, 'administrator', '2021-02-09 11:48:15', '::1', 'yeviki', '2021-11-03 15:13:36', '127.0.0.1', 1),
+(6, 'Tata Usaha', 3, 0, 'administrator', '2021-02-09 11:48:15', '::1', 'administrator', '2021-02-09 11:48:15', '::1', 1),
 (7, 'Pimpinan', 4, 0, 'administrator', '2021-02-09 11:48:29', '::1', 'administrator', '2021-02-09 11:48:29', '::1', 1),
 (8, 'Staf / Operator', 5, 0, 'administrator', '2021-02-09 11:48:37', '::1', 'administrator', '2021-03-10 09:18:58', '::1', 1);
 
@@ -510,14 +364,7 @@ INSERT INTO `xi_sa_group_privileges` (`id_group_privileges`, `id_group`, `id_rul
 (109, 1, 96, 1),
 (110, 1, 97, 1),
 (111, 1, 98, 1),
-(112, 1, 99, 1),
-(113, 1, 100, 1),
-(114, 1, 101, 1),
-(115, 1, 102, 1),
-(116, 1, 103, 1),
-(117, 1, 104, 1),
-(118, 1, 105, 1),
-(119, 1, 106, 1);
+(112, 1, 99, 1);
 
 -- --------------------------------------------------------
 
@@ -576,8 +423,7 @@ INSERT INTO `xi_sa_kontrol` (`id_kontrol`, `nama_kontrol`, `label_kontrol`, `url
 (7, 'users', 'Users', 'users', 'Halaman manajemen users', '', '2017-06-14 19:18:54', '::1', '', '2017-06-14 19:19:06', '::1', 1),
 (18, 'barang', 'Barang', 'barang', 'Halaman manajemen data barang', 'yeviki', '2021-07-29 11:58:40', '127.0.0.1', 'yeviki', '2021-07-29 11:58:40', '127.0.0.1', 1),
 (19, 'account', 'Account', 'account', 'Halaman ubah password', 'yeviki', '2021-08-02 10:50:18', '127.0.0.1', 'yeviki', '2021-08-02 10:50:18', '127.0.0.1', 1),
-(20, 'pembelian', 'Pembelian', 'pembelian', 'Halaman manajemen pembelian barang', 'yeviki', '2021-09-30 08:54:08', '127.0.0.1', 'yeviki', '2021-09-30 08:54:08', '127.0.0.1', 1),
-(21, 'permintaan', 'Permintaan', 'permintaan', 'Halaman manajemen permintaan barang', 'yeviki', '2021-10-26 11:20:37', '127.0.0.1', 'yeviki', '2021-10-26 11:21:37', '127.0.0.1', 1);
+(20, 'pembelian', 'Pembelian', 'pembelian', 'Halaman manajemen pembelian barang', 'yeviki', '2021-09-30 08:54:08', '127.0.0.1', 'yeviki', '2021-09-30 08:54:08', '127.0.0.1', 1);
 
 -- --------------------------------------------------------
 
@@ -599,7 +445,7 @@ CREATE TABLE `xi_sa_level_akses` (
 INSERT INTO `xi_sa_level_akses` (`id_level_akses`, `level_akses`, `nick_level`, `id_status`) VALUES
 (1, 'SUPER ADMIN', 'SUP', 1),
 (2, 'ADMINISTRATOR', 'ADM', 1),
-(3, 'TPA', 'TPP', 1),
+(3, 'TATA USAHA', 'TTU', 1),
 (4, 'PIMPINAN', 'PMP', 1),
 (5, 'STAF', 'STF', 1);
 
@@ -892,26 +738,7 @@ INSERT INTO `xi_sa_log_session` (`id_log_session`, `id_users`, `username`, `logi
 (223, 1, 'yeviki', 1633415846, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0', 1, '1e8055f19364327dfdb02d91e030132115b3034beb732579144bbae73de73ca5cc0d832721557305164c5d13edb778d753a01b296ee3feabc4e4c929bba73a26TtJ6ma4+XrzQltOOXl5X6AuVNQRYUZsJgoCNT6gAL6sYep5hoabenD9XUybB2UTO'),
 (224, 1, 'yeviki', 1634627873, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 0, '95e9b5b420454f056efc5bb1a790eb3dc441c769a0b917659c83ca197204af79d4288e792fa2d6ad50c001ccc923f5c15d0a5b17d2ce405945ac28f7fcee7f52pL4rshUHMT11MIXjslfd0A19BU+uEtprxdZMVPgp5k5yrDGeglpEz4Rvt55q0oNt'),
 (225, 1, 'yeviki', 1634628766, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '8a7e0af509562daa2c874e5545cf8d332578dee7e5ef09576c914b365fedafbf05c48db37c954035964ccda9af291eeb16445be9718aa6d6dc37f6e126e15433ePHtgUSL5yIF3by7KO56RehvE6wTmic7hEIgrYlGWah+17m3IEqw+M58mWExkMRZ'),
-(226, 1, 'yeviki', 1634777601, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'ccd67f2d82a560c329b61e61352254bb43154cc2d514f928eae2c551cd2e7d6f23a2117d273d803f39449632495d5b19f27bf357df139da5bbb2d23bc48f01f5JYlLDOzUBQv2NeCWKKWASQR5yvEILJqIhAkTMDw0YMHj4ToOJ2tYMwCGEl6/QRLa'),
-(227, 1, 'yeviki', 1634864609, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '2b74931a86bee95d0bf2a876ae204c634653e12ffb9bd3f7f419e1457dffbc0f60a9af1c53d6567e6fa8fc2baf78db2b288c2e831cfacc1a477c3942d031eeaft+N6kFrBHFd8N69gF409aJ3JXQWylJy49sBZvlo8i8xQkWZz9hynEFJSAlcmXX73'),
-(228, 1, 'yeviki', 1635123560, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'ac276a942cb387d2a8d0559cae4d8a84bcec1102181b593d2b05bfc6ebc5d99e4b0528dc9049464213b7695eb426b9929be5c7ba7a5880915e29a514cad7ee82o5lNPkeHKcHG/jz7dnJxkyg7nGHYftYJ2B7JiUD5yoE6zS8KG6keICtw0FCh3zvx'),
-(229, 1, 'yeviki', 1635151057, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'cdbe9da1a0d19d12ec2123f2a136b60245d17c280b58b60b0fac786b78bdecfe281360faef9f96078a82eeb70b289d95c54f77d778ea0db3a52fff6e2bf5c03dhr0n1IRI8HKECGCQoGjm911xP/vCj5vVAPfsL63Y7eMlM3GMmFTjgAfORt4K3Mtr'),
-(230, 1, 'yeviki', 1635211146, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'b99c6a98a52c6c5bc43d3b2c53fb593d06742668c92af449d3da4b3ff282f88a8cb963e2c614a6229c1dbc58090fabf67698b0739be08c1d2a1890684638d012uzwA+keVrnPiMY9IJ0zNwNKZfc8LBC8ewKS67s3ucqr0UiIK3kmJ8/B5JGX6xXIS'),
-(231, 1, 'yeviki', 1635302298, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '6d30898f109753e598af6bbeaf284c697f9c44e830eed4953c0cb8347c1c182271b27df9271eed8cff0074c50fb1cf64f6328d4d7b85e0f0f3dadbc7fe3d9d587G9QItCU3V6uqRsroOGwc2aj2zAs07O8Mdpw91PEjWItFiXHLUbJ2FQxPWCzEd/4'),
-(232, 1, 'yeviki', 1635382071, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '4ebd6d2ab70a65f53d66572ba8bebb35151a28c4e65a8e8d3f6ca31181d77eef142f9220343007a19b2eaa4be9e712827b9d4541255342a3cb45b9364fab39b4U+0ZSyK95zwZ2neUMJG55CuOmOZIbePnlqNWh1iZuRWXAFEKLfTZR+IAKl9hganN'),
-(233, 1, 'yeviki', 1635468422, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'f51640d842f59742876bbd372220ddff8491ede3e15a13e048cdd2c484e2e9a5e01ce523291d20b5be45148a56e1efdeb25ba8df4f27be3e45fdba9dbe7b18bdR8eH7Tnl2ZrodrK1udVVaggoTqtRKFfna+DTRERiMdfwvA2e7DiKjh7R1R49ZX5u'),
-(234, 1, 'yeviki', 1635729883, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'bbc09d1eaecb45ed419c3d859c4de9e38b89b64009fc206f2730d23c4b667b7a9904b953cdbea0c8c6c7f90069ed7f510a2a59a2146d3c861d59ce2e433c5e5c4wLhl4PsqGIp6i1ejnxHUdEEHVm6OOCGeL2d2LVGdpgfum/D4DFGOvJqyl+dYKwW'),
-(235, 1, 'yeviki', 1635813728, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 0, 'f079a4545978f760881986ff3c866ebcb9fb5724a57025dd4f50d83c5e0ecd4f6717e6de5c9b568e899ac079bdf755c5b772ebf26f3df15cb50443f5b0b0ac81/5mZ5KfiJ6wL5Oer8UlnqtPE9SU27ZUu2iGV9BkwWN4ifHpMIC6jMXbiVnNft3F7'),
-(236, 1, 'yeviki', 1635842452, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36', 1, 'ebd4fc4bf351acbbe2790687a8f5be9cdec320bd7e9abc29a94d2233624468e1340d627285c289562157bf62fc782761faa9a9dc331d373c120f99ada71a01944PeAT247qQfrXQMyhBiwtYVsv9PnukCj84mypLyt6O7klTzujRkT2vByszvE5rpc'),
-(237, 1, 'yeviki', 1635842497, '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Mobile Safari/537.36', 1, 'c3ee4f27b766c1677efa96268579273654a26b464668f4a184a5ea0d98ff6f6168b75ed021993bfd6da7a0ee9211320137c2dab5805f36392e13e80f7766e579tZ9HLK9ZKwjOX8YysTE49PearUcsMC6XyDDmRMlr5hnPpYF7qTwHFH9mC+qGbhK4'),
-(238, 1, 'yeviki', 1635842507, '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Mobile Safari/537.36', 1, '056edd45d942250a690d994e4df402e9e321b12b17cbbc8b0da1b772611624c397bf6bcc55756d762cd4d2a46c2a70deb69df3b10d74ca22cb28d788c1cd1826YoLrErq2CVZZCo/quTMvAcz1JcMdlPmvzVSP3rFy3/bTXx4UrypKq38FwftV+pUp'),
-(239, 1, 'yeviki', 1635842519, '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Mobile Safari/537.36', 1, '571d314ffdd926a0102e87f38e40d8268f61e2f812a737dc7b2ac7cdc03d4e2099d6a1511bc376461981693a9bf46d175d896ffd84e79beb8486cd89350614b44uRQhz6FmnaEOTZns4Jw8TALCCtv3/6xhIjh2OFr7xgwI+IZLrXQ9qUKDqOF1fF2'),
-(240, 1, 'yeviki', 1635842532, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36', 1, '29582a6fe4eb79cf2052bc38696594378eaac47a15b2ebcd4ae66ad6b82b0802b278a9396a398fc70956cb7282c2af9f92184bd49a5ed63e39dc0c8aef1d73bfTHjKTaqnnyW8VHQTjRtudFn8vIqlH/WafMMzYTUIDtIJvIsRznZakDRolI679FEF'),
-(241, 1, 'yeviki', 1635842548, '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Mobile Safari/537.36', 1, '5533efea722c48074789a31706fe81e993d24eab089e89f7e7fd834b2f81c6698a7870862b69a69248db42d7053498795c11e6da0933df1386d94e965e3b0716IZwf6R5BvkCkXdvm81nb8QKsP/kyngrEP0okJHAAvT1GJdLL2xEpQsp67NWYMKg1'),
-(242, 1, 'yeviki', 1635842561, '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Mobile Safari/537.36', 1, 'e79f6ebfc76e29fb115faf538fa768c31e4c92cfd88dc929a7061c1e77c3976bcbb7b91c28c828ebf866a92d78be03240fa049cff93ada3dc78a58f4f47c969fxAOeUc/wibMOnCoUv/67XLRRxJmz307Q2HloYoa9KunBn4938RibMj5I1UVm73+s'),
-(243, 1, 'yeviki', 1635842577, '::1', 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Mobile Safari/537.36', 1, 'f671499a6cacaedd8b212385fd5c21c071f2f6ce85e37789a1ce4c3825c97f4918602eddc53bfc4b41c60a0cc58f2bdf906e0ea7c98d25146e0ada755f1bba37HF7+Vqg7+IVUNsV0r9IaIIYSc6KXp6torDHo5AqjOyXh8RcRstcIL2/CAKsAnj+f'),
-(244, 1, 'yeviki', 1635842601, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '935724e8134bf5377a965b63ab3a5f804f25e2d90390de7e9fc9b778947675f69fb5f60576649109e9ba2de0e0b72b2abf3cb64fb9859efa55793747f079160d2ZQ5lAg6M/swwPSKcIEpT4YhjgASHKyht5AUSDhmKiWZWWTE86BArLcLtwx3Mn4W'),
-(245, 1, 'yeviki', 1635924703, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '7a40d4dc7b2bd73a3dec630ec2dc79fc7ec89635a5df8c84c2f392c23022a8f4e00735a91c157d0c74567510d43ce74ce4f19e48c017c30fe6d7cebcf48765cbndCurTafp4Ek+Xt4G+dSGynOaXk0zt0/1oW89HXsvjUafxQXgI7CoxfBuTyg2gWl');
+(226, 1, 'yeviki', 1634777601, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'ccd67f2d82a560c329b61e61352254bb43154cc2d514f928eae2c551cd2e7d6f23a2117d273d803f39449632495d5b19f27bf357df139da5bbb2d23bc48f01f5JYlLDOzUBQv2NeCWKKWASQR5yvEILJqIhAkTMDw0YMHj4ToOJ2tYMwCGEl6/QRLa');
 
 -- --------------------------------------------------------
 
@@ -953,9 +780,9 @@ INSERT INTO `xi_sa_menu` (`id_menu`, `title_menu`, `url_menu`, `icon_menu`, `ord
 (13, 'Data', '#', 'fas fa-clipboard-list', 3, 0, 0, 'Y', 'administrator', '2021-02-16 08:59:28', '::1', 'yeviki', '2021-07-29 12:07:34', '127.0.0.1', 1),
 (14, 'Barang', '', '', 1, 85, 13, 'N', 'administrator', '2021-02-16 09:39:55', '::1', 'yeviki', '2021-08-03 13:52:26', '127.0.0.1', 1),
 (15, 'Pembelian', '', '', 2, 93, 13, 'N', 'administrator', '2021-02-18 09:56:34', '::1', 'yeviki', '2021-09-30 09:04:10', '127.0.0.1', 1),
-(16, 'Buku Beser', '#', 'fas fa-envelope', 4, 0, 0, 'Y', 'administrator', '2021-02-18 10:18:22', '::1', 'yeviki', '2021-10-26 11:23:44', '127.0.0.1', 1),
+(16, 'Permintaan', '#', 'fas fa-envelope', 4, 0, 0, 'Y', 'administrator', '2021-02-18 10:18:22', '::1', 'yeviki', '2021-08-03 13:53:05', '127.0.0.1', 1),
 (17, 'Disposisi Masuk', '', '', 1, 74, 16, 'N', 'administrator', '2021-02-18 10:18:49', '::1', 'administrator', '2021-02-18 10:18:49', '::1', 1),
-(18, 'Permintaan', '', '', 3, 100, 13, 'N', 'administrator', '2021-03-01 15:12:22', '::1', 'yeviki', '2021-10-26 11:28:31', '127.0.0.1', 1),
+(18, 'Konsep', '', '', 3, 77, 13, 'N', 'administrator', '2021-03-01 15:12:22', '::1', 'yeviki', '2021-09-30 09:03:49', '127.0.0.1', 1),
 (19, 'Master', '#', 'fa fa-list', 5, 0, 0, 'Y', 'administrator', '2021-03-09 10:45:06', '::1', 'administrator', '2021-03-09 10:45:06', '::1', 1);
 
 -- --------------------------------------------------------
@@ -1061,14 +888,7 @@ INSERT INTO `xi_sa_rules` (`id_rules`, `id_module`, `id_kontrol`, `id_fungsi`, `
 (96, 11, 20, 4, 1),
 (97, 11, 20, 5, 1),
 (98, 11, 20, 7, 1),
-(99, 11, 20, 21, 1),
-(100, 11, 21, 1, 1),
-(101, 11, 21, 2, 1),
-(102, 11, 21, 3, 1),
-(103, 11, 21, 4, 1),
-(104, 11, 21, 5, 1),
-(105, 11, 21, 7, 1),
-(106, 11, 21, 22, 1);
+(99, 11, 20, 21, 1);
 
 -- --------------------------------------------------------
 
@@ -1243,28 +1063,10 @@ ALTER TABLE `data_pembelian`
   ADD PRIMARY KEY (`id_pembelian`);
 
 --
--- Indeks untuk tabel `data_permintaan`
---
-ALTER TABLE `data_permintaan`
-  ADD PRIMARY KEY (`id_permintaan`);
-
---
 -- Indeks untuk tabel `detail_pembelian`
 --
 ALTER TABLE `detail_pembelian`
   ADD PRIMARY KEY (`id_detail_pembelian`);
-
---
--- Indeks untuk tabel `detail_permintaan`
---
-ALTER TABLE `detail_permintaan`
-  ADD PRIMARY KEY (`id_detail_permintaan`);
-
---
--- Indeks untuk tabel `ms_tpa`
---
-ALTER TABLE `ms_tpa`
-  ADD PRIMARY KEY (`id_tpa`);
 
 --
 -- Indeks untuk tabel `ref_kategori`
@@ -1415,13 +1217,13 @@ ALTER TABLE `xi_sa_white_list`
 -- AUTO_INCREMENT untuk tabel `data_barang`
 --
 ALTER TABLE `data_barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `data_gudang`
 --
 ALTER TABLE `data_gudang`
-  MODIFY `id_gudang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_gudang` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `data_pembelian`
@@ -1430,28 +1232,10 @@ ALTER TABLE `data_pembelian`
   MODIFY `id_pembelian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `data_permintaan`
---
-ALTER TABLE `data_permintaan`
-  MODIFY `id_permintaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT untuk tabel `detail_pembelian`
 --
 ALTER TABLE `detail_pembelian`
-  MODIFY `id_detail_pembelian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT untuk tabel `detail_permintaan`
---
-ALTER TABLE `detail_permintaan`
-  MODIFY `id_detail_permintaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT untuk tabel `ms_tpa`
---
-ALTER TABLE `ms_tpa`
-  MODIFY `id_tpa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_detail_pembelian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `ref_kategori`
@@ -1475,7 +1259,7 @@ ALTER TABLE `xi_sa_ci_captcha`
 -- AUTO_INCREMENT untuk tabel `xi_sa_fungsi`
 --
 ALTER TABLE `xi_sa_fungsi`
-  MODIFY `id_fungsi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_fungsi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT untuk tabel `xi_sa_group`
@@ -1487,7 +1271,7 @@ ALTER TABLE `xi_sa_group`
 -- AUTO_INCREMENT untuk tabel `xi_sa_group_privileges`
 --
 ALTER TABLE `xi_sa_group_privileges`
-  MODIFY `id_group_privileges` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id_group_privileges` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT untuk tabel `xi_sa_jenis_fungsi`
@@ -1499,7 +1283,7 @@ ALTER TABLE `xi_sa_jenis_fungsi`
 -- AUTO_INCREMENT untuk tabel `xi_sa_kontrol`
 --
 ALTER TABLE `xi_sa_kontrol`
-  MODIFY `id_kontrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_kontrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `xi_sa_level_akses`
@@ -1529,7 +1313,7 @@ ALTER TABLE `xi_sa_log_mobile`
 -- AUTO_INCREMENT untuk tabel `xi_sa_log_session`
 --
 ALTER TABLE `xi_sa_log_session`
-  MODIFY `id_log_session` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
+  MODIFY `id_log_session` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
 
 --
 -- AUTO_INCREMENT untuk tabel `xi_sa_menu`
@@ -1547,7 +1331,7 @@ ALTER TABLE `xi_sa_module`
 -- AUTO_INCREMENT untuk tabel `xi_sa_rules`
 --
 ALTER TABLE `xi_sa_rules`
-  MODIFY `id_rules` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id_rules` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
 
 --
 -- AUTO_INCREMENT untuk tabel `xi_sa_setting`
