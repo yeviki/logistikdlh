@@ -627,6 +627,141 @@
             }
         })
     });
+
+    //---------------------------------------------------------------------------------------------------------------------------------------//
+    //---------------------------------------------------------------------------------------------------------------------------------------//
+    //---------------------------------------------------------------------------------------------------------------------------------------//
+    //Panggil form verifikasi permintaan
+    $(document).on('click', '.btnVerifikasi', function(e) {
+        $('#modalRulesForm').modal({
+            backdrop: 'static'
+        });
+        let id_permin   = $(this).data('id');
+        let nofak       = $(this).data('jd');
+        let tglreq       = $(this).data('tgl');
+        let nama_tpa       = $(this).data('tpa');
+
+        $('#lblNoFak').html(nofak);
+        $('#lblTanggal').html(tglreq);
+        $('#lblTPA').html(nama_tpa);
+        $('input[name="tokenPermin"]').val(id_permin);
+        $('input[name="nofaktur"]').val(nofak);
+        getDataListReq(id_permin);
+    });
+
+    $(document).on('click', '.btnCloseRules', function(e) {
+        $('#modalRulesForm').modal('toggle');
+    });
+
+    function getDataListReq(id_permin) {
+        let html = '';
+        $.ajax({
+            type: 'GET',
+            url: site + '/rules-verifikasi',
+            data: {'token' : id_permin, '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()},
+            dataType: 'json',
+            success: function(data) {
+                $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                if(data.status = 'RC200') {
+                    if(Object.keys(data.message).length > 0) {
+                        let no = 1;
+                        $.each(data.message, function(row, v) {
+                            html += `<tr>
+                                <td class="text-center">${no}.</td>
+                                <td>${v.nm_barang}</td>
+                                <td class="text-center">${v.qty_req}</td>
+                                <td class="text-center">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="number" class="form-control nominal" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2" name="qty_acc[]" id="qty_acc" value="" min="0" max="${v.qty_req}">
+                                            <input type="hidden" class="form-control" name="detail_permintaan[]" value="${v.id_detail_permintaan}">
+                                        </div>
+                                    </td>
+                            </tr>`
+                            no++;
+                        });
+                    } else
+                        html = '<tr><td colspan="3"><i>Tidak Ada Data Pertanyaan</i></td></tr>';
+                } else
+                    html = '<tr><td colspan="3"><i>Tidak Ada Data Pertanyaan</i></td></tr>';
+                $('#tblPermintaan > tbody').html(html);
+            }
+        });
+    }
+    
+    //btn save
+    $(document).on('click', '#btnSavePersetujuan', function (e){
+        e.preventDefault();
+        // get form action url
+        $(this).html('<i class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></i> DIPROSES...');
+        $(this).addClass('disabled');
+        run_waitMe($('#frmRules'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah anda ingin menyimpan data ini ?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: site + '/rules-verifikasi/new-rules',
+                    type: 'POST',
+                    data: $('#formPermintaan').serialize(),
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        swalAlert.fire({
+                            title: 'Gagal Simpan',
+                            text: 'Proses simpan data gagal, silahkan diperiksa kembali',
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errNotifikasi').html(msg.error(data.message));
+                                $('#frmRules').waitMe('hide');
+                            }
+                        })
+                    } else {
+                        $('#frmRules').waitMe('hide');
+                        $('#modalRulesForm').modal('toggle');
+                        swalAlert.fire({
+                            title: 'Berhasil Simpan',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errSuccess').html(msg.success(data.message));
+                                getDataList();
+                            }
+                        })
+                    }
+                }).fail(function() {
+                    $('#errNotifikasi').html(msg.error('Harap periksa kembali data yang disimpan'));
+                    $('#frmRules').waitMe('hide');
+                }).always(function() {
+                    $("#btnSavePersetujuan").html('<i class="fas fa-check"></i> Simpan Persetujuan');
+                    $("#btnSavePersetujuan").removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Simpan',
+                    text: 'Proses simpan data telah dibatalkan',
+                    icon: 'error',
+                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#frmRules').waitMe('hide');
+                        $("#btnSavePersetujuan").html('<i class="fas fa-check"></i> Simpan Persetujuan');
+                        $("#btnSavePersetujuan").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
     
 
     $(document).on('keypress keyup', '.nominal',function (e) {

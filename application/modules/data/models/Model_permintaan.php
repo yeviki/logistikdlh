@@ -34,9 +34,11 @@ class Model_permintaan extends CI_Model {
                             a.tanggal_req,
                             a.catatan,
                             a.status_req,
-                            a.id_tpa
+                            a.id_tpa,
+                            b.nama_tpa
                             ');
         $this->db->from('data_permintaan a');
+        $this->db->join('ms_tpa b', 'a.id_tpa = b.id_tpa', 'inner');
         if($this->app_loader->is_tpa()) {
             $this->db->where('a.id_tpa', $this->app_loader->current_tpaid());
         }
@@ -49,12 +51,17 @@ class Model_permintaan extends CI_Model {
                             a.tanggal_req,
                             a.catatan,
                             a.status_req,
-                            a.id_tpa
+                            a.id_tpa,
+                            b.nama_tpa
                             ');
         $this->db->from('data_permintaan a');
+        $this->db->join('ms_tpa b', 'a.id_tpa = b.id_tpa', 'inner');
+        
         if($this->app_loader->is_tpa()) {
             $this->db->where('a.id_tpa', $this->app_loader->current_tpaid());
-        } 
+        } else {
+            $this->db->where('a.status_req', 2);
+        }
         $i = 0;
         foreach ($this->search as $item) { // loop column
             if($_POST['search']['value']) { // if datatable send POST for search
@@ -204,6 +211,7 @@ class Model_permintaan extends CI_Model {
                             a.no_faktur_req,
                             a.tanggal_req,
                             a.status_req,
+                            a.id_tpa,
                             b.id_detail_permintaan,
                             b.id_barang,
                             b.qty_req,
@@ -213,13 +221,15 @@ class Model_permintaan extends CI_Model {
                             c.id_satuan,
                             c.id_kat_barang,
                             d.satuan,
-                            e.kategori
+                            e.kategori,
+                            f.nama_tpa
                             ');
         $this->db->from('data_permintaan a');
         $this->db->join('detail_permintaan b', 'b.id_permintaan = a.id_permintaan', 'inner');
         $this->db->join('data_barang c', 'b.id_barang = c.id_barang', 'inner');
         $this->db->join('ref_satuan d', 'c.id_satuan = d.id_satuan', 'inner');
         $this->db->join('ref_kategori e', 'c.id_kat_barang = e.id_kat_barang', 'inner');
+        $this->db->join('ms_tpa f', 'a.id_tpa = f.id_tpa', 'inner');
         $this->db->where('a.id_permintaan', abs($id_permintaan));
         $query = $this->db->get();
         return $query->row_array();
@@ -323,6 +333,82 @@ class Model_permintaan extends CI_Model {
             $this->db->update('data_permintaan');
 
             return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
+        }
+    }
+
+
+    //---------------------------------------------------------------------------------------------------------------------------------//
+    //---------------------------------------------------------------------------------------------------------------------------------//
+    //---------------------------------------------------------------------------------------------------------------------------------//
+
+    /* get data permintaan barang TPA */
+    public function getDataPermintaan($id) {
+        $this->db->select('a.id_detail_permintaan,
+                           a.id_permintaan,
+                           a.id_barang,
+                           a.qty_req,
+                           a.status_det_req,
+                           b.no_faktur_req,
+                           b.tanggal_req,
+                           b.id_tpa,
+                           b.status_req,
+                           c.nm_barang
+                           ');
+        $this->db->from('detail_permintaan a');
+        $this->db->join('data_permintaan b', 'a.id_permintaan = b.id_permintaan', 'inner');
+        $this->db->join('data_barang c', 'a.id_barang = c.id_barang', 'inner');
+        $this->db->where('a.id_permintaan', $id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    /*Fungsi check status permintaan barang*/
+    public function checkStatusPermintaan($id) {
+        $this->db->select('a.id_permintaan,
+						 a.no_faktur_req,
+						 a.tanggal_req,
+						 a.id_tpa,
+						 a.status_req
+                         ');
+        $this->db->from('data_permintaan a');
+        $this->db->where('a.id_permintaan', $id);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    /*insert data persetujuan permintaan barang*/
+    public function insertDataPersetujuan() {
+        //get data
+        $create_by              = $this->app_loader->current_account();
+        $create_date            = gmdate('Y-m-d H:i:s', time()+60*60*7);
+        $create_ip              = $this->input->ip_address();
+        $tahun                  = gmdate('Y');
+
+        $id_absensi_md_wi       = $this->encryption->decrypt(escape($this->input->post('tokenPermin', TRUE)));
+
+        $data = [];
+        $detail_permintaan      = $this->input->post('detail_permintaan');
+        $qty_acc                = $this->input->post('qty_acc');
+
+        // Cek data qty_acc jika ada yang kosong
+        $cekKosong = FALSE;
+        foreach ($qty_acc as $key => $value) {
+            $check_qty_acc = trim($value);
+            if (empty($check_qty_acc)) {
+                return array('response'=>'ERROR');
+                $cekKosong = TRUE;
+            } else {
+                $cekKosong = FALSE;
+            }
+        }
+
+        if($cekKosong == FALSE){
+            foreach ($qty_acc as $key => $value) {
+                // $data[$key][$persetujuan[$key]] = $value;
+                    $this->db->where('id_detail_permintaan', $detail_permintaan[$key]);
+                    $this->db->update('detail_permintaan', array('qty_acc' => $value, 'status_det_req' => 0));
+            }
+            return array('response'=>'SUCCESS');
         }
     }
 }

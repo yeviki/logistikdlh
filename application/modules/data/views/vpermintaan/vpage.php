@@ -163,3 +163,87 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalRulesForm" tabindex="-1" role="dialog" aria-labelledby="modalRulesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl" id="frmRules">
+        <div class="modal-content">
+            <div class="modal-header aqua-gradient-rgba">
+                <h4 class="modal-title heading lead white-text font-weight-bold"> Verifikasi Permintaan </h4>
+                <button type="button" class="close btnCloseRules" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-12">
+                        <div id="errNotifikasi"></div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="pull-left">
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                <h3 class="text-center">Formulir Verifikasi Permintaan Barang TPA</strong> 
+                                </h3>
+                                <tbody>
+                                    <tr>
+                                    <td  width="13%">No Faktur</td>
+                                    <td> : &nbsp; <a class="text-left"id="lblNoFak"></a></td>
+                                    </tr>
+                                    <tr>
+                                    <td>Tanggal</td>
+                                    <td> : &nbsp; <a class="text-left"id="lblTanggal"></a></td>
+                                    </tr>
+                                    <tr>
+                                    <td>Nama TPA</td>
+                                    <td> : &nbsp; <a class="text-left"id="lblTPA"></a></td>
+                                    </tr>
+                                    <tr>
+                                    <td>Ketentuan</td>
+                                    <td><p><u>Petunjuk Pengisian</u>:</p>
+                                        <ol style="text-align:justify;">
+                                            <li>Silahkan isi persetujuan barang berdasarkan permintaan TPA;</li>
+                                            <li>Jika menolak permintaan silahkan mengisi nominal [0] pada kolom persetujuan;</li>
+                                            <li>Jika permintaan barang dirasa tidak sesuai dengan kebutuhan TPA saat ini, pihak UPTD bisa mengurangi permintaan TPA dengan cara mengisi nominal/jumlah dibawah permintaan pengajuan dari TPA;</li>
+                                            <li>Setelah mengisi nominal/jumlah pada kolom persetujuan silahkan klik tombol simpan;</li>
+                                            <li>Setelah proses simpan nominal/jumlah yang telah di setujui tidak bisa dilakukan perubahan data, harap periksa kembali sebelum klik tombol simpan;</li>
+                                        </ol>
+                                        <!-- <ul>
+                                            <li>Sangat Baik (86 s/d 100)</li>
+                                            <li>Baik (71 s/d 85)</li>
+                                            <li>Cukup (56 s/d 70)</li>
+                                            <li>Kurang (&lt; dari 55)</li>
+                                        </ul> -->
+                                    </td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>     
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive-md">
+                    <h5 class="heading font-weight-bold"><i class="fas fa-list"></i> Detail Permintaan Barang </h5>
+                    <?php echo form_open('', array('id' => 'formPermintaan', 'class='=>'needs-validated', 'novalidate'=>'')); ?>
+                        <?php echo form_hidden('tokenPermin', ''); ?>
+                        <?php echo form_hidden('nofaktur', ''); ?>
+                        <table cellspacing="0" class="table table-striped table-borderless table-hover table-sm" id="tblPermintaan" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="10%" class="font-weight-bold text-center">No.</th>
+                                    <th width="50%" class="font-weight-bold">Nama Barang</th>
+                                    <th width="50%" class="font-weight-bold text-center">Permintaan</th>
+                                    <th width="15%" class="font-weight-bold text-center">Persetujuan</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    <?php echo form_close(); ?>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-blue-grey waves-effect waves-light px-3 py-2 mx-0 font-weight-bold btnCloseRules"><i class="fas fa-times"></i> Close</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light px-3 py-2 font-weight-bold" id="btnSavePersetujuan"><i class="fas fa-check"></i> Simpan Persetujuan</button>
+            </div>
+        </div>
+    </div>
+</div>
