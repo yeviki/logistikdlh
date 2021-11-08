@@ -184,6 +184,7 @@ class Model_permintaan extends CI_Model {
         $this->db->select('a.id_permintaan,
                             a.no_faktur_req,
                             a.tanggal_req,
+                            a.status_req,
                             b.id_detail_permintaan,
                             b.id_barang,
                             b.qty_req,
@@ -347,6 +348,7 @@ class Model_permintaan extends CI_Model {
                            a.id_permintaan,
                            a.id_barang,
                            a.qty_req,
+                           a.qty_acc,
                            a.status_det_req,
                            b.no_faktur_req,
                            b.tanggal_req,
@@ -384,32 +386,36 @@ class Model_permintaan extends CI_Model {
         $create_ip              = $this->input->ip_address();
         $tahun                  = gmdate('Y');
 
-        $id_absensi_md_wi       = $this->encryption->decrypt(escape($this->input->post('tokenPermin', TRUE)));
+        $id       = $this->encryption->decrypt(escape($this->input->post('tokenPermin', TRUE)));
 
-        $data = [];
+        // $data = [];
         $detail_permintaan      = $this->input->post('detail_permintaan');
         $qty_acc                = $this->input->post('qty_acc');
 
         // Cek data qty_acc jika ada yang kosong
-        $cekKosong = FALSE;
-        foreach ($qty_acc as $key => $value) {
-            $check_qty_acc = trim($value);
-            if (empty($check_qty_acc)) {
-                return array('response'=>'ERROR');
-                $cekKosong = TRUE;
-            } else {
-                $cekKosong = FALSE;
-            }
-        }
+        // $cekKosong = FALSE;
+        // foreach ($qty_acc as $key => $value) {
+        //     $check_qty_acc = trim($value);
+        //     if (empty($check_qty_acc)) {
+        //         return array('response'=>'ERROR');
+        //         $cekKosong = TRUE;
+        //     } else {
+        //         $cekKosong = FALSE;
+        //     }
+        // }
 
-        if($cekKosong == FALSE){
+        // if($cekKosong == FALSE){
             foreach ($qty_acc as $key => $value) {
+
                 // $data[$key][$persetujuan[$key]] = $value;
                     $this->db->where('id_detail_permintaan', $detail_permintaan[$key]);
-                    $this->db->update('detail_permintaan', array('qty_acc' => $value, 'status_det_req' => 0));
+                    $this->db->update('detail_permintaan', array('qty_acc' => $value));
+
+                    $this->db->where('id_permintaan', abs($id));
+                    $this->db->update('data_permintaan', array('status_req' => 3));
             }
             return array('response'=>'SUCCESS');
-        }
+        // }
     }
 }
 

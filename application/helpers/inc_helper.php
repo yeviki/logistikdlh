@@ -184,14 +184,29 @@ if (!function_exists('convert_status_stok')) {
 /**
  * Fungsi convert status permintaan
  */
-if (!function_exists('convert_status_req')) {
-    function convert_status_req($id_status) {
+if (!function_exists('convert_stat_detail_req')) {
+    function convert_stat_detail_req($status_det_req) {
         $status = array(
             0 => '<span class="badge badge-pill badge-danger">REQUEST</span>',
             1 => '<span class="badge badge-pill badge-success">COMPLETE APPROVE</span>',
-            2 => '<span class="badge badge-pill badge-success">PARTIAL APPROVE</span>',
+            2 => '<span class="badge badge-pill badge-default">PARTIAL APPROVE</span>',
+            3 => '<span class="badge badge-pill badge-danger">REJECTED</span>',
         );
-        return $status[intval($id_status)];
+        return $status[intval($status_det_req)];
+    }
+}
+
+/**
+ * Fungsi convert status permintaan
+ */
+if (!function_exists('convert_stat_req')) {
+    function convert_stat_req($status_req) {
+        $status = array(
+            1 => '<span class="badge badge-pill badge-danger">Request</span>',
+            2 => '<span class="badge badge-pill badge-default">Verifikasi</span>',
+            3 => '<span class="badge badge-pill badge-default">Approve</span>',
+        );
+        return $status[intval($status_req)];
     }
 }
 /* End of file inc.php */

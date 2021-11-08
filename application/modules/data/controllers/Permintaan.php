@@ -80,6 +80,7 @@ class Permintaan extends SLP_Controller {
                     $row[] = $dl['tanggal_req'];
                     $row[] = $dl['no_faktur_req'];
                     $row[] = $dl['catatan'];
+                    $row[] = convert_stat_req($dl['status_req']);
                     $row[] = $button;
                     $data[] = $row;
                 }
@@ -218,7 +219,12 @@ class Permintaan extends SLP_Controller {
                 $isi['satuan'] 		            = $q['satuan'];
                 $isi['qty_req'] 		        = $q['qty_req'];
                 $isi['subtotal'] 			    = $q['qty_req'];
-                $isi['status'] 			        = convert_status_req($q['status_det_req']);
+                if ($q['status_req'] == 3) {
+                    $isi['qty_acc'] 			    = $q['qty_acc'];
+                } else {
+                    $isi['qty_acc'] 			    = '';
+                }
+                $isi['status'] 			        = convert_stat_detail_req($q['status_det_req']);
                 $matadiklat[$q['no_faktur_req']][] = $isi;
             }
             $result = array('status' => 'RC200', 'message' => $matadiklat, 'csrfHash' => $csrfHash);
@@ -335,6 +341,7 @@ class Permintaan extends SLP_Controller {
                 $isi['id_detail_permintaan'] 		= $q['id_detail_permintaan'];
                 $isi['nm_barang'] 	                = $q['nm_barang'];
                 $isi['qty_req'] 	                = $q['qty_req'];
+                $isi['qty_acc'] 	                = !empty($q) ? $q['qty_acc'] : 0;
                 $rules[] = $isi;
             }
             $result = array('status' => 'RC200', 'message' => $rules, 'csrfHash' => $csrfHash);
@@ -357,7 +364,8 @@ class Permintaan extends SLP_Controller {
                 $data = $this->mPermintaan->insertDataPersetujuan();
                 if ($data['response'] == 'ERROR') {
                     $result = array('status' => 'RC404', 'message' => 'Proses simpan data persetujuan barang gagal, karena isi tidak lengkap', 'csrfHash' => $csrfHash);
-                } else if ($data['response'] == 'SUCCESS') {
+                } else 
+                if ($data['response'] == 'SUCCESS') {
                     $result = array('status' => 'RC200', 'message' => 'Proses simpan data persetujuan barang berhasil', 'csrfHash' => $csrfHash);
                 }
             }

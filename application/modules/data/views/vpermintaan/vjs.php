@@ -420,6 +420,7 @@
                                     html += '<td>'+v['nm_barang']+'</td>';
                                     html += '<td class="text-left">'+v['satuan']+'</td>';
                                     html += '<td class="text-center">'+v['qty_req']+'</td>';
+                                    html += '<td class="text-center">'+v['qty_acc']+'</td>';
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
@@ -672,7 +673,7 @@
                                 <td class="text-center">${v.qty_req}</td>
                                 <td class="text-center">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="number" class="form-control nominal" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2" name="qty_acc[]" id="qty_acc" value="" min="0" max="${v.qty_req}">
+                                            <input type="number" class="form-control nominal" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2" name="qty_acc[]" id="qty_acc" value="${v.qty_acc}" min="0" max="${v.qty_req}">
                                             <input type="hidden" class="form-control" name="detail_permintaan[]" value="${v.id_detail_permintaan}">
                                         </div>
                                     </td>
@@ -699,10 +700,11 @@
             title: 'Konfirmasi',
             text: 'Apakah anda ingin menyimpan data ini ?',
             icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
-            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
-            reverseButtons: true
+            showCancelButton    : true,
+            allowOutsideClick   : false,
+            confirmButtonText   : '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText    : '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons      : true
         }).then((result) => {
             if (result.value) {
                 $.ajax({
@@ -751,7 +753,8 @@
                     title: 'Batal Simpan',
                     text: 'Proses simpan data telah dibatalkan',
                     icon: 'error',
-                    confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
                 }).then((result) => {
                     if (result.value) {
                         $('#frmRules').waitMe('hide');

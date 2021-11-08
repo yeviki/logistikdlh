@@ -21,9 +21,10 @@
                                 <tr>
                                     <th width="3%" class="font-weight-bold">#</th>
                                     <th width="20%" class="font-weight-bold">Tanggal</th>
-                                    <th width="40%" class="font-weight-bold">No Faktur</th>
+                                    <th width="20%" class="font-weight-bold">No Faktur</th>
                                     <th width="20%" class="font-weight-bold">Catatan</th>
-                                    <th width="20%" class="font-weight-bold">Action</th>
+                                    <th width="8%" class="font-weight-bold">Status</th>
+                                    <th width="17%" class="font-weight-bold">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -142,6 +143,7 @@
                                 <th width="50%" class="font-weight-bold">Barang</th>
                                 <th class="font-weight-bold text-left">Satuan</th>
                                 <th class="font-weight-bold text-center">Permintaan</th>
+                                <th class="font-weight-bold text-center">Persetujuan</th>
                                 <th class="font-weight-bold text-center">Status</th>
                             </tr>
                         </thead>

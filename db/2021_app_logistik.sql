@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 07, 2021 at 05:48 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 5.6.31
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 08 Nov 2021 pada 10.30
+-- Versi server: 10.1.38-MariaDB
+-- Versi PHP: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `data_barang`
+-- Struktur dari tabel `data_barang`
 --
 
 CREATE TABLE `data_barang` (
@@ -42,7 +42,7 @@ CREATE TABLE `data_barang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `data_barang`
+-- Dumping data untuk tabel `data_barang`
 --
 
 INSERT INTO `data_barang` (`id_barang`, `nm_barang`, `id_satuan`, `id_kat_barang`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -60,7 +60,7 @@ INSERT INTO `data_barang` (`id_barang`, `nm_barang`, `id_satuan`, `id_kat_barang
 -- --------------------------------------------------------
 
 --
--- Table structure for table `data_gudang`
+-- Struktur dari tabel `data_gudang`
 --
 
 CREATE TABLE `data_gudang` (
@@ -77,7 +77,7 @@ CREATE TABLE `data_gudang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `data_gudang`
+-- Dumping data untuk tabel `data_gudang`
 --
 
 INSERT INTO `data_gudang` (`id_gudang`, `id_barang`, `qty_stok`, `id_level`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -95,7 +95,7 @@ INSERT INTO `data_gudang` (`id_gudang`, `id_barang`, `qty_stok`, `id_level`, `cr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `data_pembelian`
+-- Struktur dari tabel `data_pembelian`
 --
 
 CREATE TABLE `data_pembelian` (
@@ -112,7 +112,7 @@ CREATE TABLE `data_pembelian` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `data_pembelian`
+-- Dumping data untuk tabel `data_pembelian`
 --
 
 INSERT INTO `data_pembelian` (`id_pembelian`, `no_faktur_buy`, `tgl_pembelian`, `catatan`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -122,7 +122,7 @@ INSERT INTO `data_pembelian` (`id_pembelian`, `no_faktur_buy`, `tgl_pembelian`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `data_permintaan`
+-- Struktur dari tabel `data_permintaan`
 --
 
 CREATE TABLE `data_permintaan` (
@@ -141,17 +141,18 @@ CREATE TABLE `data_permintaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `data_permintaan`
+-- Dumping data untuk tabel `data_permintaan`
 --
 
 INSERT INTO `data_permintaan` (`id_permintaan`, `no_faktur_req`, `tanggal_req`, `id_tpa`, `catatan`, `status_req`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
 (1, '01-PYK', '2021-11-05', 1, 'Testing', 2, 'admin_pyk', '2021-11-05 16:51:30', '127.0.0.1', 'admin_pyk', '2021-11-05 16:51:30', '127.0.0.1'),
-(2, '02-SLK-2021', '2021-11-07', 2, 'Pemesanan barang yang telah habis', 2, 'admin_solok', '2021-11-07 22:51:23', '127.0.0.1', 'admin_solok', '2021-11-07 22:51:23', '127.0.0.1');
+(2, '02-SLK-2021', '2021-11-07', 2, 'Pemesanan barang yang telah habis', 3, 'admin_solok', '2021-11-07 22:51:23', '127.0.0.1', 'admin_solok', '2021-11-07 22:51:23', '127.0.0.1'),
+(3, '03-PYK-2021', '2021-11-08', 1, 'Permintaan barang karna kebutuhan mendesak', 1, 'admin_pyk', '2021-11-08 11:30:45', '127.0.0.1', 'admin_pyk', '2021-11-08 11:30:45', '127.0.0.1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `detail_pembelian`
+-- Struktur dari tabel `detail_pembelian`
 --
 
 CREATE TABLE `detail_pembelian` (
@@ -171,7 +172,7 @@ CREATE TABLE `detail_pembelian` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `detail_pembelian`
+-- Dumping data untuk tabel `detail_pembelian`
 --
 
 INSERT INTO `detail_pembelian` (`id_detail_pembelian`, `id_pembelian`, `id_barang`, `qty_barang`, `harga_barang`, `total_harga`, `id_status_barang`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -188,7 +189,7 @@ INSERT INTO `detail_pembelian` (`id_detail_pembelian`, `id_pembelian`, `id_baran
 (11, 2, 10, 10, 50000, 500000, 1, 'yeviki', '2021-11-05 10:13:28', '127.0.0.1', 'yeviki', '2021-11-05 10:13:28', '127.0.0.1');
 
 --
--- Triggers `detail_pembelian`
+-- Trigger `detail_pembelian`
 --
 DELIMITER $$
 CREATE TRIGGER `Update Stok` AFTER UPDATE ON `detail_pembelian` FOR EACH ROW BEGIN
@@ -202,7 +203,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `detail_permintaan`
+-- Struktur dari tabel `detail_permintaan`
 --
 
 CREATE TABLE `detail_permintaan` (
@@ -221,7 +222,7 @@ CREATE TABLE `detail_permintaan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `detail_permintaan`
+-- Dumping data untuk tabel `detail_permintaan`
 --
 
 INSERT INTO `detail_permintaan` (`id_detail_permintaan`, `id_permintaan`, `id_barang`, `qty_req`, `qty_acc`, `status_det_req`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -230,14 +231,34 @@ INSERT INTO `detail_permintaan` (`id_detail_permintaan`, `id_permintaan`, `id_ba
 (3, 1, 7, 3, 0, 0, 'admin_pyk', '2021-11-07 21:28:08', '127.0.0.1', 'admin_pyk', '2021-11-07 21:28:08', '127.0.0.1'),
 (4, 1, 4, 3, 0, 0, 'admin_pyk', '2021-11-07 21:28:18', '127.0.0.1', 'admin_pyk', '2021-11-07 21:28:18', '127.0.0.1'),
 (5, 1, 8, 1, 0, 0, 'admin_pyk', '2021-11-07 21:28:29', '127.0.0.1', 'admin_pyk', '2021-11-07 21:28:29', '127.0.0.1'),
-(6, 2, 7, 5, 0, 0, 'admin_solok', '2021-11-07 22:51:40', '127.0.0.1', 'admin_solok', '2021-11-07 22:51:40', '127.0.0.1'),
-(7, 2, 3, 2, 0, 0, 'admin_solok', '2021-11-07 22:51:52', '127.0.0.1', 'admin_solok', '2021-11-07 22:51:52', '127.0.0.1'),
-(8, 2, 5, 5, 0, 0, 'admin_solok', '2021-11-07 22:52:00', '127.0.0.1', 'admin_solok', '2021-11-07 22:52:00', '127.0.0.1');
+(6, 2, 7, 5, 0, 3, 'admin_solok', '2021-11-07 22:51:40', '127.0.0.1', 'admin_solok', '2021-11-07 22:51:40', '127.0.0.1'),
+(7, 2, 3, 2, 2, 1, 'admin_solok', '2021-11-07 22:51:52', '127.0.0.1', 'admin_solok', '2021-11-07 22:51:52', '127.0.0.1'),
+(8, 2, 5, 5, 3, 2, 'admin_solok', '2021-11-07 22:52:00', '127.0.0.1', 'admin_solok', '2021-11-07 22:52:00', '127.0.0.1'),
+(9, 3, 6, 5, 0, 0, 'admin_pyk', '2021-11-08 11:30:57', '127.0.0.1', 'admin_pyk', '2021-11-08 11:30:57', '127.0.0.1'),
+(10, 3, 10, 2, 0, 0, 'admin_pyk', '2021-11-08 11:31:20', '127.0.0.1', 'admin_pyk', '2021-11-08 11:31:20', '127.0.0.1');
+
+--
+-- Trigger `detail_permintaan`
+--
+DELIMITER $$
+CREATE TRIGGER `statusdetail` BEFORE UPDATE ON `detail_permintaan` FOR EACH ROW BEGIN
+IF old.qty_req = new.qty_acc THEN
+SET new.status_det_req = 1;
+ELSEIF old.qty_req > new.qty_acc THEN
+SET new.status_det_req = 2;
+END IF;
+
+IF new.qty_acc = 0 THEN
+SET new.status_det_req = 3;
+END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ms_tpa`
+-- Struktur dari tabel `ms_tpa`
 --
 
 CREATE TABLE `ms_tpa` (
@@ -253,7 +274,7 @@ CREATE TABLE `ms_tpa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `ms_tpa`
+-- Dumping data untuk tabel `ms_tpa`
 --
 
 INSERT INTO `ms_tpa` (`id_tpa`, `nama_tpa`, `lokasi_tpa`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -263,7 +284,7 @@ INSERT INTO `ms_tpa` (`id_tpa`, `nama_tpa`, `lokasi_tpa`, `create_by`, `create_d
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ref_kategori`
+-- Struktur dari tabel `ref_kategori`
 --
 
 CREATE TABLE `ref_kategori` (
@@ -272,7 +293,7 @@ CREATE TABLE `ref_kategori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `ref_kategori`
+-- Dumping data untuk tabel `ref_kategori`
 --
 
 INSERT INTO `ref_kategori` (`id_kat_barang`, `kategori`) VALUES
@@ -288,7 +309,7 @@ INSERT INTO `ref_kategori` (`id_kat_barang`, `kategori`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ref_satuan`
+-- Struktur dari tabel `ref_satuan`
 --
 
 CREATE TABLE `ref_satuan` (
@@ -297,7 +318,7 @@ CREATE TABLE `ref_satuan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `ref_satuan`
+-- Dumping data untuk tabel `ref_satuan`
 --
 
 INSERT INTO `ref_satuan` (`id_satuan`, `satuan`) VALUES
@@ -319,7 +340,7 @@ INSERT INTO `ref_satuan` (`id_satuan`, `satuan`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_ci_captcha`
+-- Struktur dari tabel `xi_sa_ci_captcha`
 --
 
 CREATE TABLE `xi_sa_ci_captcha` (
@@ -332,7 +353,7 @@ CREATE TABLE `xi_sa_ci_captcha` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_ci_session`
+-- Struktur dari tabel `xi_sa_ci_session`
 --
 
 CREATE TABLE `xi_sa_ci_session` (
@@ -343,23 +364,27 @@ CREATE TABLE `xi_sa_ci_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_ci_session`
+-- Dumping data untuk tabel `xi_sa_ci_session`
 --
 
 INSERT INTO `xi_sa_ci_session` (`id`, `ip_address`, `timestamp`, `data`) VALUES
 ('10jlvav7viq99te74hp7ihn6n8va7e3k', '::1', 1636104842, ''),
 ('a5ag1emp2kv4lqofd423no9dbac2egkt', '127.0.0.1', 1636106045, 0x6163636f756e745f6e616d657c733a31313a2261646d696e5f736f6c6f6b223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223565356431353233326665333866393531313738373862396339323639663530626332653331633964353639333030343231613138303932666234616162653565613637333638333338626337643838666230303539316565363739656561653537313561356563636138393731303530646432336461353566323461646436383857634e6a364f6b6137443535396f6673486e4d2f50447242494a615151557945716c51576c7659433932624d44444b5139675159664c714d42714f674b74223b657870697265735f62797c693a313633363130393631353b66756c6c6e616d657c733a31313a2241646d696e20536f6c6f6b223b67726f75705f6163746976657c733a313a2236223b67726f75705f6e616d657c733a333a22545041223b6c6576656c5f616b7365737c733a333a22545041223b6e69636b5f6c6576656c7c733a333a22545050223b757365725f69647c733a33323a223038303633443438463245454538433536454137324232464635354239374637223b7470615f69647c733a313a2232223b),
+('ba04cvbo9hk1n910p745ipmmr5ohpnov', '127.0.0.1', 1636344781, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223261363239646233313936626437313739646238323338303033313938333663343261393031333835646236313361386434656332626234363261326432663736613561313134313634613965343338663031663063303834393063383432353831616338666665633365613261623031643430333639383561316265633130474d50766c4f416d62384352673355437944634f7a6345645831564242435548526d5259717a475274642f3839374d754f574a676c35686a436a30584c4d3269223b657870697265735f62797c693a313633363333363939353b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b7470615f69647c733a313a2230223b),
 ('dfg24en8noe0dhdevlqov9k04vkgsfua', '127.0.0.1', 1636300327, 0x6163636f756e745f6e616d657c733a31313a2261646d696e5f736f6c6f6b223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a22623932336133663864633162646463333936643231643534393265383062363961353037663138633234353131383961303365623961653639643431303733303739393738626132303638326539376136343236353062356637376461383931313661313730633430653565373365623164663566643166313262633933306353363278436b32425a5064556274457a466f7736736136686c6439343633664e74424a48704b56546c412b7272366d6e34374b53727053465450414442365466223b657870697265735f62797c693a313633363239343930343b66756c6c6e616d657c733a31313a2241646d696e20536f6c6f6b223b67726f75705f6163746976657c733a313a2236223b67726f75705f6e616d657c733a333a22545041223b6c6576656c5f616b7365737c733a333a22545041223b6e69636b5f6c6576656c7c733a333a22545050223b757365725f69647c733a33323a223038303633443438463245454538433536454137324232464635354239374637223b7470615f69647c733a313a2232223b),
+('ebul69a7v7h63dnofu3nrpqrqnutc61v', '127.0.0.1', 1636346223, 0x6163636f756e745f6e616d657c733a393a2261646d696e5f70796b223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a22663961353166356466393735663963356136643335333830333439643431303036663639613733346261316334313939386432663133336465613563616361333237353662383537353936346465643263396630326634316539326539373137316233393834383864616461366663353839343864363732626439323063333032312f2b70673163465a344b6869443176534c2f7a36394c4d34737942632b6b316e33347678707674616c6b6a75497136436f346738572b32706f6a31695163223b657870697265735f62797c693a313633363334303935353b66756c6c6e616d657c733a393a2241646d696e2050594b223b67726f75705f6163746976657c733a313a2236223b67726f75705f6e616d657c733a333a22545041223b6c6576656c5f616b7365737c733a333a22545041223b6e69636b5f6c6576656c7c733a333a22545050223b757365725f69647c733a33323a223044453546443036314139373341334341453132463733443232373245314241223b7470615f69647c733a313a2231223b),
 ('h9k720j14m9lu286u1tiiu89n979qusd', '127.0.0.1', 1636107559, 0x6572726f725f73657373696f6e7c693a323b6163636f756e745f6e616d657c733a393a2261646d696e5f70796b223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a2236663739396333313536373065373530313233306133343637643262353634396134303432636162383565383166653038613463633762643131666133323734393864643438626536643661646161363630363339363566376262343234336537303064326138383738616232343930666432653565373134316135353035306d774536736541396d514652715a546f62486442476554366c3538502f65484373565a70502f53694a6c4f644d33317a62496273504c6d63346137495a483856223b657870697265735f62797c693a313633363130393236393b66756c6c6e616d657c733a393a2241646d696e2050594b223b67726f75705f6163746976657c733a313a2236223b67726f75705f6e616d657c733a333a22545041223b6c6576656c5f616b7365737c733a333a22545041223b6e69636b5f6c6576656c7c733a333a22545050223b757365725f69647c733a33323a223044453546443036314139373341334341453132463733443232373245314241223b7470615f69647c733a313a2231223b),
 ('jfvk74ms2ki09gcv3j1on1o93r6vkfca', '127.0.0.1', 1636291544, ''),
+('l0h4oektjimonhorkr0vh6tun9jgvvo1', '127.0.0.1', 1636345799, 0x6163636f756e745f6e616d657c733a31313a2261646d696e5f736f6c6f6b223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a22383462363939383834316565663532393434316635326433313739336233626536616163643438353431616230376265353264613636623361343565663361646634643662383235326139626562373762383563313231643965623331643464646339633939663164386633346537613437393435626465656133313964393649555045657570394c39536f37326151515567356c586237374d4f496733375444663538743154636e44514761467a64564c3043506c6637584a41374d764869223b657870697265735f62797c693a313633363334383437313b66756c6c6e616d657c733a31313a2241646d696e20536f6c6f6b223b67726f75705f6163746976657c733a313a2236223b67726f75705f6e616d657c733a333a22545041223b6c6576656c5f616b7365737c733a333a22545041223b6e69636b5f6c6576656c7c733a333a22545050223b757365725f69647c733a33323a223038303633443438463245454538433536454137324232464635354239374637223b7470615f69647c733a313a2232223b),
 ('tu424q670vdjg3sbcheahh2qfpuqua3k', '127.0.0.1', 1636295400, 0x6163636f756e745f6e616d657c733a393a2261646d696e5f70796b223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a2239623439333066353334316637316365616362316130656563666361336662376333353062623139306464623362303835383634346431393965353162353132336631633837303063356161306337363563346232336636636435613139336139663536313538666664393439626164313865666235306331646634653566316e703171716342574b3830756f71626c525545624f746e764d6e61314c5665526d312b567974696849592f6552557668345666767a6459614c6c306b6175362f223b657870697265735f62797c693a313633363239343836393b66756c6c6e616d657c733a393a2241646d696e2050594b223b67726f75705f6163746976657c733a313a2236223b67726f75705f6e616d657c733a333a22545041223b6c6576656c5f616b7365737c733a333a22545041223b6e69636b5f6c6576656c7c733a333a22545050223b757365725f69647c733a33323a223044453546443036314139373341334341453132463733443232373245314241223b7470615f69647c733a313a2231223b),
 ('u6p4o5cjb7mt2o6a55nfpti102smd7b7', '127.0.0.1', 1636107614, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a223264656233633063663536303235316231623438356266633230653663643038306533626463396433616133303634636361313365643132373834326432646638363565343430613333373063613764363737643835383031393131376632656235653236633962363563373866646631616364626636313965633333333664586a56595666646250457a5352364d5779633670714e593335555965513851347674423261646f395866436a53717664344c4e47337937537262343975394e64223b657870697265735f62797c693a313633363037393838383b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b),
-('v42tsv6gcbha4id6jncf7jm7n47du0ng', '127.0.0.1', 1636303647, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a226138613139653334313133643438646166613435396564323762626237663231366338613366626534313830333339643966623734353665316136643535336130613135313934636465303133656564303833346535656364316532386163636662656539383233343433353837613561363339306437663138316131656461566c4d365267542b52634d4776504e614845773079484f596a6d335956415732333464314c4f734f583171446d75687a65617333504679497144704763656679223b657870697265735f62797c693a313633363239343538353b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b7470615f69647c733a313a2230223b);
+('v42tsv6gcbha4id6jncf7jm7n47du0ng', '127.0.0.1', 1636303647, 0x6163636f756e745f6e616d657c733a363a22796576696b69223b4170705470704f6e6c696e65403230323073657373696f6e7c733a3139323a226138613139653334313133643438646166613435396564323762626237663231366338613366626534313830333339643966623734353665316136643535336130613135313934636465303133656564303833346535656364316532386163636662656539383233343433353837613561363339306437663138316131656461566c4d365267542b52634d4776504e614845773079484f596a6d335956415732333464314c4f734f583171446d75687a65617333504679497144704763656679223b657870697265735f62797c693a313633363239343538353b66756c6c6e616d657c733a31333a2241646d696e6973747261746f72223b67726f75705f6163746976657c733a313a2231223b67726f75705f6e616d657c733a31313a2253757065722041646d696e223b6c6576656c5f616b7365737c733a31313a2253555045522041444d494e223b6e69636b5f6c6576656c7c733a333a22535550223b757365725f69647c733a33323a223233314536393645394332313831303533354530384646464537304630383638223b7470615f69647c733a313a2230223b),
+('vscvcmp9va5qutjn4cmbe3vauc48dfg6', '127.0.0.1', 1636337499, '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_fungsi`
+-- Struktur dari tabel `xi_sa_fungsi`
 --
 
 CREATE TABLE `xi_sa_fungsi` (
@@ -380,7 +405,7 @@ CREATE TABLE `xi_sa_fungsi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_fungsi`
+-- Dumping data untuk tabel `xi_sa_fungsi`
 --
 
 INSERT INTO `xi_sa_fungsi` (`id_fungsi`, `nama_fungsi`, `label_fungsi`, `url_fungsi`, `deskripsi_fungsi`, `id_jenis_fungsi`, `id_level_akses`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`, `id_status`) VALUES
@@ -411,7 +436,7 @@ INSERT INTO `xi_sa_fungsi` (`id_fungsi`, `nama_fungsi`, `label_fungsi`, `url_fun
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_group`
+-- Struktur dari tabel `xi_sa_group`
 --
 
 CREATE TABLE `xi_sa_group` (
@@ -429,7 +454,7 @@ CREATE TABLE `xi_sa_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_group`
+-- Dumping data untuk tabel `xi_sa_group`
 --
 
 INSERT INTO `xi_sa_group` (`id_group`, `nama_group`, `id_level_akses`, `id_upk`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`, `id_status`) VALUES
@@ -442,7 +467,7 @@ INSERT INTO `xi_sa_group` (`id_group`, `nama_group`, `id_level_akses`, `id_upk`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_group_privileges`
+-- Struktur dari tabel `xi_sa_group_privileges`
 --
 
 CREATE TABLE `xi_sa_group_privileges` (
@@ -453,7 +478,7 @@ CREATE TABLE `xi_sa_group_privileges` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_group_privileges`
+-- Dumping data untuk tabel `xi_sa_group_privileges`
 --
 
 INSERT INTO `xi_sa_group_privileges` (`id_group_privileges`, `id_group`, `id_rules`, `id_status`) VALUES
@@ -539,7 +564,7 @@ INSERT INTO `xi_sa_group_privileges` (`id_group_privileges`, `id_group`, `id_rul
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_jenis_fungsi`
+-- Struktur dari tabel `xi_sa_jenis_fungsi`
 --
 
 CREATE TABLE `xi_sa_jenis_fungsi` (
@@ -549,7 +574,7 @@ CREATE TABLE `xi_sa_jenis_fungsi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_jenis_fungsi`
+-- Dumping data untuk tabel `xi_sa_jenis_fungsi`
 --
 
 INSERT INTO `xi_sa_jenis_fungsi` (`id_jenis_fungsi`, `jenis_fungsi`, `id_status`) VALUES
@@ -561,7 +586,7 @@ INSERT INTO `xi_sa_jenis_fungsi` (`id_jenis_fungsi`, `jenis_fungsi`, `id_status`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_kontrol`
+-- Struktur dari tabel `xi_sa_kontrol`
 --
 
 CREATE TABLE `xi_sa_kontrol` (
@@ -580,7 +605,7 @@ CREATE TABLE `xi_sa_kontrol` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_kontrol`
+-- Dumping data untuk tabel `xi_sa_kontrol`
 --
 
 INSERT INTO `xi_sa_kontrol` (`id_kontrol`, `nama_kontrol`, `label_kontrol`, `url_kontrol`, `deskripsi_kontrol`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`, `id_status`) VALUES
@@ -599,7 +624,7 @@ INSERT INTO `xi_sa_kontrol` (`id_kontrol`, `nama_kontrol`, `label_kontrol`, `url
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_level_akses`
+-- Struktur dari tabel `xi_sa_level_akses`
 --
 
 CREATE TABLE `xi_sa_level_akses` (
@@ -610,7 +635,7 @@ CREATE TABLE `xi_sa_level_akses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_level_akses`
+-- Dumping data untuk tabel `xi_sa_level_akses`
 --
 
 INSERT INTO `xi_sa_level_akses` (`id_level_akses`, `level_akses`, `nick_level`, `id_status`) VALUES
@@ -623,7 +648,7 @@ INSERT INTO `xi_sa_level_akses` (`id_level_akses`, `level_akses`, `nick_level`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_log_akses`
+-- Struktur dari tabel `xi_sa_log_akses`
 --
 
 CREATE TABLE `xi_sa_log_akses` (
@@ -634,7 +659,7 @@ CREATE TABLE `xi_sa_log_akses` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_log_login`
+-- Struktur dari tabel `xi_sa_log_login`
 --
 
 CREATE TABLE `xi_sa_log_login` (
@@ -648,7 +673,7 @@ CREATE TABLE `xi_sa_log_login` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_log_mobile`
+-- Struktur dari tabel `xi_sa_log_mobile`
 --
 
 CREATE TABLE `xi_sa_log_mobile` (
@@ -664,7 +689,7 @@ CREATE TABLE `xi_sa_log_mobile` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_log_session`
+-- Struktur dari tabel `xi_sa_log_session`
 --
 
 CREATE TABLE `xi_sa_log_session` (
@@ -679,7 +704,7 @@ CREATE TABLE `xi_sa_log_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_log_session`
+-- Dumping data untuk tabel `xi_sa_log_session`
 --
 
 INSERT INTO `xi_sa_log_session` (`id_log_session`, `id_users`, `username`, `login_time`, `ip_address`, `user_agent`, `id_status`, `session_id`) VALUES
@@ -939,12 +964,15 @@ INSERT INTO `xi_sa_log_session` (`id_log_session`, `id_users`, `username`, `logi
 (253, 3, 'admin_solok', 1636106015, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '5e5d15232fe38f95117878b9c9269f50bc2e31c9d569300421a18092fb4aabe5ea67368338bc7d88fb00591ee679eeae5715a5ecca8971050dd23da55f24add688WcNj6Oka7D559ofsHnM/PDrBIJaQQUyEqlQWlvYC92bMDDKQ9gQYfLqMBqOgKt'),
 (254, 1, 'yeviki', 1636290985, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'a8a19e34113d48dafa459ed27bbb7f216c8a3fbe4180339d9fb7456e1a6d553a0a15194cde013eed0834e5ecd1e28accfbee9823443587a5a6390d7f181a1edaVlM6RgT+RcMGvPNaHEw0yHOYjm3YVAW234d1LOsOX1qDmuhzeas3PFyIqDpGcefy'),
 (255, 2, 'admin_pyk', 1636291269, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:93.0) Gecko/20100101 Firefox/93.0', 1, '9b4930f5341f71ceacb1a0eecfca3fb7c350bb190ddb3b0858644d199e51b5123f1c8700c5aa0c765c4b23f6cd5a193a9f56158ffd949bad18efb50c1df4e5f1np1qqcBWK80uoqblRUEbOtnvMna1LVeRm1+VytihIY/eRUvh4VfvzdYaLl0kau6/'),
-(256, 3, 'admin_solok', 1636291304, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'b923a3f8dc1bddc396d21d5492e80b69a507f18c2451189a03eb9ae69d41073079978ba20682e97a642650b5f77da89116a170c40e5e73eb1df5fd1f12bc930cS62xCk2BZPdUbtEzFow6sa6hld9463fNtBJHpKVTlA+rr6mn47KSrpSFTPADB6Tf');
+(256, 3, 'admin_solok', 1636291304, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:93.0) Gecko/20100101 Firefox/93.0', 1, 'b923a3f8dc1bddc396d21d5492e80b69a507f18c2451189a03eb9ae69d41073079978ba20682e97a642650b5f77da89116a170c40e5e73eb1df5fd1f12bc930cS62xCk2BZPdUbtEzFow6sa6hld9463fNtBJHpKVTlA+rr6mn47KSrpSFTPADB6Tf'),
+(257, 1, 'yeviki', 1636333395, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0', 1, '2a629db3196bd7179db823800319836c42a901385db613a8d4ec2bb462a2d2f76a5a114164a9e438f01f0c08490c842581ac8ffec3ea2ab01d4036985a1bec10GMPvlOAmb8CRg3UCyDcOzcEdX1VBBCUHRmRYqzGRtd/897MuOWJgl5hjCj0XLM2i'),
+(258, 2, 'admin_pyk', 1636337355, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0', 1, 'f9a51f5df975f9c5a6d35380349d41006f69a734ba1c41998d2f133dea5caca32756b8575964ded2c9f02f41e92e97171b398488dada6fc58948d672bd920c3021/+pg1cFZ4KhiD1vSL/z69LM4syBc+k1n34vxpvtalkjuIq6Co4g8W+2poj1iQc'),
+(259, 3, 'admin_solok', 1636344871, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:94.0) Gecko/20100101 Firefox/94.0', 1, '84b6998841eef529441f52d31793b3be6aacd48541ab07be52da66b3a45ef3adf4d6b8252a9beb77b85c121d9eb31d4ddc9c99f1d8f34e7a47945bdeea319d96IUPEeup9L9So72aQQUg5lXb77MOIg37TDf58t1TcnDQGaFzdVL0CPlf7XJA7MvHi');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_menu`
+-- Struktur dari tabel `xi_sa_menu`
 --
 
 CREATE TABLE `xi_sa_menu` (
@@ -966,7 +994,7 @@ CREATE TABLE `xi_sa_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_menu`
+-- Dumping data untuk tabel `xi_sa_menu`
 --
 
 INSERT INTO `xi_sa_menu` (`id_menu`, `title_menu`, `url_menu`, `icon_menu`, `order_menu`, `id_rules`, `parent_id`, `is_parent`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`, `id_status`) VALUES
@@ -989,7 +1017,7 @@ INSERT INTO `xi_sa_menu` (`id_menu`, `title_menu`, `url_menu`, `icon_menu`, `ord
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_module`
+-- Struktur dari tabel `xi_sa_module`
 --
 
 CREATE TABLE `xi_sa_module` (
@@ -1008,7 +1036,7 @@ CREATE TABLE `xi_sa_module` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_module`
+-- Dumping data untuk tabel `xi_sa_module`
 --
 
 INSERT INTO `xi_sa_module` (`id_module`, `nama_module`, `label_module`, `url_module`, `deskripsi_module`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`, `id_status`) VALUES
@@ -1019,7 +1047,7 @@ INSERT INTO `xi_sa_module` (`id_module`, `nama_module`, `label_module`, `url_mod
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_rules`
+-- Struktur dari tabel `xi_sa_rules`
 --
 
 CREATE TABLE `xi_sa_rules` (
@@ -1031,7 +1059,7 @@ CREATE TABLE `xi_sa_rules` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_rules`
+-- Dumping data untuk tabel `xi_sa_rules`
 --
 
 INSERT INTO `xi_sa_rules` (`id_rules`, `id_module`, `id_kontrol`, `id_fungsi`, `id_status`) VALUES
@@ -1102,7 +1130,7 @@ INSERT INTO `xi_sa_rules` (`id_rules`, `id_module`, `id_kontrol`, `id_fungsi`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_setting`
+-- Struktur dari tabel `xi_sa_setting`
 --
 
 CREATE TABLE `xi_sa_setting` (
@@ -1118,7 +1146,7 @@ CREATE TABLE `xi_sa_setting` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_setting`
+-- Dumping data untuk tabel `xi_sa_setting`
 --
 
 INSERT INTO `xi_sa_setting` (`id`, `app_name`, `app_author`, `app_description`, `app_year`, `app_icon`, `app_favicon`, `app_keywords`, `app_versi`) VALUES
@@ -1127,7 +1155,7 @@ INSERT INTO `xi_sa_setting` (`id`, `app_name`, `app_author`, `app_description`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_status`
+-- Struktur dari tabel `xi_sa_status`
 --
 
 CREATE TABLE `xi_sa_status` (
@@ -1136,7 +1164,7 @@ CREATE TABLE `xi_sa_status` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_status`
+-- Dumping data untuk tabel `xi_sa_status`
 --
 
 INSERT INTO `xi_sa_status` (`id_status`, `nm_status`) VALUES
@@ -1146,7 +1174,7 @@ INSERT INTO `xi_sa_status` (`id_status`, `nm_status`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_users`
+-- Struktur dari tabel `xi_sa_users`
 --
 
 CREATE TABLE `xi_sa_users` (
@@ -1175,7 +1203,7 @@ CREATE TABLE `xi_sa_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_users`
+-- Dumping data untuk tabel `xi_sa_users`
 --
 
 INSERT INTO `xi_sa_users` (`id_users`, `token`, `nip`, `username`, `password`, `email`, `fullname`, `foto_profile`, `id_tpa`, `blokir`, `id_status`, `validate_email_code`, `validate_email_status`, `reset_password_code`, `reset_password_status`, `reset_password_expired`, `create_by`, `create_date`, `create_ip`, `mod_by`, `mod_date`, `mod_ip`) VALUES
@@ -1184,7 +1212,7 @@ INSERT INTO `xi_sa_users` (`id_users`, `token`, `nip`, `username`, `password`, `
 (3, '08063D48F2EEE8C56EA72B2FF55B97F7', '', 'admin_solok', '$2a$12$aeP1Uu2JeRWvcfLN8Na6f.LUgxW/Z0nnV6PuZpE0nGhgw8MJi5cTW', '', 'Admin Solok', 'default-user-icon.jpg', 2, 0, 1, '', 0, '', 0, 0, 'yeviki', '2021-11-05 16:09:53', '127.0.0.1', 'yeviki', '2021-11-05 16:09:53', '127.0.0.1');
 
 --
--- Triggers `xi_sa_users`
+-- Trigger `xi_sa_users`
 --
 DELIMITER $$
 CREATE TRIGGER `tgr_users_delete` AFTER DELETE ON `xi_sa_users` FOR EACH ROW BEGIN
@@ -1197,7 +1225,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_users_default_pass`
+-- Struktur dari tabel `xi_sa_users_default_pass`
 --
 
 CREATE TABLE `xi_sa_users_default_pass` (
@@ -1208,7 +1236,7 @@ CREATE TABLE `xi_sa_users_default_pass` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_users_default_pass`
+-- Dumping data untuk tabel `xi_sa_users_default_pass`
 --
 
 INSERT INTO `xi_sa_users_default_pass` (`id_default_pass`, `id_users`, `pass_plain`, `updated`) VALUES
@@ -1218,7 +1246,7 @@ INSERT INTO `xi_sa_users_default_pass` (`id_default_pass`, `id_users`, `pass_pla
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_users_privileges`
+-- Struktur dari tabel `xi_sa_users_privileges`
 --
 
 CREATE TABLE `xi_sa_users_privileges` (
@@ -1229,7 +1257,7 @@ CREATE TABLE `xi_sa_users_privileges` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_users_privileges`
+-- Dumping data untuk tabel `xi_sa_users_privileges`
 --
 
 INSERT INTO `xi_sa_users_privileges` (`id_users_privileges`, `id_users`, `id_group`, `id_status`) VALUES
@@ -1240,7 +1268,7 @@ INSERT INTO `xi_sa_users_privileges` (`id_users_privileges`, `id_users`, `id_gro
 -- --------------------------------------------------------
 
 --
--- Table structure for table `xi_sa_white_list`
+-- Struktur dari tabel `xi_sa_white_list`
 --
 
 CREATE TABLE `xi_sa_white_list` (
@@ -1252,7 +1280,7 @@ CREATE TABLE `xi_sa_white_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `xi_sa_white_list`
+-- Dumping data untuk tabel `xi_sa_white_list`
 --
 
 INSERT INTO `xi_sa_white_list` (`id_white_list`, `module_name`, `class_name`, `method_name`, `id_status`) VALUES
@@ -1267,175 +1295,175 @@ INSERT INTO `xi_sa_white_list` (`id_white_list`, `module_name`, `class_name`, `m
 --
 
 --
--- Indexes for table `data_barang`
+-- Indeks untuk tabel `data_barang`
 --
 ALTER TABLE `data_barang`
   ADD PRIMARY KEY (`id_barang`);
 
 --
--- Indexes for table `data_gudang`
+-- Indeks untuk tabel `data_gudang`
 --
 ALTER TABLE `data_gudang`
   ADD PRIMARY KEY (`id_gudang`);
 
 --
--- Indexes for table `data_pembelian`
+-- Indeks untuk tabel `data_pembelian`
 --
 ALTER TABLE `data_pembelian`
   ADD PRIMARY KEY (`id_pembelian`);
 
 --
--- Indexes for table `data_permintaan`
+-- Indeks untuk tabel `data_permintaan`
 --
 ALTER TABLE `data_permintaan`
   ADD PRIMARY KEY (`id_permintaan`);
 
 --
--- Indexes for table `detail_pembelian`
+-- Indeks untuk tabel `detail_pembelian`
 --
 ALTER TABLE `detail_pembelian`
   ADD PRIMARY KEY (`id_detail_pembelian`);
 
 --
--- Indexes for table `detail_permintaan`
+-- Indeks untuk tabel `detail_permintaan`
 --
 ALTER TABLE `detail_permintaan`
   ADD PRIMARY KEY (`id_detail_permintaan`);
 
 --
--- Indexes for table `ms_tpa`
+-- Indeks untuk tabel `ms_tpa`
 --
 ALTER TABLE `ms_tpa`
   ADD PRIMARY KEY (`id_tpa`);
 
 --
--- Indexes for table `ref_kategori`
+-- Indeks untuk tabel `ref_kategori`
 --
 ALTER TABLE `ref_kategori`
   ADD PRIMARY KEY (`id_kat_barang`);
 
 --
--- Indexes for table `ref_satuan`
+-- Indeks untuk tabel `ref_satuan`
 --
 ALTER TABLE `ref_satuan`
   ADD PRIMARY KEY (`id_satuan`);
 
 --
--- Indexes for table `xi_sa_ci_captcha`
+-- Indeks untuk tabel `xi_sa_ci_captcha`
 --
 ALTER TABLE `xi_sa_ci_captcha`
   ADD PRIMARY KEY (`captcha_id`);
 
 --
--- Indexes for table `xi_sa_ci_session`
+-- Indeks untuk tabel `xi_sa_ci_session`
 --
 ALTER TABLE `xi_sa_ci_session`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `xi_sa_fungsi`
+-- Indeks untuk tabel `xi_sa_fungsi`
 --
 ALTER TABLE `xi_sa_fungsi`
   ADD PRIMARY KEY (`id_fungsi`);
 
 --
--- Indexes for table `xi_sa_group`
+-- Indeks untuk tabel `xi_sa_group`
 --
 ALTER TABLE `xi_sa_group`
   ADD PRIMARY KEY (`id_group`);
 
 --
--- Indexes for table `xi_sa_group_privileges`
+-- Indeks untuk tabel `xi_sa_group_privileges`
 --
 ALTER TABLE `xi_sa_group_privileges`
   ADD PRIMARY KEY (`id_group_privileges`);
 
 --
--- Indexes for table `xi_sa_jenis_fungsi`
+-- Indeks untuk tabel `xi_sa_jenis_fungsi`
 --
 ALTER TABLE `xi_sa_jenis_fungsi`
   ADD PRIMARY KEY (`id_jenis_fungsi`);
 
 --
--- Indexes for table `xi_sa_kontrol`
+-- Indeks untuk tabel `xi_sa_kontrol`
 --
 ALTER TABLE `xi_sa_kontrol`
   ADD PRIMARY KEY (`id_kontrol`);
 
 --
--- Indexes for table `xi_sa_level_akses`
+-- Indeks untuk tabel `xi_sa_level_akses`
 --
 ALTER TABLE `xi_sa_level_akses`
   ADD PRIMARY KEY (`id_level_akses`);
 
 --
--- Indexes for table `xi_sa_log_akses`
+-- Indeks untuk tabel `xi_sa_log_akses`
 --
 ALTER TABLE `xi_sa_log_akses`
   ADD PRIMARY KEY (`id_log_akses`);
 
 --
--- Indexes for table `xi_sa_log_login`
+-- Indeks untuk tabel `xi_sa_log_login`
 --
 ALTER TABLE `xi_sa_log_login`
   ADD PRIMARY KEY (`id_log`);
 
 --
--- Indexes for table `xi_sa_log_mobile`
+-- Indeks untuk tabel `xi_sa_log_mobile`
 --
 ALTER TABLE `xi_sa_log_mobile`
   ADD PRIMARY KEY (`id_log`);
 
 --
--- Indexes for table `xi_sa_log_session`
+-- Indeks untuk tabel `xi_sa_log_session`
 --
 ALTER TABLE `xi_sa_log_session`
   ADD PRIMARY KEY (`id_log_session`);
 
 --
--- Indexes for table `xi_sa_menu`
+-- Indeks untuk tabel `xi_sa_menu`
 --
 ALTER TABLE `xi_sa_menu`
   ADD PRIMARY KEY (`id_menu`);
 
 --
--- Indexes for table `xi_sa_module`
+-- Indeks untuk tabel `xi_sa_module`
 --
 ALTER TABLE `xi_sa_module`
   ADD PRIMARY KEY (`id_module`);
 
 --
--- Indexes for table `xi_sa_rules`
+-- Indeks untuk tabel `xi_sa_rules`
 --
 ALTER TABLE `xi_sa_rules`
   ADD PRIMARY KEY (`id_rules`);
 
 --
--- Indexes for table `xi_sa_setting`
+-- Indeks untuk tabel `xi_sa_setting`
 --
 ALTER TABLE `xi_sa_setting`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `xi_sa_status`
+-- Indeks untuk tabel `xi_sa_status`
 --
 ALTER TABLE `xi_sa_status`
   ADD PRIMARY KEY (`id_status`);
 
 --
--- Indexes for table `xi_sa_users`
+-- Indeks untuk tabel `xi_sa_users`
 --
 ALTER TABLE `xi_sa_users`
   ADD PRIMARY KEY (`id_users`);
 
 --
--- Indexes for table `xi_sa_users_default_pass`
+-- Indeks untuk tabel `xi_sa_users_default_pass`
 --
 ALTER TABLE `xi_sa_users_default_pass`
   ADD PRIMARY KEY (`id_default_pass`);
 
 --
--- Indexes for table `xi_sa_users_privileges`
+-- Indeks untuk tabel `xi_sa_users_privileges`
 --
 ALTER TABLE `xi_sa_users_privileges`
   ADD PRIMARY KEY (`id_users_privileges`),
@@ -1444,161 +1472,189 @@ ALTER TABLE `xi_sa_users_privileges`
   ADD KEY `id_group` (`id_group`);
 
 --
--- Indexes for table `xi_sa_white_list`
+-- Indeks untuk tabel `xi_sa_white_list`
 --
 ALTER TABLE `xi_sa_white_list`
   ADD PRIMARY KEY (`id_white_list`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `data_barang`
+-- AUTO_INCREMENT untuk tabel `data_barang`
 --
 ALTER TABLE `data_barang`
   MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
--- AUTO_INCREMENT for table `data_gudang`
+-- AUTO_INCREMENT untuk tabel `data_gudang`
 --
 ALTER TABLE `data_gudang`
   MODIFY `id_gudang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
--- AUTO_INCREMENT for table `data_pembelian`
+-- AUTO_INCREMENT untuk tabel `data_pembelian`
 --
 ALTER TABLE `data_pembelian`
   MODIFY `id_pembelian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
--- AUTO_INCREMENT for table `data_permintaan`
+-- AUTO_INCREMENT untuk tabel `data_permintaan`
 --
 ALTER TABLE `data_permintaan`
-  MODIFY `id_permintaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_permintaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
--- AUTO_INCREMENT for table `detail_pembelian`
+-- AUTO_INCREMENT untuk tabel `detail_pembelian`
 --
 ALTER TABLE `detail_pembelian`
   MODIFY `id_detail_pembelian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
 --
--- AUTO_INCREMENT for table `detail_permintaan`
+-- AUTO_INCREMENT untuk tabel `detail_permintaan`
 --
 ALTER TABLE `detail_permintaan`
-  MODIFY `id_detail_permintaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_detail_permintaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
 --
--- AUTO_INCREMENT for table `ms_tpa`
+-- AUTO_INCREMENT untuk tabel `ms_tpa`
 --
 ALTER TABLE `ms_tpa`
   MODIFY `id_tpa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
--- AUTO_INCREMENT for table `ref_kategori`
+-- AUTO_INCREMENT untuk tabel `ref_kategori`
 --
 ALTER TABLE `ref_kategori`
   MODIFY `id_kat_barang` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
--- AUTO_INCREMENT for table `ref_satuan`
+-- AUTO_INCREMENT untuk tabel `ref_satuan`
 --
 ALTER TABLE `ref_satuan`
   MODIFY `id_satuan` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
 --
--- AUTO_INCREMENT for table `xi_sa_ci_captcha`
+-- AUTO_INCREMENT untuk tabel `xi_sa_ci_captcha`
 --
 ALTER TABLE `xi_sa_ci_captcha`
   MODIFY `captcha_id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT for table `xi_sa_fungsi`
+-- AUTO_INCREMENT untuk tabel `xi_sa_fungsi`
 --
 ALTER TABLE `xi_sa_fungsi`
   MODIFY `id_fungsi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
 --
--- AUTO_INCREMENT for table `xi_sa_group`
+-- AUTO_INCREMENT untuk tabel `xi_sa_group`
 --
 ALTER TABLE `xi_sa_group`
   MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
--- AUTO_INCREMENT for table `xi_sa_group_privileges`
+-- AUTO_INCREMENT untuk tabel `xi_sa_group_privileges`
 --
 ALTER TABLE `xi_sa_group_privileges`
   MODIFY `id_group_privileges` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+
 --
--- AUTO_INCREMENT for table `xi_sa_jenis_fungsi`
+-- AUTO_INCREMENT untuk tabel `xi_sa_jenis_fungsi`
 --
 ALTER TABLE `xi_sa_jenis_fungsi`
   MODIFY `id_jenis_fungsi` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
--- AUTO_INCREMENT for table `xi_sa_kontrol`
+-- AUTO_INCREMENT untuk tabel `xi_sa_kontrol`
 --
 ALTER TABLE `xi_sa_kontrol`
   MODIFY `id_kontrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
 --
--- AUTO_INCREMENT for table `xi_sa_level_akses`
+-- AUTO_INCREMENT untuk tabel `xi_sa_level_akses`
 --
 ALTER TABLE `xi_sa_level_akses`
   MODIFY `id_level_akses` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
--- AUTO_INCREMENT for table `xi_sa_log_akses`
+-- AUTO_INCREMENT untuk tabel `xi_sa_log_akses`
 --
 ALTER TABLE `xi_sa_log_akses`
   MODIFY `id_log_akses` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT for table `xi_sa_log_login`
+-- AUTO_INCREMENT untuk tabel `xi_sa_log_login`
 --
 ALTER TABLE `xi_sa_log_login`
   MODIFY `id_log` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT for table `xi_sa_log_mobile`
+-- AUTO_INCREMENT untuk tabel `xi_sa_log_mobile`
 --
 ALTER TABLE `xi_sa_log_mobile`
   MODIFY `id_log` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- AUTO_INCREMENT for table `xi_sa_log_session`
+-- AUTO_INCREMENT untuk tabel `xi_sa_log_session`
 --
 ALTER TABLE `xi_sa_log_session`
-  MODIFY `id_log_session` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
+  MODIFY `id_log_session` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+
 --
--- AUTO_INCREMENT for table `xi_sa_menu`
+-- AUTO_INCREMENT untuk tabel `xi_sa_menu`
 --
 ALTER TABLE `xi_sa_menu`
   MODIFY `id_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
 --
--- AUTO_INCREMENT for table `xi_sa_module`
+-- AUTO_INCREMENT untuk tabel `xi_sa_module`
 --
 ALTER TABLE `xi_sa_module`
   MODIFY `id_module` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
 --
--- AUTO_INCREMENT for table `xi_sa_rules`
+-- AUTO_INCREMENT untuk tabel `xi_sa_rules`
 --
 ALTER TABLE `xi_sa_rules`
   MODIFY `id_rules` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+
 --
--- AUTO_INCREMENT for table `xi_sa_setting`
+-- AUTO_INCREMENT untuk tabel `xi_sa_setting`
 --
 ALTER TABLE `xi_sa_setting`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
--- AUTO_INCREMENT for table `xi_sa_users`
+-- AUTO_INCREMENT untuk tabel `xi_sa_users`
 --
 ALTER TABLE `xi_sa_users`
   MODIFY `id_users` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
--- AUTO_INCREMENT for table `xi_sa_users_default_pass`
+-- AUTO_INCREMENT untuk tabel `xi_sa_users_default_pass`
 --
 ALTER TABLE `xi_sa_users_default_pass`
   MODIFY `id_default_pass` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
--- AUTO_INCREMENT for table `xi_sa_users_privileges`
+-- AUTO_INCREMENT untuk tabel `xi_sa_users_privileges`
 --
 ALTER TABLE `xi_sa_users_privileges`
   MODIFY `id_users_privileges` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
--- AUTO_INCREMENT for table `xi_sa_white_list`
+-- AUTO_INCREMENT untuk tabel `xi_sa_white_list`
 --
 ALTER TABLE `xi_sa_white_list`
   MODIFY `id_white_list` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `xi_sa_users_privileges`
+-- Ketidakleluasaan untuk tabel `xi_sa_users_privileges`
 --
 ALTER TABLE `xi_sa_users_privileges`
   ADD CONSTRAINT `xi_sa_users_privileges_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `xi_sa_users` (`id_users`),
