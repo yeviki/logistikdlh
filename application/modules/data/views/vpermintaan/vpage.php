@@ -81,7 +81,7 @@
         <div class="modal-content">
             <div class="modal-header aqua-gradient-rgba">
                 <h4 class="modal-title heading lead white-text font-weight-bold"><i class="fas fa-cart-plus"></i> Detail Permintaan</h4>
-                <button type="button" class="close btnCloseMataDik" aria-label="Close">
+                <button type="button" class="close btnClosePermintaan" aria-label="Close">
                     <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
             </div>
@@ -160,7 +160,7 @@
                 <hr>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-blue-grey waves-effect waves-light px-3 py-2 mx-0 font-weight-bold btnCloseMataDik"><i class="fas fa-times"></i> Close</button>
+                <button type="button" class="btn btn-blue-grey waves-effect waves-light px-3 py-2 mx-0 font-weight-bold btnClosePermintaan"><i class="fas fa-times"></i> Close</button>
             </div>
         </div>
     </div>
@@ -238,6 +238,13 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2"><h5>Total Permintaan</h5></th>
+                                    <th class="font-weight-bold text-center"><h5><span id="jumlah_req"></span></h5></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     <?php echo form_close(); ?>
                 </div>

@@ -270,7 +270,7 @@
         })
     });
 
-    $(document).on('click', '.btnCloseMataDik', function(e) {
+    $(document).on('click', '.btnClosePermintaan', function(e) {
         let id = $(this).closest('div.modal').attr('id');
         formResetDetail();
         $('#'+id).modal('toggle');
@@ -284,6 +284,7 @@
         $('#formDetailPermintaan').attr('action', site + '/create');
         $('#errSuccess').html('');
         $('#errRules').html('');
+        $('#jumlah').html('');
         $('form#formDetailPermintaan').trigger('reset');
         $('form#formDetailPermintaan').removeClass('was-validated');
     }
@@ -563,7 +564,7 @@
         run_waitMe($('#formParent'));
         swalAlert.fire({
             title: 'Konfirmasi',
-            text: 'Apakah anda ingin mengajukan permintaan barang ?, Pastikan detail permintaan sudah terisi sesuai kebutuhan, Permintaan yang telah diajukan tidak bisa dibatalkan.!',
+            html: 'Apakah anda ingin mengajukan permintaan barang ?, pastikan detail permintaan sudah terisi sesuai kebutuhan. <br> <b>Permintaan yang telah diajukan tidak bisa dibatalkan.!</b>',
             icon: 'warning',
             showCancelButton: true,
             allowOutsideClick : false,
@@ -652,6 +653,7 @@
 
     $(document).on('click', '.btnCloseRules', function(e) {
         $('#modalRulesForm').modal('toggle');
+        $('#jumlah_req').html('');
     });
 
     function getDataListReq(id_permin) {
@@ -662,6 +664,7 @@
             data: {'token' : id_permin, '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()},
             dataType: 'json',
             success: function(data) {
+                total_req = 0;
                 $('input[name="'+csrfName+'"]').val(data.csrfHash);
                 if(data.status = 'RC200') {
                     if(Object.keys(data.message).length > 0) {
@@ -673,13 +676,15 @@
                                 <td class="text-center">${v.qty_req}</td>
                                 <td class="text-center">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="number" class="form-control nominal" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2" name="qty_acc[]" id="qty_acc" value="${v.qty_acc}" min="0" max="${v.qty_req}">
+                                            <input type="number" class="form-control nmax nominal" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2" name="qty_acc[]" id="qty_acc" value="${v.qty_acc}" min="0" max="${v.qty_req}">
                                             <input type="hidden" class="form-control" name="detail_permintaan[]" value="${v.id_detail_permintaan}">
                                         </div>
                                     </td>
                             </tr>`
                             no++;
+                            total_req += parseInt(v.qty_req);
                         });
+                        $("#jumlah_req").html(NumberDenganKoma(total_req));
                     } else
                         html = '<tr><td colspan="3"><i>Tidak Ada Data Pertanyaan</i></td></tr>';
                 } else
@@ -688,8 +693,16 @@
             }
         });
     }
+
+    $(document).on('keyup ',".nmax", function(e){
+        var nilai = parseInt($(this).val());
+        var max = parseInt($(this).attr('max'));
+        if(nilai > max){
+            $(this).val(max);
+        }
+    });
     
-    //btn save
+    //btn save persetujuan pengajuan permintaan barang
     $(document).on('click', '#btnSavePersetujuan', function (e){
         e.preventDefault();
         // get form action url
@@ -760,6 +773,87 @@
                         $('#frmRules').waitMe('hide');
                         $("#btnSavePersetujuan").html('<i class="fas fa-check"></i> Simpan Persetujuan');
                         $("#btnSavePersetujuan").removeClass('disabled');
+                    }
+                })
+            }
+        })
+    });
+
+    //-----------------------------------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------------------------------------------------//
+    //-----------------------------------------------------------------------------------------------------------------------------//
+    //Button Update Stok TPA ---------------------------------------------------------------------//
+    $(document).on('click', '.btnUpdateStok', function(e){
+        e.preventDefault();
+        let postData = {
+            'tokenId': $(this).data('id'),
+            '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()
+        };
+        $(this).html('<i class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></i>');
+        $(this).addClass('disabled');
+        run_waitMe($('#formParent'));
+        swalAlert.fire({
+            title: 'Konfirmasi',
+            html: 'Apakah anda ingin update stok barang?, pastikan logistik yang diterima sesuai dengan nominal/jumlah persetujuan permintaan barang. <br> <b>Stok yang telah terupdate tidak bisa dibatalkan.!</b>',
+            icon: 'warning',
+            showCancelButton: true,
+            allowOutsideClick : false,
+            confirmButtonText: '<i class="fas fa-check"></i> Ya, lanjutkan',
+            cancelButtonText: '<i class="fas fa-times"></i> Tidak, batalkan',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: site + '/rules-permintaan/set-request',
+                    type: "POST",
+                    data: postData,
+                    dataType: "json",
+                }).done(function(data) {
+                    $('input[name="'+csrfName+'"]').val(data.csrfHash);
+                    if(data.status == 'RC404') {
+                        swalAlert.fire({
+                            title: 'Gagal Update Stok',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errSuccess').html(msg.error(data.message));
+                            }
+                        })
+                    } else {
+                        swalAlert.fire({
+                            title: 'Berhasil Update Stok',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: '<i class="fas fa-check"></i> Oke',
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#errSuccess').html(msg.success(data.message));
+                                getDataList();
+                            }
+                        })
+                    }
+                    $('#formParent').waitMe('hide');
+                }).fail(function() {
+                    $('#errSuccess').html(msg.error('Harap periksa kembali data permintaan'));
+                    $('#formParent').waitMe('hide');
+                }).always(function() {
+                    $('.btnUpdateStok').html('<i class="fas fa-lock"></i> Update Stok');
+                    $('.btnUpdateStok').removeClass('disabled');
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                swalAlert.fire({
+                    title: 'Batal Update Stok',
+                    text: 'Proses update stok barang telah dibatalkan',
+                    icon: 'error',
+                    allowOutsideClick   : false,
+                    confirmButtonText   : '<i class="fas fa-check"></i> Oke',
+                }).then((result) => {
+                    if (result.value) {
+                        $('#formParent').waitMe('hide');
+                        $('.btnUpdateStok').html('<i class="fas fa-lock"></i> Update Stok');
+                        $('.btnUpdateStok').removeClass('disabled');
                     }
                 })
             }
