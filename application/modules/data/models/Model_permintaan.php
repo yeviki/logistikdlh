@@ -328,12 +328,12 @@ class Model_permintaan extends CI_Model {
             if ($statusReq==2) {
                 return array('response'=>'PENGAJUAN', 'nama'=>$no_faktur_req);
             } else {
+                $this->db->set('status_req', 2);
+                $this->db->where('id_permintaan', abs($id));
+                $this->db->update('data_permintaan');
+    
+                return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
             }
-            $this->db->set('status_req', 2);
-            $this->db->where('id_permintaan', abs($id));
-            $this->db->update('data_permintaan');
-
-            return array('response'=>'SUCCESS', 'nama'=>$no_faktur_req);
         }
     }
 
@@ -416,6 +416,58 @@ class Model_permintaan extends CI_Model {
             }
             return array('response'=>'SUCCESS');
         // }
+    }
+
+    /*update stok permintaan barang*/
+    public function checkLogistik($id) {
+        $this->db->select('a.id_barang,
+						 a.stok_logistik,
+						 a.id_tpa
+                         ');
+        $this->db->from('data_distribusi a');
+        $this->db->where('a.id_barang', $id);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+ 
+    public function updateStokTPA() {
+        $id    = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
+        $dataCheck = $this->getDataPermintaan($id);
+        // print_r($dataCheck);die;
+        foreach ($dataCheck as $key => $value) {
+            $checkDistribusi = function($id) {
+                $check = $this->db->get_where('data_distribusi', ['id_barang' => $id]);
+                if($check->num_rows() > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+        
+            if($checkDistribusi($value['id_barang']) == true) {
+                $this->db->set('stok_logistik', 'stok_logistik +'.$value['qty_acc'], false);
+                $this->db->where('id_barang', $value['id_barang']);
+                $this->db->update('data_distribusi');
+            } else {
+                $create_by              = $this->app_loader->current_account();
+                $create_date            = gmdate('Y-m-d H:i:s', time()+60*60*7);
+                $create_ip              = $this->input->ip_address();
+
+                $this->db->insert('data_distribusi',
+                [
+                    'stok_logistik' => $value['qty_acc'],
+                    'id_barang'     => $value['id_barang'],
+                    'id_tpa'        => $value['id_tpa'],
+                    'create_by'     => $create_by,
+                    'create_date'   => $create_date,
+                    'create_ip'     => $create_ip,
+                    'mod_by'        => $create_by,
+                    'mod_date'      => $create_date,
+                    'mod_ip'        => $create_ip
+                ]);
+            }
+        }
+        return array('response'=>'SUCCESS');
     }
 }
 

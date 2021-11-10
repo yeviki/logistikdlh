@@ -20,7 +20,7 @@
                             <thead>
                                 <tr>
                                     <th width="3%" class="font-weight-bold">#</th>
-                                    <th width="20%" class="font-weight-bold">Tanggal</th>
+                                    <th width="10%" class="font-weight-bold">Tanggal</th>
                                     <th width="20%" class="font-weight-bold">No Faktur</th>
                                     <th width="20%" class="font-weight-bold">Catatan</th>
                                     <th width="8%" class="font-weight-bold">Status</th>

@@ -220,6 +220,8 @@ class Permintaan extends SLP_Controller {
                 $this->deleteDetail();
             else if ($name == 'set-request')
                 $this->ajukanPermintaan();
+            else if ($name == 'update-stok')
+                $this->rulesUpdateStok();
             else
                 $this->permintaanData();
         }
@@ -333,6 +335,26 @@ class Permintaan extends SLP_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }
 
+    
+    // Fungsi Tombol Update Stok Barang Pada TPA
+    private function rulesUpdateStok() {
+        $session  = $this->app_loader->current_account();
+        $csrfHash = $this->security->get_csrf_hash();
+        $tokenPermin   = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
+        if (!empty($session) AND !empty($tokenPermin)) {
+            $data = $this->mPermintaan->updateStokTPA();
+            if ($data['response'] == 'ERROR') {
+                $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, karena isi tidak lengkap', 'csrfHash' => $csrfHash);
+            } else 
+            if ($data['response'] == 'SUCCESS') {
+                $result = array('status' => 'RC200', 'message' => 'Proses update stok barang berhasil', 'csrfHash' => $csrfHash);
+            }
+        } else {
+            $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, mohon coba kembali', 'csrfHash' => $csrfHash);
+        }
+        $this->output->set_content_type('application/json')->set_output(json_encode($result));
+    }
+
     //------------------------------------------------------------------------------------------------------------------------------------//
     //------------------------------------------------------------------------------------------------------------------------------------//
     //------------------------------------------------------------------------------------------------------------------------------------//
@@ -345,8 +367,6 @@ class Permintaan extends SLP_Controller {
         } else {
             if ($name == 'new-rules')
                 $this->rulesCreate();
-            else if ($name == 'update-stok')
-                $this->rulesUpdateStok();
             else
                 $this->tampilData();
         }
@@ -382,7 +402,7 @@ class Permintaan extends SLP_Controller {
         $status_req    = !empty($check_data) ? $check_data['status_req'] : 0;
         if (!empty($session) AND !empty($tokenPermin)) {
             if ($status_req != 2) {
-                $result = array('status' => 'RC404', 'message' => 'Proses persetujuan gagal, karena anda sudah melakukan pengisian persetujuan', 'csrfHash' => $csrfHash);
+                $result = array('status' => 'RC404', 'message' => 'Peringatan!!, Data sedang dalam verifikasi', 'csrfHash' => $csrfHash);
             } else {
                 $data = $this->mPermintaan->insertDataPersetujuan();
                 if ($data['response'] == 'ERROR') {
@@ -394,31 +414,6 @@ class Permintaan extends SLP_Controller {
             }
         } else {
             $result = array('status' => 'RC404', 'message' => 'Proses simpan data persetujuan barang gagal, mohon coba kembali', 'csrfHash' => $csrfHash);
-        }
-        $this->output->set_content_type('application/json')->set_output(json_encode($result));
-    }
-
-    // Fungsi Tombol Update Stok Barang Pada TPA
-    private function rulesUpdateStok() {
-        $session  = $this->app_loader->current_account();
-        $csrfHash = $this->security->get_csrf_hash();
-        $tokenPermin   = $this->encryption->decrypt(escape($this->input->post('tokenPermin', TRUE)));
-        $check_data    = $this->mPermintaan->checkStatusPermintaan($tokenPermin);
-        $status_req    = !empty($check_data) ? $check_data['status_req'] : 0;
-        if (!empty($session) AND !empty($tokenPermin)) {
-            if ($status_req != 2) {
-                $result = array('status' => 'RC404', 'message' => 'Proses update stok gagal, karena status masih dalam persetujuan', 'csrfHash' => $csrfHash);
-            } else {
-                $data = $this->mPermintaan->updateStokTPA();
-                if ($data['response'] == 'ERROR') {
-                    $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, karena isi tidak lengkap', 'csrfHash' => $csrfHash);
-                } else 
-                if ($data['response'] == 'SUCCESS') {
-                    $result = array('status' => 'RC200', 'message' => 'Proses update stok barang berhasil', 'csrfHash' => $csrfHash);
-                }
-            }
-        } else {
-            $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, mohon coba kembali', 'csrfHash' => $csrfHash);
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($result));
     }

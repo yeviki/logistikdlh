@@ -804,7 +804,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: site + '/rules-permintaan/set-request',
+                    url: site + '/rules-permintaan/update-stok',
                     type: "POST",
                     data: postData,
                     dataType: "json",
