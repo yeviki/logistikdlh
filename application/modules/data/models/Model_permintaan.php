@@ -431,8 +431,8 @@ class Model_permintaan extends CI_Model {
     }
  
     public function updateStokTPA() {
-        $id    = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
-        $dataCheck = $this->getDataPermintaan($id);
+        $id         = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
+        $dataCheck  = $this->getDataPermintaan($id);
         // print_r($dataCheck);die;
         foreach ($dataCheck as $key => $value) {
             $checkDistribusi = function($id) {
@@ -444,10 +444,10 @@ class Model_permintaan extends CI_Model {
                 }
             };
         
-            if($checkDistribusi($value['id_barang']) == true) {
+            if ($checkDistribusi($value['id_barang']) == true) {
                 $this->db->set('stok_logistik', 'stok_logistik +'.$value['qty_acc'], false);
                 $this->db->where('id_barang', $value['id_barang']);
-                $this->db->update('data_distribusi');
+                $this->db->update('data_distribusi'); 
             } else {
                 $create_by              = $this->app_loader->current_account();
                 $create_date            = gmdate('Y-m-d H:i:s', time()+60*60*7);
@@ -472,3 +472,4 @@ class Model_permintaan extends CI_Model {
 }
 
 // This is the end of auth signin model
+            
