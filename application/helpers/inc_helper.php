@@ -204,7 +204,7 @@ if (!function_exists('convert_stat_req')) {
         $status = array(
             1 => '<span class="badge badge-pill badge-danger">Request</span>',
             2 => '<span class="badge badge-pill badge-info">Verifikasi</span>',
-            3 => '<span class="badge badge-pill badge-default">Approve</span>',
+            3 => '<span class="badge badge-pill badge-default">Sudah Diperiksa</span>',
             4 => '<span class="badge badge-pill badge-dark">Done</span>',
         );
         return $status[intval($status_req)];

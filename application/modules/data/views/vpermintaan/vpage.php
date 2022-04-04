@@ -11,7 +11,11 @@
                     </h5>
                     <div class="clearfix">
                         <a type="button" href="<?php echo site_url(isset($siteUri) ? $siteUri : '#'); ?>" class="btn btn-white btn-rounded waves-effect waves-light px-3 py-2 font-weight-bold" name="button"><i class="fas fa-sync-alt"></i> Refresh Data</a>
-                        <button type="button" class="btn btn-success waves-effect waves-light px-3 py-2 font-weight-bold" id="btnAdd"><i class="fas fa-plus-circle"></i> Tambah Baru</button>
+                        <?php
+                        if ($this->app_loader->is_tpa()) { ?>
+                            <button type="button" class="btn btn-success waves-effect waves-light px-3 py-2 font-weight-bold" id="btnAdd"><i class="fas fa-plus-circle"></i> Tambah Baru</button>
+                        <?php } else 
+                        ?>
                     </div>
                 </div>
                 <div class="card-body mb-0">
@@ -129,6 +133,8 @@
                     </div>
                 </div>
                 <div class="table-responsive-md">
+                    <p class="note note-warning"><strong>Note:</strong> Jika ada penambahan jumlah item yang sama silahkan hapus terlebih dahulu item yang sudah ada pada list permintaan. Permintaan yang telah dikirim tidak dapat lagi diubah <a class="font-weight-bold">Terima Kasih</a>
+                    </p> 
                     <h5 class="heading font-weight-bold"><i class="fas fa-list"></i> Detail Permintaan No Faktur <span class="lblDetail"></span></h5>
                     <table cellspacing="0" class="table table-striped table-borderless table-hover table-sm" id="tblDetail" width="100%">
                         <thead>
@@ -151,7 +157,8 @@
                         <tfoot>
                             <tr>
                                 <th colspan="4"><h4>Total Permintaan</h4></th>
-                                <th class="font-weight-bold text-center"><h4><span id="jumlah"></span></h4></th>
+                                <th class="font-weight-bold text-center"><h4><span id="reqJumlah"></span></h4></th>
+                                <th class="font-weight-bold text-center"><h4><span id="accJumlah"></span></h4></th>
                                 <th></th>
                             </tr>
                         </tfoot>

@@ -53,7 +53,7 @@ class App_loader {
      * @return boolean
      */
     public function is_super() {
-        if ($this->CI->session->userdata('nick_level') == 'SAD') {
+        if ($this->CI->session->userdata('nick_level') == 'SUP') {
             return TRUE;
         }
         return FALSE;

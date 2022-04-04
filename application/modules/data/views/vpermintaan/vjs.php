@@ -284,7 +284,8 @@
         $('#formDetailPermintaan').attr('action', site + '/create');
         $('#errSuccess').html('');
         $('#errRules').html('');
-        $('#jumlah').html('');
+        $('#reqJumlah').html('');
+        $('#accJumlah').html('');
         $('form#formDetailPermintaan').trigger('reset');
         $('form#formDetailPermintaan').removeClass('was-validated');
     }
@@ -405,7 +406,8 @@
                 $('input[name="'+csrfName+'"]').val(data.csrfHash);
                 if(data.status = 'RC200') {
                     if(Object.keys(data.message).length > 0) {
-                        jumlah = 0;
+                        reqJumlah = 0;
+                        accJumlah = 0;
                         $.each(data.message, function(key, val){
                             // html += ' <tr class="table-info"><td colspan="8"><strong>Nama Kontrol : '+key+'</strong></td></tr>';
                             let no = 1;
@@ -425,11 +427,13 @@
                                     html += '<td class="text-center">'+v['status']+'</td>';
                                 html += '</tr>';
                                 no++;
-                                jumlah += parseInt(v['subtotal']);
+                                reqJumlah += parseInt(v['subtotal']);
+                                accJumlah += parseInt(v['acctotal']);
 
                             });
                         });
-                        $("#jumlah").html(NumberDenganKoma(jumlah));
+                        $("#reqJumlah").html(NumberDenganKoma(reqJumlah));
+                        $("#accJumlah").html(NumberDenganKoma(accJumlah));
                     } else
                         html = '<tr><td colspan="10"><i>Tidak Ada Data</i></td></tr>';
                         
@@ -787,6 +791,7 @@
         e.preventDefault();
         let postData = {
             'tokenId': $(this).data('id'),
+            'statusRq': $(this).data('st'),
             '<?php echo $this->security->get_csrf_token_name(); ?>' : $('input[name="'+csrfName+'"]').val()
         };
         $(this).html('<i class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></i>');

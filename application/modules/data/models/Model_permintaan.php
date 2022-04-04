@@ -41,6 +41,8 @@ class Model_permintaan extends CI_Model {
         $this->db->join('ms_tpa b', 'a.id_tpa = b.id_tpa', 'inner');
         if($this->app_loader->is_tpa()) {
             $this->db->where('a.id_tpa', $this->app_loader->current_tpaid());
+        } else {
+            $this->db->where_in('a.status_req', array(2,4));
         }
         return $this->db->count_all_results();
     }
@@ -60,7 +62,7 @@ class Model_permintaan extends CI_Model {
         if($this->app_loader->is_tpa()) {
             $this->db->where('a.id_tpa', $this->app_loader->current_tpaid());
         } else {
-            $this->db->where('a.status_req', 2);
+            $this->db->where_in('a.status_req', array(2,4));
         }
         $i = 0;
         foreach ($this->search as $item) { // loop column
@@ -180,7 +182,7 @@ class Model_permintaan extends CI_Model {
 
 
     /* get data list detail pembelian */
-    public function getDataListDetailPembelian($id_permintaan) {
+    public function getDataListDetailPermintaan($id_permintaan) {
         $this->db->select('a.id_permintaan,
                             a.no_faktur_req,
                             a.tanggal_req,
@@ -244,7 +246,7 @@ class Model_permintaan extends CI_Model {
     }
 
     /* Fungsi untuk insert data */
-    public function insertDetailPembelian() {
+    public function insertDetailPermintaan() {
         //get data
         $tahun          = gmdate('Y');
         $create_by      = $this->app_loader->current_account();
@@ -465,9 +467,13 @@ class Model_permintaan extends CI_Model {
                     'mod_date'      => $create_date,
                     'mod_ip'        => $create_ip
                 ]);
+
+                
             }
         }
-        return array('response'=>'SUCCESS');
+            $this->db->where('id_permintaan', abs($id));
+            $this->db->update('data_permintaan', array('status_req' => 4));
+            return array('response'=>'SUCCESS');
     }
 }
 

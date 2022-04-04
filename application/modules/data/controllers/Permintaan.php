@@ -53,28 +53,37 @@ class Permintaan extends SLP_Controller {
                     $data_status = $this->mPermintaan->getDataDetailPermintaan($dl['id_permintaan']);
                     $statusReq  = !empty($data_status) ? $data_status['status_req'] : 0;
                     if ($statusReq == 2) {
-                        $setButton          = 'disabled';
-                        $setStatus          = 'Proses Pengajuan';
-                        $setIcon            = 'fas fa-lock';
-                        $setDetailPermin    = '';
-                        $setRequest         = '';
+                        $setButton              = 'disabled';
+                        $setButtonVerfikator    = '';
+                        $setStatus              = 'Proses Pengajuan';
+                        $setIcon                = 'fas fa-lock';
+                        $setDetailPermin        = '';
+                        $setRequest             = '';
                     } else if ($statusReq == 3) {
-                        $setButton          = '';
-                        $setStatus          = 'Update Stok';
-                        $setIcon            = 'fas fa-truck-loading';
-                        $setDetailPermin    = 'btnSetPermintaan';
-                        $setRequest         = 'btnUpdateStok';
+                        $setButton              = '';
+                        $setStatus              = 'Update Stok';
+                        $setIcon                = 'fas fa-truck-loading';
+                        $setDetailPermin        = 'btnSetPermintaan';
+                        $setRequest             = 'btnUpdateStok';
+                    } else if ($statusReq == 4) {
+                        $setButtonVerfikator    = 'disabled';
+                        $setButton              = '';
+                        $setStatus              = 'Done';
+                        $setIcon                = 'fas fa-lock';
+                        $setDetailPermin        = 'btnSetPermintaan';
+                        $setRequest             = 'btnRequest';
                     } else {
-                        $setButton          = '';
-                        $setStatus          = 'Ajukan Permintaan';
-                        $setIcon            = 'fas fa-unlock';
-                        $setDetailPermin    = 'btnSetPermintaan';
-                        $setRequest         = 'btnRequest';
+                        $setButton              = '';
+                        $setButtonVerfikator    = '';
+                        $setStatus              = 'Ajukan Permintaan';
+                        $setIcon                = 'fas fa-unlock';
+                        $setDetailPermin        = 'btnSetPermintaan';
+                        $setRequest             = 'btnRequest';
                     }
 
                     // Tombol Hak Akses Admin TPA
                     if ($this->app_loader->is_tpa()) {
-                        $button = '<button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light '.$setRequest.'" '.$setButton.' data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" data-jd="'.$dl['no_faktur_req'].'" title="'.$setStatus.'"><i class="'.$setIcon.'"></i> '.$setStatus.'</button>
+                        $button = '<button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light '.$setRequest.'" '.$setButton.' data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" data-jd="'.$dl['no_faktur_req'].'" data-st="'.$dl['status_req'].'" title="'.$setStatus.'"><i class="'.$setIcon.'"></i> '.$setStatus.'</button>
                     
                         <button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light '.$setDetailPermin.'" '.$setButton.' data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" data-jd="'.$dl['no_faktur_req'].'" data-st="'.$dl['status_req'].'" title="Tambah Barang"><i class="fas fa-cart-plus"></i></button>
                         
@@ -84,7 +93,7 @@ class Permintaan extends SLP_Controller {
                         <button type="button" class="btn btn-danger btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnDelete" data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" title="Hapus data"><i class="fas fa-trash-alt"></i></button>';
                     } else {
                         // Tombol Hak Akses Administrator UPTD
-                        $button = '<button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnVerifikasi" data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" data-jd="'.$dl['no_faktur_req'].'" data-st="'.$dl['status_req'].'" data-tgl="'.$dl['tanggal_req'].'"  data-tpa="'.$dl['nama_tpa'].'" title="Lihat Permintaan"><i class="fas fa-cart-plus"></i> Lihat Permintaan</button>';
+                        $button = '<button type="button" class="btn btn-purple btn-sm px-2 py-1 my-0 mx-0 waves-effect waves-light btnVerifikasi" '.$setButtonVerfikator.' data-id="'.$this->encryption->encrypt($dl['id_permintaan']).'" data-jd="'.$dl['no_faktur_req'].'" data-st="'.$dl['status_req'].'" data-tgl="'.$dl['tanggal_req'].'"  data-tpa="'.$dl['nama_tpa'].'" title="Lihat Permintaan"><i class="fas fa-cart-plus"></i> Lihat Permintaan</button>';
                     }
 
                     $no++;
@@ -232,7 +241,7 @@ class Permintaan extends SLP_Controller {
         $csrfHash   = $this->security->get_csrf_hash();
         $dataID     = $this->encryption->decrypt(escape($this->input->get('token', TRUE)));
         if(!empty($dataID) AND !empty($session)) {
-            $data = $this->mPermintaan->getDataListDetailPembelian($dataID);
+            $data = $this->mPermintaan->getDataListDetailPermintaan($dataID);
             $matadiklat = array();
             foreach ($data as $q) {
                 $isi['id_detail_permintaan'] 	= $this->encryption->encrypt($q['id_detail_permintaan']).'####'.$q['status_det_req'];
@@ -240,7 +249,8 @@ class Permintaan extends SLP_Controller {
                 $isi['satuan'] 		            = $q['satuan'];
                 $isi['qty_req'] 		        = $q['qty_req'];
                 $isi['subtotal'] 			    = !empty($q) ? $q['qty_req'] : 0;
-                if ($q['status_req'] == 3) {
+                $isi['acctotal'] 			    = !empty($q) ? $q['qty_acc'] : 0;
+                if ($q['status_req'] == 3 || $q['status_req'] == 4) {
                     $isi['qty_acc'] 			    = $q['qty_acc'];
                 } else {
                     $isi['qty_acc'] 			    = '';
@@ -273,7 +283,7 @@ class Permintaan extends SLP_Controller {
             if($this->validasiDataValueDetail() == FALSE) {
                 $result = array('status' => 'RC404', 'message' => $this->form_validation->error_array(), 'kode'=>$modId, 'csrfHash' => $csrfHash);
             } else {
-                $data = $this->mPermintaan->insertDetailPembelian();
+                $data = $this->mPermintaan->insertDetailPermintaan();
                 if($data['response'] == 'ERROR') {
                     $result = array('status' => 'RC404', 'message' => 'Proses insert data gagal, karena data tidak ditemukan', 'csrfHash' => $csrfHash);
                 }  else if ($data['response'] == 'SUCCESS') {
@@ -341,13 +351,18 @@ class Permintaan extends SLP_Controller {
         $session  = $this->app_loader->current_account();
         $csrfHash = $this->security->get_csrf_hash();
         $tokenPermin   = $this->encryption->decrypt(escape($this->input->post('tokenId', TRUE)));
+        $statusRq   = $this->input->post('statusRq', TRUE);
         if (!empty($session) AND !empty($tokenPermin)) {
-            $data = $this->mPermintaan->updateStokTPA();
-            if ($data['response'] == 'ERROR') {
-                $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, karena isi tidak lengkap', 'csrfHash' => $csrfHash);
-            } else 
-            if ($data['response'] == 'SUCCESS') {
-                $result = array('status' => 'RC200', 'message' => 'Proses update stok barang berhasil', 'csrfHash' => $csrfHash);
+            if ($statusRq == 4) {
+                $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, stok sudah diupdate', 'csrfHash' => $csrfHash);
+            } else {
+                $data = $this->mPermintaan->updateStokTPA();
+                if ($data['response'] == 'ERROR') {
+                    $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, stok sudah terupdate', 'csrfHash' => $csrfHash);
+                } else 
+                if ($data['response'] == 'SUCCESS') {
+                    $result = array('status' => 'RC200', 'message' => 'Proses update stok barang berhasil', 'csrfHash' => $csrfHash);
+                }
             }
         } else {
             $result = array('status' => 'RC404', 'message' => 'Proses update stok barang gagal, mohon coba kembali', 'csrfHash' => $csrfHash);
